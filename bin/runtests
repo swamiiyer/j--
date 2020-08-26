@@ -1,0 +1,339 @@
+#!/bin/bash
+
+# Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas.
+#
+# This script tests the j-- programs under tests/jvm and tests/spim folders. Must be run under
+# the $j/j-- folder.
+
+CORRECT="\u2714\n"
+WRONG="\u2718\n"
+JMM="bash ./bin/j--"
+JMM2SPIM="bash ./bin/j-- -s naive -r 4"
+
+printf "Compiling j--...\n"
+
+ant
+
+printf "\nTesting programs under tests/clemitter/...\n"
+
+printf "  GenExceptionHandler.java "
+bash ./bin/clemitter tests/clemitter/GenExceptionHandler.java
+out1=`java ExceptionHandler`
+expected1="x not specified
+Done!"
+out2=`java ExceptionHandler -2`
+expected2="x must be positive
+Done!"
+out3=`java ExceptionHandler 2`
+expected3="1.4142135623730951
+Done!"
+if [[ -e "ExceptionHandler.class" ]] && \
+   [[ $out1 == $expected1 ]] && [[ $out2 == $expected2 ]] && [[ $out3 == $expected3 ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  GenFactorial.java "
+bash ./bin/clemitter tests/clemitter/GenFactorial.java
+out=`java Factorial 5`
+if [[ -e "Factorial.class" ]] && [[ $out == "5! = 120" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  GenHelloWorld.java "
+bash ./bin/clemitter tests/clemitter/GenHelloWorld.java
+out=`java HelloWorld`
+if [[ -e "HelloWorld.class" ]] && [[ $out == "Hello, World" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  GenLookupSwitch.java "
+bash ./bin/clemitter tests/clemitter/GenLookupSwitch.java
+out1=`java LookupSwitch 10`
+out2=`java LookupSwitch 20`
+if [[ -e "LookupSwitch.class" ]] && [[ $out1 == "Error!" ]] && [[ $out2 == "Icosahedron" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  GenNHellos.java "
+bash ./bin/clemitter tests/clemitter/GenNHellos.java
+out=`java NHellos 5`
+expected="Hello # 1
+Hello # 2
+Hello # 3
+Hello # 4
+Hello # 5"
+
+if [[ -e "NHellos.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  GenTableSwitch.java "
+bash ./bin/clemitter tests/clemitter/GenTableSwitch.java
+out1=`java TableSwitch 7`
+out2=`java TableSwitch 42`
+if [[ -e "TableSwitch.class" ]] && [[ $out1 == "July" ]] && [[ $out2 == "Error!" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+rm *.class
+
+printf "\n\nTesting programs under tests/jvm/...\n"
+
+printf "  Casts.java "
+$JMM tests/jvm/Casts.java
+out=`java Casts`
+expected="42
+*
+42
+true
+Hello, World"
+if [[ -e "Casts.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  Counter.java "
+$JMM tests/jvm/Counter.java
+out=`java Counter 1000`
+if [[ -e "Casts.class" ]] && [[ $out != "" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  DayOfWeek.java "
+$JMM tests/jvm/DayOfWeek.java
+out1=`java DayOfWeek 3 14 1879`
+out2=`java DayOfWeek 7 8 1974`
+out3=`java DayOfWeek 8 28 1983`
+if [[ -e "DayOfWeek.class" ]] && \
+   [[ $out1 == "Friday" ]] && [[ $out2 == "Monday" ]] && [[ $out3 == "Sunday" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  DivisorPattern.java "
+$JMM tests/jvm/DivisorPattern.java
+out=`java DivisorPattern 5`
+expected="* * * * * 1
+* *   *   2
+*   *     3
+* *   *   4
+*       * 5"
+if [[ -e "DivisorPattern.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  Euclid.java "
+$JMM tests/jvm/Euclid.java
+out1=`java Euclid 408 1440`
+out2=`java Euclid 314159 271828`
+if [[ -e "Euclid.class" ]] && \
+   [[ $out1 == "gcd(408, 1440) = 24" ]] && [[ $out2 == "gcd(314159, 271828) = 1" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  Factorial.java "
+$JMM tests/jvm/Factorial.java
+out=`java Factorial 10`
+expected="10! = 3628800 (computed recursively)
+10! = 3628800 (computed iteratively)"
+if [[ -e "Factorial.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  HelloWorld.java "
+$JMM tests/jvm/HelloWorld.java
+out=`java HelloWorld`
+if [[ -e "HelloWorld.class" ]] && [[ $out == "Hello, World" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  Inheritance.java "
+$JMM tests/jvm/Inheritance.java
+out=`java Inheritance`
+expected="University of Milkyway: Alice (#1729, Student, Class of 2024)
+University of Milkyway: Bob (#42, Faculty)
+University of Milkyway: Carol (#28, Staff)"
+if [[ -e "Inheritance.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  InstanceOf.java "
+$JMM tests/jvm/InstanceOf.java
+out=`java InstanceOf`
+expected="true
+true
+true
+false"
+if [[ -e "InstanceOf.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  LeapYear.java "
+$JMM tests/jvm/LeapYear.java
+out1=`java LeapYear 2020`
+out2=`java LeapYear 1900`
+out3=`java LeapYear 2000`
+if [[ -e "LeapYear.class" ]] && \
+   [[ $out1 == "true" ]] && [[ $out2 == "false" ]] && [[ $out3 == "true" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  MatrixSquared.java "
+$JMM tests/jvm/MatrixSquared.java
+out=`java MatrixSquared 1 2 3 4`
+expected="7 10
+12 22"
+if [[ -e "MatrixSquared.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  Pascal.java "
+$JMM tests/jvm/Pascal.java
+out=`java Pascal 5`
+expected="1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+1 5 10 10 5 1"
+if [[ -e "Pascal.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  PowersOfTwo.java "
+$JMM tests/jvm/PowersOfTwo.java
+out=`java PowersOfTwo 5`
+expected="0 1
+1 2
+2 4
+3 8
+4 16
+5 32"
+if [[ -e "PowersOfTwo.class" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  PrimeCounter.java "
+$JMM tests/jvm/PrimeCounter.java
+out=`java PrimeCounter 10000`
+if [[ -e "PrimeCounter.class" ]] && [[ $out == "pi(10000) = 1229" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  SumOfPowers.java "
+$JMM tests/jvm/SumOfPowers.java
+out=`java SumOfPowers 11 3`
+if [[ -e "SumOfPowers.class" ]] && [[ $out == "4356" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+rm *.class
+
+printf "\nTesting programs under tests/spim/...\n"
+
+printf "  Euclid.java "
+$JMM2SPIM tests/spim/Euclid.java > /dev/null
+out=`spim -f Euclid.s | tail -1`
+if [[ -e "Euclid.s" ]] && [[ $out == "gcd(408, 1440) = 24" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  Factorial.java "
+$JMM2SPIM tests/spim/Factorial.java > /dev/null
+out=`spim -f Factorial.s | tail -2`
+expected="10! = 3628800 (computed recursively)
+10! = 3628800 (computed iteratively)"
+if [[ -e "Factorial.s" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+#printf "  Fibonacci.java "
+#$JMM2SPIM tests/spim/Fibonacci.java > /dev/null
+#out=`spim -f Fibonacci.s | tail -15`
+#expected="1
+#1
+#2
+#3
+#5
+#8
+#13
+#21
+#34
+#55
+#89
+#144
+#233
+#377
+#610
+#987"
+#if [[ -e "Fibonacci.s" ]] && [[ $out == $expected ]]; then
+#  printf $CORRECT
+#else
+#  printf $WRONG
+#fi
+
+printf "  Formals.java "
+$JMM2SPIM tests/spim/Formals.java > /dev/null
+out=`spim -f Formals.s | tail -2`
+expected="28
+5040"
+if [[ -e "Formals.s" ]] && [[ $out == $expected ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+printf "  HelloWorld.java "
+$JMM2SPIM tests/spim/HelloWorld.java > /dev/null
+out=`spim -f HelloWorld.s | tail -1`
+if [[ -e "HelloWorld.s" ]] && [[ $out == "Hello, World" ]]; then
+  printf $CORRECT
+else
+  printf $WRONG
+fi
+
+rm *.s
