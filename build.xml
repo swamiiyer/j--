@@ -1,0 +1,112 @@
+<!-- 
+Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas.
+
+An Ant build configuration file for the jminusminus compiler.
+-->
+
+<project default="jar">
+
+    <property name="APP_FULL_NAME" value="j-- (A Non-trivial Subset of Java)" />
+    <property name="SRC_DIR" value="src" />
+    <property name="CLASS_DIR" value="out" />
+    <property name="LIB_DIR" value="lib" />
+    <property name="JAVADOC_DIR" value="jmm-javadoc" />
+    <property name="J2H_DIR" value="jmm-code" />
+
+    <!-- help: Lists main targets -->
+    <target name="help">
+        <echo message="help: Lists main targets"/>
+        <echo message="javacc: Generates JavaCC scanner and parser"/>
+        <echo message="compile: Compiles the jminusminus source files"/>
+        <echo message="jar: Bundles jminusminus classes into a jar file"/>
+        <echo message="javadoc: Generates javadoc for jminusminus classes"/>
+        <echo message="j2h: Generates browsable code using java2html"/>
+        <echo message="package: Creates a distributable for j--"/>
+        <echo message="clean: Removes generated files and folders"/>
+    </target>
+    
+    <!-- javacc: Generates JavaCC scanner and parser. -->
+    <target name="javacc">
+        <echo message="Generating JavaCC files..."/>
+        <javacc target="${SRC_DIR}/jminusminus/j--.jj" outputdirectory="${SRC_DIR}/jminusminus"
+                javacchome="${LIB_DIR}" static="false" />
+    </target>
+
+    <!-- compile: Compiles the jminusminus source files. -->
+    <target name="compile" depends="clean,javacc">
+        <echo message="Compiling j-- source files..."/>
+        <mkdir dir="${CLASS_DIR}" />
+        <javac srcdir="${SRC_DIR}" destdir="${CLASS_DIR}" includes="jminusminus/**"
+               includeantruntime="false" debug="on">
+            <!-- Uncomment the following to see compiler warnings. -->
+            <!-- <compilerarg value="-Xlint" />                    -->
+        </javac>
+    </target>
+
+    <!--
+       jar: Bundles jminusminus classes into a jar file.
+    -->
+    <target name="jar" depends="compile">
+        <echo message="Bundling class files into jar files..."/>
+        <jar destfile="${LIB_DIR}/j--.jar" basedir="${CLASS_DIR}" includes="jminusminus/**"/>
+    </target>
+
+    <!-- javadoc: Generates javadoc for jminusminus classes. -->
+    <target name="javadoc">
+        <echo message="Generating javadoc for j-- classes..."/>
+        <mkdir dir="${JAVADOC_DIR}" />
+        <javadoc overview="${SRC_DIR}/overview.html" package="Yes" sourcepath="${SRC_DIR}"
+                 destdir="${JAVADOC_DIR}" packagenames="jminusminus.*"
+                 windowtitle="${APP_FULL_NAME}" doctitle="${APP_FULL_NAME}">
+            <link href="https://docs.oracle.com/en/java/javase/11/docs/api/" />
+        </javadoc>
+    </target>
+
+    <!-- j2h: Generates browsable code using java2html. -->
+    <target name="j2h">
+        <echo message="Generating browsable code for j--..."/>
+        <mkdir dir="${J2H_DIR}" />
+        <java jar="${LIB_DIR}/j2h.jar" fork="true" failonerror="true" maxmemory="128m">
+              <arg value="-m"/>
+              <arg value="4"/>
+              <arg value="-d"/>
+              <arg value="${J2H_DIR}"/>
+              <arg value="-js"/>
+              <arg value="${SRC_DIR}"/>
+       </java>
+    </target>
+
+    <!-- 
+       package: Makes a distributable package for the compiler which includes the sources,
+       binaries, and documentation.
+    -->
+    <target name="package" depends="jar,javadoc,j2h">
+        <echo message="Making a distributable j--.zip..."/>
+        <zip destfile="j--.zip"
+             basedir="../"
+             includes="j--/**"
+             excludes="j--/${CLASS_DIR}/**,j--/*.zip" />
+    </target>
+
+    <!-- clean: Removes generated files and folders. -->
+    <target name="clean">
+        <echo message="Removing generated files and folders..."/>
+        <delete file="${SRC_DIR}/jminusminus/Token.java" />
+        <delete file="${SRC_DIR}/jminusminus/TokenMgrError.java" />
+        <delete file="${SRC_DIR}/jminusminus/ParseException.java" />
+        <delete file="${SRC_DIR}/jminusminus/JavaCCParser.java" />
+        <delete file="${SRC_DIR}/jminusminus/JavaCCParserTokenManager.java" />
+        <delete file="${SRC_DIR}/jminusminus/JavaCCParserConstants.java" />
+        <delete file="${SRC_DIR}/jminusminus/SimpleCharStream.java" />
+        <delete>
+            <fileset dir="${basedir}" includes="**/*.class"/>
+            <fileset dir="${basedir}" includes="**/*.s" excludes="src/jminusminus/SPIM.s"/>
+        </delete>
+        <delete file="j--.zip" />
+        <delete file="${LIB_DIR}/j--.jar" />
+        <delete dir="${CLASS_DIR}" />
+        <delete dir="${JAVADOC_DIR}" />
+        <delete dir="${J2H_DIR}" />
+    </target>
+
+</project>
