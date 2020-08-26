@@ -1,0 +1,120 @@
+JArrayExpression:
+- The target object must be an array.
+- The index expression must be an integer.
+
+JArrayInitializer:
+- A non-array object must not be initialized with the array sequence {...}.
+- Each initializer must have the same type as the component type.
+
+JAssignment:
+- JAssignOp:
+  - lhs must be legal.
+  - lhs and rhs must have the same type.
+- JPlusAssignOp:
+  - lhs must be legal.
+  - lhs must be an integer (addition) or a string (concatenation).
+
+JBinaryExpression:
+- JMultiplyOp
+  - lhs and rhs must be integers.
+- JPlusOp
+  - lhs and rhs must be integers (addition) or one of them must be a string (concatenation).
+- JSubtractOp
+  - lhs and rhs must be integers.
+
+JBooleanBinaryExpression:
+- JEqualOp:
+  - lhs and rhs must have the same type.
+- JLogicalAndOp:
+  - lhs and rhs must be booleans.
+
+JCastOp:
+- Source type must be castable to target type.
+
+JClassDeclaration:
+- Super type must be accessible from the base type.
+- A class must not a final type.
+- A non-abstract class must not define abstract methods.
+
+JComparisonExpression:
+- lhs and rhs must be integers.
+
+JCompilationUnit:
+- Imports must be valid.
+
+JConstructorDeclaration:
+- A constructor must not be static or abstract.
+
+JFieldDeclaration:
+- A field must not be abstract.
+
+JFieldSelection:
+- The target must be a reference type.
+- The field must be declared.
+- The field must be accessible.
+- A non-static field must not be referenced from a static context.
+- A final field must not be assigned a value.
+
+JIfStatement:
+- The condition must be a boolean.
+
+JInstanceOfOp:
+- lhs and rhs must be reference types and assignable from one to the other.
+
+JMessageExpression:
+- The target must be a reference type.
+- The message must exist.
+- The message must be accessible.
+- A non-static message must not be referenced from a static context.
+
+JMethodDeclaration:
+- An abstract method cannot have a body.
+- A method without body must be abstract.
+- A private method cannot be abstract.
+- A static method cannot be abstract
+- A non-void method must have a return statement.
+
+JNewArrayOp:
+- Dimensions must be integers.
+
+JNewOp:
+- The constructor being invoked must not instantiate an abstract type.
+- The constructor being invoked must exist.
+
+JReturnStatement:
+- Must not return a value from a constructor.
+- Must not return a value from a void method.
+- The type of return value in a non-void method must match return type of the method.
+- A non-void method must have a return value.
+
+JSuperConstruction:
+- super(...) must be the first statement in the constructor's body.
+- A super class must exist.
+- A super constructor with the given argument types must exist.
+
+JThisConstruction:
+- this(...) must be the first statement in the constructor's body.
+- A constructor with the given argument types must exist.
+
+JVariable:
+- The variable name must exist.
+- The variable must be initialized.
+- The variable must be a valid lhs to =.
+
+JVariableDeclaration:
+- A local variable must not overshadow another local variable.
+
+JUnaryExpression:
+- JLogicalNotOp:
+  - The operand must be a boolean.
+- JNegateOp:
+  - The operand must be an integer.
+- JPostDecrementOp:
+  - The operand must have an LValue.
+  - The operand must be an integer.
+- JPreIncrementOp:
+  - The operand must have an LValue.
+  - The operand must be an integer.
+
+JWhileStatement:
+- The condition must be boolean.
