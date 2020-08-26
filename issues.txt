@@ -1,4 +1,0 @@
-- this and super references allowed in a static context.
-- invokevirtual generated for super.toString() instead of invokespecial.
-- tests/spim/Fibonacci.java fails.
-- tests/spim/Factorial.java fails with -s naive -r 3.
