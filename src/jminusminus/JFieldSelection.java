@@ -1,0 +1,207 @@
+// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
+
+package jminusminus;
+
+import static jminusminus.CLConstants.*;
+
+/**
+ * The AST node for a field selection operation. It has a target object, a field name, and the
+ * field it defines.
+ */
+class JFieldSelection extends JExpression implements JLhs {
+    /**
+     * The target expression.
+     */
+    protected JExpression target;
+
+    // The ambiguous part that is reclassified in analyze().
+    private AmbiguousName ambiguousPart;
+
+    // The field name.
+    private String fieldName;
+
+    // The Field representing this field.
+    private Field field;
+
+    /**
+     * Constructs an AST node for a field selection without an ambiguous part.
+     *
+     * @param line      the line number of the selection.
+     * @param target    the target of the selection.
+     * @param fieldName the field name.
+     */
+    public JFieldSelection(int line, JExpression target, String fieldName) {
+        this(line, null, target, fieldName);
+    }
+
+    /**
+     * Construct an AST node for a field selection having an ambiguous part.
+     *
+     * @param line          line in which the field selection occurs in the source file.
+     * @param ambiguousPart the ambiguous part.
+     * @param target        the target of the selection.
+     * @param fieldName     the field name.
+     */
+    public JFieldSelection(int line, AmbiguousName ambiguousPart, JExpression target,
+                           String fieldName) {
+        super(line);
+        this.ambiguousPart = ambiguousPart;
+        this.target = target;
+        this.fieldName = fieldName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // Reclassify the ambiguous part.
+        if (ambiguousPart != null) {
+            JExpression expr = ambiguousPart.reclassify(context);
+            if (expr != null) {
+                if (target == null) {
+                    target = expr;
+                } else {
+                    // Can't even happen syntactically.
+                    JAST.compilationUnit.reportSemanticError(line(), "Badly formed suffix");
+                }
+            }
+        }
+        target = (JExpression) target.analyze(context);
+        Type targetType = target.type();
+
+        // We use a workaround for the "length" field of arrays.
+        if ((targetType.isArray()) && fieldName.equals("length")) {
+            type = Type.INT;
+        } else {
+            // Other than that, targetType has to be a reference type.
+            if (targetType.isPrimitive()) {
+                JAST.compilationUnit.reportSemanticError(line(),
+                        "Target of a field selection must be a reference type");
+                type = Type.ANY;
+                return this;
+            }
+            field = targetType.fieldFor(fieldName);
+            if (field == null) {
+                JAST.compilationUnit.reportSemanticError(line(),
+                        "Cannot find a field: " + fieldName);
+                type = Type.ANY;
+            } else {
+                context.definingType().checkAccess(line, (Member) field);
+                type = field.type();
+
+                // Non-static field cannot be referenced from a static context.
+                if (!field.isStatic()) {
+                    if (target instanceof JVariable &&
+                            ((JVariable) target).iDefn() instanceof TypeNameDefn) {
+                        JAST.compilationUnit.reportSemanticError(line(), "Non-static field " +
+                                fieldName + " cannot be referenced from a static context");
+                    }
+                }
+            }
+        }
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyzeLhs(Context context) {
+        JExpression result = analyze(context);
+        if (field.isFinal()) {
+            JAST.compilationUnit.reportSemanticError(line, "The field " + fieldName + " in type " +
+                    target.type.toString() + " is final");
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        target.codegen(output);
+
+        // We use a workaround for the "length" field of arrays.
+        if ((target.type().isArray()) && fieldName.equals("length")) {
+            output.addNoArgInstruction(ARRAYLENGTH);
+        } else {
+            int mnemonic = field.isStatic() ? GETSTATIC : GETFIELD;
+            output.addMemberAccessInstruction(mnemonic, target.type().jvmName(), fieldName,
+                    type.toDescriptor());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
+        codegen(output);
+        if (onTrue) {
+            output.addBranchInstruction(IFNE, targetLabel);
+        } else {
+            output.addBranchInstruction(IFEQ, targetLabel);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegenLoadLhsLvalue(CLEmitter output) {
+        // Nothing to do for static fields.
+        if (!field.isStatic()) {
+            target.codegen(output);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegenLoadLhsRvalue(CLEmitter output) {
+        if (field.isStatic()) {
+            output.addMemberAccessInstruction(GETSTATIC, target.type()
+                    .jvmName(), fieldName, field.type().toDescriptor());
+        } else {
+            output.addNoArgInstruction(type == Type.STRING ? DUP_X1 : DUP);
+            output.addMemberAccessInstruction(GETFIELD,
+                    target.type().jvmName(), fieldName, field.type().toDescriptor());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegenDuplicateRvalue(CLEmitter output) {
+        if (field.isStatic()) {
+            output.addNoArgInstruction(DUP);
+        } else {
+            output.addNoArgInstruction(DUP_X1);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegenStore(CLEmitter output) {
+        String descriptor = field.type().toDescriptor();
+        if (field.isStatic()) {
+            output.addMemberAccessInstruction(PUTSTATIC, target.type().jvmName(), fieldName,
+                    descriptor);
+        } else {
+            output.addMemberAccessInstruction(PUTFIELD, target.type().jvmName(), fieldName,
+                    descriptor);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void toJSON(JSONElement json) {
+        JSONElement e = new JSONElement();
+        json.addChild("JFieldSelection:" +  line, e);
+        e.addAttribute("name", fieldName);
+        if (target != null) {
+            JSONElement e1 = new JSONElement();
+            e.addChild("Target", e1);
+            target.toJSON(e1);
+        }
+    }
+}
