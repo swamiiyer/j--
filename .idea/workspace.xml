@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="635c3b74-0e24-42bf-a84e-cbc6a9391ff1" name="Default Changelist" comment="" />
+    <list default="true" id="635c3b74-0e24-42bf-a84e-cbc6a9391ff1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/j--.iml" beforeDir="false" afterPath="$PROJECT_DIR$/j--.iml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,7 +31,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
@@ -203,14 +206,6 @@
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state x="656" y="30" width="709" height="1050" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1596487784346" />
-    <state x="833" y="279" width="524" height="504" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589031823203">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="833" y="279" width="524" height="504" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1589031823203" />
-    <state x="598" y="30" width="781" height="1050" key="#org.jetbrains.kotlin.idea.refactoring.safeDelete.KotlinOverridingDialog" timestamp="1589031929141">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="598" y="30" width="781" height="1050" key="#org.jetbrains.kotlin.idea.refactoring.safeDelete.KotlinOverridingDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1589031929141" />
     <state x="779" y="302" key="#xdebugger.evaluate" timestamp="1598187524886">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
@@ -235,17 +230,17 @@
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state width="1445" height="321" key="GridCell.Tab.0.right/0.30.1920.1050@0.30.1920.1050" timestamp="1598444282879" />
-    <state x="424" y="185" width="992" height="733" key="SettingsEditor" timestamp="1596727606349">
+    <state x="424" y="185" width="992" height="733" key="SettingsEditor" timestamp="1598526147264">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
-    <state x="424" y="185" width="992" height="733" key="SettingsEditor/0.30.1920.1050@0.30.1920.1050" timestamp="1596727606349" />
-    <state x="636" y="249" key="run.anything.popup" timestamp="1597851285830">
+    <state x="424" y="185" width="992" height="733" key="SettingsEditor/0.30.1920.1050@0.30.1920.1050" timestamp="1598526147264" />
+    <state x="636" y="249" key="run.anything.popup" timestamp="1598542565849">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
-    <state x="636" y="249" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1597851285830" />
-    <state x="763" y="249" width="672" height="678" key="search.everywhere.popup" timestamp="1597868553171">
+    <state x="636" y="249" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1598542565849" />
+    <state x="763" y="249" width="672" height="678" key="search.everywhere.popup" timestamp="1598528864943">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
-    <state x="763" y="249" width="672" height="678" key="search.everywhere.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1597868553171" />
+    <state x="763" y="249" width="672" height="678" key="search.everywhere.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1598528864943" />
   </component>
 </project>
