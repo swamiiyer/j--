@@ -99,14 +99,14 @@ PARSER_END(JavaCCParser)
 /////////////////////////////////////////////////////////
 
 // Whitespace -- ignored
-SKIP: {" "|"\t"|"\n"|"\r"|"\f"}
+SKIP: { " " | "\t" | "\n" | "\r" | "\f" }
 
 // Single line comment -- ignored
-SKIP : { "//": IN_SINGLE_LINE_COMMENT }
+SKIP: { <BEGIN_COMMENT: "//">: IN_SINGLE_LINE_COMMENT }
 <IN_SINGLE_LINE_COMMENT>
-SPECIAL_TOKEN: { <SINGLE_LINE_COMMENT: "\n"|"\r"|"\r\n"> : DEFAULT }
+SKIP: { <END_COMMENT: "\n" | "\r" | "\r\n">: DEFAULT }
 <IN_SINGLE_LINE_COMMENT>
-MORE : { <~[]> }
+SKIP: { <COMMENT: ~[]> }
 
 // Reserved words
 TOKEN: {
@@ -167,17 +167,17 @@ TOKEN: {
 
 // Identifiers
 TOKEN: {
-  <IDENTIFIER: (<LETTER>|"_"|"$") (<LETTER>|<DIGIT>|"_"|"$")* >
-| <#LETTER: ["a"-"z","A"-"Z"] >
-| <#DIGIT: ["0"-"9"] >
+  <IDENTIFIER: ( <LETTER> | "_" | "$") ( <LETTER> | <DIGIT> |"_" | "$" )*>
+| <#LETTER: [ "a"-"z", "A"-"Z" ]>
+| <#DIGIT: [ "0"-"9" ]>
 }
 
 // Literals
 TOKEN: {
-  <INT_LITERAL: (<DIGIT> (<DIGIT>)*) >
-| <CHAR_LITERAL: "'" (<ESC> | ~["'","\\","\n","\r"]) "'" >
-| <STRING_LITERAL: "\"" (<ESC> | ~["\"","\\","\n","\r"])* "\"" >
-| <#ESC: "\\" ["n","t","b","r","f","\\","'","\""] >
+  <INT_LITERAL: <DIGIT> ( <DIGIT> )*>
+| <CHAR_LITERAL: "'" ( <ESC> | ~[ "'", "\\", "\n", "\r" ]) "'">
+| <STRING_LITERAL: "\"" ( <ESC> | ~[ "\"", "\\", "\n", "\r" ] )* "\"">
+| <#ESC: "\\" [ "n", "t", "b", "r", "f", "\\", "'", "\"" ]>
 }
 
 // For anything else, we return an ERROR token. Without this definition the TokenManager will throw

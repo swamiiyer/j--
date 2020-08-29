@@ -92,12 +92,12 @@ class Scanner {
             if (ch == '/') {
                 nextCh();
                 if (ch == '/') {
-                    // CharReader maps all new lines to '\n'
+                    // CharReader maps all new lines to '\n'.
                     while (ch != '\n' && ch != EOFCH) {
                         nextCh();
                     }
                 } else {
-                    reportScannerError("Operator / is not supported in j--.");
+                    reportScannerError("Operator / is not supported in j--");
                 }
             } else {
                 moreWhiteSpace = false;
