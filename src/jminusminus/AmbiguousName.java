@@ -62,4 +62,13 @@ class AmbiguousName {
 
         return result;
     }
+
+    /**
+     * Returns the ambiguous part.
+     *
+     * @return the ambiguous part.
+     */
+    public String toString() {
+        return name;
+    }
 }

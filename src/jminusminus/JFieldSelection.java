@@ -197,6 +197,7 @@ class JFieldSelection extends JExpression implements JLhs {
     public void toJSON(JSONElement json) {
         JSONElement e = new JSONElement();
         json.addChild("JFieldSelection:" +  line, e);
+        e.addAttribute("ambiguousPart", ambiguousPart.toString());
         e.addAttribute("name", fieldName);
         if (target != null) {
             JSONElement e1 = new JSONElement();
