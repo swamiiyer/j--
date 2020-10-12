@@ -31,6 +31,11 @@ class JMethodDeclaration extends JAST implements JMember {
     protected ArrayList<JFormalParameter> params;
 
     /**
+     * Exceptions thrown.
+     */
+    protected ArrayList<TypeName> exceptions;
+
+    /**
      * Method body.
      */
     protected JBlock body;
@@ -68,10 +73,12 @@ class JMethodDeclaration extends JAST implements JMember {
      * @param name       method name.
      * @param returnType return type.
      * @param params     the formal parameters.
+     * @param exceptions exceptions thrown.
      * @param body       method body.
      */
     public JMethodDeclaration(int line, ArrayList<String> mods, String name, Type returnType,
-                              ArrayList<JFormalParameter> params, JBlock body) {
+                              ArrayList<JFormalParameter> params,
+                              ArrayList<TypeName> exceptions, JBlock body) {
         super(line);
         this.mods = mods;
         this.name = name;
@@ -200,6 +207,13 @@ class JMethodDeclaration extends JAST implements JMember {
                         param.type() == null ? "" : param.type().toString()));
             }
             e.addAttribute("parameters", value);
+        }
+        if (exceptions != null) {
+            ArrayList<String> value = new ArrayList<String>();
+            for (TypeName exception : exceptions) {
+                value.add(String.format("\"%s\"", exception.toString()));
+            }
+            e.addAttribute("throws", value);
         }
         if (context != null) {
             context.toJSON(e);

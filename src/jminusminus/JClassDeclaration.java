@@ -25,6 +25,9 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     // Super class type.
     private Type superType;
 
+    // Implemented interfaces.
+    private ArrayList<TypeName> impls;
+
     // Context for this class.
     private ClassContext context;
 
@@ -44,14 +47,16 @@ class JClassDeclaration extends JAST implements JTypeDecl {
      * @param mods       class modifiers.
      * @param name       class name.
      * @param superType  super class type.
+     * @param impls      implemented interfaces.
      * @param classBlock class block.
      */
     public JClassDeclaration(int line, ArrayList<String> mods, String name, Type superType,
-                             ArrayList<JMember> classBlock) {
+                             ArrayList<TypeName> impls, ArrayList<JMember> classBlock) {
         super(line);
         this.mods = mods;
         this.name = name;
         this.superType = superType;
+        this.impls = impls;
         this.classBlock = classBlock;
         hasExplicitConstructor = false;
         instanceFieldInitializations = new ArrayList<JFieldDeclaration>();
@@ -218,6 +223,13 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         }
         e.addAttribute("name", name);
         e.addAttribute("super", superType == null ? "" : superType.toString());
+        if (impls != null) {
+            ArrayList<String> value = new ArrayList<String>();
+            for (TypeName impl : impls) {
+                value.add(String.format("\"%s\"", impl.toString()));
+            }
+            e.addAttribute("implements", value);
+        }
         if (context != null) {
             context.toJSON(e);
         }

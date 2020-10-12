@@ -19,15 +19,17 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
     /**
      * Constructs an AST node for a constructor declaration.
      *
-     * @param line   line in which the constructor declaration occurs in the source file.
-     * @param mods   modifiers.
-     * @param name   constructor name.
-     * @param params the formal parameters.
-     * @param body   constructor body.
+     * @param line       line in which the constructor declaration occurs in the source file.
+     * @param mods       modifiers.
+     * @param name       constructor name.
+     * @param params     the formal parameters.
+     * @param exceptions exceptions thrown.
+     * @param body       constructor body.
      */
     public JConstructorDeclaration(int line, ArrayList<String> mods, String name,
-                                   ArrayList<JFormalParameter> params, JBlock body) {
-        super(line, mods, name, Type.CONSTRUCTOR, params, body);
+                                   ArrayList<JFormalParameter> params,
+                                   ArrayList<TypeName> exceptions, JBlock body) {
+        super(line, mods, name, Type.CONSTRUCTOR, params, null, body);
     }
 
     /**

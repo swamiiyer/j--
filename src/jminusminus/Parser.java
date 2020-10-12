@@ -199,7 +199,7 @@ public class Parser {
         } else {
             superClass = Type.OBJECT;
         }
-        return new JClassDeclaration(line, mods, name, superClass, classBody());
+        return new JClassDeclaration(line, mods, name, superClass, null, classBody());
     }
 
     /**
@@ -245,7 +245,7 @@ public class Parser {
             String name = scanner.previousToken().image();
             ArrayList<JFormalParameter> params = formalParameters();
             JBlock body = block();
-            memberDecl = new JConstructorDeclaration(line, mods, name, params, body);
+            memberDecl = new JConstructorDeclaration(line, mods, name, params, null, body);
         } else {
             Type type = null;
             if (have(VOID)) {
@@ -255,7 +255,7 @@ public class Parser {
                 String name = scanner.previousToken().image();
                 ArrayList<JFormalParameter> params = formalParameters();
                 JBlock body = have(SEMI) ? null : block();
-                memberDecl = new JMethodDeclaration(line, mods, name, type, params, body);
+                memberDecl = new JMethodDeclaration(line, mods, name, type, params, null, body);
             } else {
                 type = type();
                 if (seeIdentLParen()) {
@@ -264,7 +264,7 @@ public class Parser {
                     String name = scanner.previousToken().image();
                     ArrayList<JFormalParameter> params = formalParameters();
                     JBlock body = have(SEMI) ? null : block();
-                    memberDecl = new JMethodDeclaration(line, mods, name, type, params, body);
+                    memberDecl = new JMethodDeclaration(line, mods, name, type, params, null, body);
                 } else {
                     // Field
                     memberDecl = new JFieldDeclaration(line, mods, variableDeclarators(type));
