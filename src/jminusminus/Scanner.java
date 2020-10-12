@@ -333,7 +333,7 @@ class Scanner {
         }
     }
 
-    // Reports a lexcial error and records the fact that an error has occured. This fact can be
+    // Reports a lexical error and records the fact that an error has occurred. This fact can be
     // ascertained from the Scanner by sending it an errorHasOccurred message.
     private void reportScannerError(String message, Object... args) {
         isInError = true;

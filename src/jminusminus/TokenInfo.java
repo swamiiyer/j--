@@ -8,7 +8,7 @@ package jminusminus;
  */
 enum TokenKind {
     // End of file.
-    EOF("<End Of File>"),
+    EOF(""),
 
     // Reserved words.
     ABSTRACT("abstract"), BOOLEAN("boolean"), CHAR("char"), CLASS("class"), ELSE("else"),
@@ -46,20 +46,26 @@ enum TokenKind {
     }
 
     /**
+     * Returns the token kind's string representation.
+     *
+     * @return the token kind's string representation.
+     */
+    public String tokenRep() {
+        if (this == EOF) {
+            return "<EOF>";
+        }
+        if (image.startsWith("<") && image.endsWith(">")) {
+            return image;
+        }
+        return "\"" + image + "\"";
+    }
+
+    /**
      * Returns the token kind's image.
      *
      * @return the token kind's image.
      */
     public String image() {
-        return image;
-    }
-
-    /**
-     * Returns the string representation (image) of the token kind.
-     *
-     * @return the string representation (image) of the token kind.
-     */
-    public String toString() {
         return image;
     }
 }
@@ -103,7 +109,7 @@ public class TokenInfo {
      * @param line the line in which the token occurs in the source file.
      */
     public TokenInfo(TokenKind kind, int line) {
-        this(kind, kind.toString(), line);
+        this(kind, kind.image(), line);
     }
 
     /**
@@ -116,15 +122,6 @@ public class TokenInfo {
     }
 
     /**
-     * Returns the semantic text associated with the token.
-     *
-     * @return the semantic text associated with the token
-     */
-    public String image() {
-        return image;
-    }
-
-    /**
      * Returns the line number associated with the token.
      *
      * @return the line number associated with the token.
@@ -134,20 +131,20 @@ public class TokenInfo {
     }
 
     /**
-     * Returns the token kind's string representation.
+     * Returns the token's string representation.
      *
-     * @return the token kind's string representation.
+     * @return the token's string representation.
      */
     public String tokenRep() {
-        return kind.toString();
+        return kind.tokenRep();
     }
 
     /**
-     * Returns the string representation (image) of the token.
+     * Returns the token's image.
      *
-     * @return the string representation (image) of the token.
+     * @return the token's image.
      */
-    public String toString() {
+    public String image() {
         return image;
     }
 }
