@@ -164,7 +164,7 @@ class JMessageExpression extends JExpression {
     public void toJSON(JSONElement json) {
         JSONElement e = new JSONElement();
         json.addChild("JMessageExpression:" + line, e);
-        e.addAttribute("ambiguousPart", ambiguousPart.toString());
+        e.addAttribute("ambiguousPart", ambiguousPart == null ? "null" : ambiguousPart.toString());
         e.addAttribute("name", messageName);
         if (target != null) {
             JSONElement e1 = new JSONElement();
