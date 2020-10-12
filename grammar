@@ -33,7 +33,7 @@ blockStatement ::= statement
 statement ::= block
             | IF parExpression statement [ ELSE statement ]
             | RETURN [ expression ] SEMI
-            | SEMI 
+            | SEMI
             | WHILE parExpression statement
             | statementExpression SEMI
 
