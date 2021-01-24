@@ -84,6 +84,7 @@ class JMethodDeclaration extends JAST implements JMember {
         this.name = name;
         this.returnType = returnType;
         this.params = params;
+        this.exceptions = exceptions;
         this.body = body;
         isAbstract = mods.contains("abstract");
         isStatic = mods.contains("static");

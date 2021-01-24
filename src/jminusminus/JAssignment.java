@@ -128,3 +128,313 @@ class JPlusAssignOp extends JAssignment {
         ((JLhs) lhs).codegenStore(output);
     }
 }
+
+/**
+ * The AST node for a minus-assign (-=) operation.
+ */
+class JMinusAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for a minus-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JMinusAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "-=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for a star-assign (*=) operation.
+ */
+class JStarAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for a star-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JStarAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "*=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for a div-assign (/=) operation.
+ */
+class JDivAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for a div-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JDivAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "/=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for a rem-assign (%=) operation.
+ */
+class JRemAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for a rem-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JRemAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "%=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for an or-assign (|=) operation.
+ */
+class JOrAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for an or-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JOrAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "|=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for an and-assign (&amp;=) operation.
+ */
+class JAndAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for an and-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JAndAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "&=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for an xor-assign (^=) operation.
+ */
+class JXorAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for an xor-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JXorAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "^=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for an arithmetic-left-shift-assign (&lt;&lt;=) operation.
+ */
+class JALeftShiftAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for an arithmetic-left-shift-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JALeftShiftAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "<<=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for an arithmetic-right-shift-assign (&gt;&gt;=) operation.
+ */
+class JARightShiftAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for an arithmetic-right-shift-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JARightShiftAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, ">>=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for an logical-right-shift-assign (&gt;&gt;&gt;=) operation.
+ */
+class JLRightShiftAssignOp extends JAssignment {
+    /**
+     * Constructs the AST node for an logical-right-shift-assign operation.
+     *
+     * @param line line in which the assignment operation occurs in the source file.
+     * @param lhs  the lhs operand.
+     * @param rhs  the rhs operand.
+     */
+    public JLRightShiftAssignOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, ">>>=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}

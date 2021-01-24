@@ -171,7 +171,7 @@ class Scanner {
                     nextCh();
                     return new TokenInfo(LE, line);
                 } else {
-                    reportScannerError("Operator < is not supported in j--.");
+                    reportScannerError("Operator < is not supported in j--");
                     return getNextToken();
                 }
             case '!':
@@ -183,7 +183,7 @@ class Scanner {
                     nextCh();
                     return new TokenInfo(LAND, line);
                 } else {
-                    reportScannerError("Operator & is not supported in j--.");
+                    reportScannerError("Operator & is not supported in j--");
                     return getNextToken();
                 }
             case '\'':
@@ -203,7 +203,7 @@ class Scanner {
                     return new TokenInfo(CHAR_LITERAL, buffer.toString(), line);
                 } else {
                     // Expected a ' ; report error and try to recover.
-                    reportScannerError(ch + " found by scanner where closing ' was expected.");
+                    reportScannerError(ch + " found by scanner where closing ' was expected");
                     while (ch != '\'' && ch != ';' && ch != '\n') {
                         nextCh();
                     }
@@ -223,9 +223,9 @@ class Scanner {
                     }
                 }
                 if (ch == '\n') {
-                    reportScannerError("Unexpected end of line found in String");
+                    reportScannerError("Unexpected end of line found in string");
                 } else if (ch == EOFCH) {
-                    reportScannerError("Unexpected end of file found in String");
+                    reportScannerError("Unexpected end of file found in string");
                 } else {
                     // Scan the closing "
                     nextCh();

@@ -13,22 +13,18 @@ typeDeclaration ::= modifiers classDeclaration
 
 modifiers ::= { ABSTRACT | PRIVATE | PROTECTED | PUBLIC | STATIC }
 
-classDeclaration ::= CLASS IDENTIFIER 
-                         [ EXTENDS qualifiedIdentifier ]
-                             classBody
+classDeclaration ::= CLASS IDENTIFIER [ EXTENDS qualifiedIdentifier ] classBody
 
 classBody ::= LCURLY { modifiers memberDecl } RCURLY
 
-memberDecl ::= IDENTIFIER formalParameters
-                   block
-             | ( VOID | type ) IDENTIFIER formalParameters
-                   ( block | SEMI )
+memberDecl ::= IDENTIFIER formalParameters block
+             | ( VOID | type ) IDENTIFIER formalParameters ( block | SEMI )
              | type variableDeclarators SEMI
 
 block ::= LCURLY { blockStatement } RCURLY
 
-blockStatement ::= statement
-                 | localVariableDeclarationStatement
+blockStatement ::= localVariableDeclarationStatement
+                 | statement
 
 statement ::= block
             | IF parExpression statement [ ELSE statement ]
@@ -66,24 +62,18 @@ statementExpression ::= expression
 
 expression ::= assignmentExpression
 
-assignmentExpression ::= conditionalAndExpression
-                             [ ( ASSIGN | PLUS_ASSIGN ) assignmentExpression ]
+assignmentExpression ::= conditionalAndExpression [ ( ASSIGN | PLUS_ASSIGN ) assignmentExpression ]
 
-conditionalAndExpression ::= equalityExpression
-                                 { LAND equalityExpression }
+conditionalAndExpression ::= equalityExpression { LAND equalityExpression }
 
-equalityExpression ::= relationalExpression
-                           { EQUAL relationalExpression }
+equalityExpression ::= relationalExpression { EQUAL relationalExpression }
 
-relationalExpression ::= additiveExpression
-                             [ ( GT | LE ) additiveExpression
-                             | INSTANCEOF referenceType ]
+relationalExpression ::= additiveExpression [ ( GT | LE ) additiveExpression
+                                            | INSTANCEOF referenceType ]
 
-additiveExpression ::= multiplicativeExpression
-                         { ( MINUS | PLUS ) multiplicativeExpression }
+additiveExpression ::= multiplicativeExpression { ( MINUS | PLUS ) multiplicativeExpression }
 
-multiplicativeExpression ::= unaryExpression
-                               { STAR unaryExpression }
+multiplicativeExpression ::= unaryExpression { STAR unaryExpression }
 
 unaryExpression ::= INC unaryExpression
                   | MINUS unaryExpression
@@ -103,8 +93,8 @@ primary ::= parExpression
           | NEW creator
           | THIS [ arguments ]
           | SUPER ( arguments | DOT IDENTIFIER [ arguments ] )
-          | literal
           | qualifiedIdentifier [ arguments ]
+          | literal
 
 creator ::= ( basicType | qualifiedIdentifier )
                 ( arguments

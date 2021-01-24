@@ -698,7 +698,7 @@ class TypeName extends Type {
     public Type resolve(Context context) {
         Type resolvedType = context.lookupType(name);
         if (resolvedType == null) {
-            // Try loading a type with the give fullname.
+            // Try loading a type with the given fullname.
             try {
                 resolvedType = typeFor(Class.forName(name));
                 context.addType(line, resolvedType);

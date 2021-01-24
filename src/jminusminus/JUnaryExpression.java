@@ -236,3 +236,123 @@ class JPreIncrementOp extends JUnaryExpression {
         }
     }
 }
+
+/**
+ * The AST node for a unary plus (+) expression.
+ */
+class JUnaryPlusOp extends JUnaryExpression {
+    /**
+     * Constructs an AST node for a unary plus expression.
+     *
+     * @param line    line in which the unary plus expression occurs in the source file.
+     * @param operand the operand.
+     */
+    public JUnaryPlusOp(int line, JExpression operand) {
+        super(line, "+", operand);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for a unary complement (~) expression.
+ */
+class JComplementOp extends JUnaryExpression {
+    /**
+     * Constructs an AST node for a unary complement expression.
+     *
+     * @param line    line in which the unary complement expression occurs in the source file.
+     * @param operand the operand.
+     */
+    public JComplementOp(int line, JExpression operand) {
+        super(line, "~", operand);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for post-increment (++) expression.
+ */
+class JPostIncrementOp extends JUnaryExpression {
+    /**
+     * Constructs an AST node for a post-increment expression.
+     *
+     * @param line    line in which the expression occurs in the source file.
+     * @param operand the operand.
+     */
+    public JPostIncrementOp(int line, JExpression operand) {
+        super(line, "++ (post)", operand);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for a pre-decrement (--) expression.
+ */
+class JPreDecrementOp extends JUnaryExpression {
+    /**
+     * Constructs an AST node for a pre-decrement expression.
+     *
+     * @param line    line in which the expression occurs in the source file.
+     * @param operand the operand.
+     */
+    public JPreDecrementOp(int line, JExpression operand) {
+        super(line, "-- (pre)", operand);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        // TODO
+    }
+}

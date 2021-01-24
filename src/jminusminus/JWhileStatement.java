@@ -11,7 +11,7 @@ class JWhileStatement extends JStatement {
     // Test expression.
     private JExpression condition;
 
-    // The body.
+    // Body.
     private JStatement body;
 
     /**

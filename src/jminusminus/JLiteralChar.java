@@ -34,13 +34,8 @@ class JLiteralChar extends JExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // Unescape the escaped escapes
         String s = JAST.unescape(text);
-
-        // The string representation is padded (by hand-written and JavaCC scanner) with single
-        // quotes, so we extract the char at 1
         char c = s.charAt(1);
-
         int i = (int) c;
         switch (i) {
             case 0:

@@ -3,7 +3,25 @@
   <component name="ChangeListManager">
     <list default="true" id="635c3b74-0e24-42bf-a84e-cbc6a9391ff1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/j--.iml" beforeDir="false" afterPath="$PROJECT_DIR$/j--.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar" beforeDir="false" afterPath="$PROJECT_DIR$/grammar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JAssignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JAssignment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JBinaryExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JBinaryExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JBooleanBinaryExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JBooleanBinaryExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JClassDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JClassDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JComparisonExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JComparisonExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JConstructorDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JConstructorDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralChar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralChar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralInt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralInt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralString.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralString.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JMethodDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JMethodDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JTypeDecl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JTypeDecl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JUnaryExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JUnaryExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JWhileStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JWhileStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/TokenInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/TokenInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Type.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/j--.jj" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/j--.jj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +59,7 @@
       <recent name="$PROJECT_DIR$/tests/jvm" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.SPIM">
+  <component name="RunManager" selected="Application.Scan">
     <configuration name="Analyze" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="jminusminus.Main" />
       <module name="j--" />
@@ -190,57 +208,9 @@
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.bat" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="479" y="215" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597670357695">
+    <state x="571" y="30" width="845" height="1050" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1611495685409">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
-    <state x="479" y="215" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1597670357695" />
-    <state x="476" y="356" width="514" height="396" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597662735691">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="476" y="356" width="514" height="396" key="#com.intellij.fileTypes.FileTypeChooser/0.30.1920.1050@0.30.1920.1050" timestamp="1597662735691" />
-    <state x="835" y="260" width="374" height="595" key="#com.intellij.ide.util.MemberChooser" timestamp="1598294685963">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="835" y="260" width="374" height="595" key="#com.intellij.ide.util.MemberChooser/0.30.1920.1050@0.30.1920.1050" timestamp="1598294685963" />
-    <state x="656" y="30" width="709" height="1050" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1596487784346">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="656" y="30" width="709" height="1050" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1596487784346" />
-    <state x="779" y="302" key="#xdebugger.evaluate" timestamp="1598187524886">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="779" y="302" key="#xdebugger.evaluate/0.30.1920.1050@0.30.1920.1050" timestamp="1598187524886" />
-    <state x="648" y="189" width="261" height="508" key="EnvironmentVariablesDialog" timestamp="1596808152505">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="648" y="189" width="261" height="508" key="EnvironmentVariablesDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1596808152505" />
-    <state width="1445" height="321" key="GridCell.Tab.0.bottom" timestamp="1598444282879">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state width="1445" height="321" key="GridCell.Tab.0.bottom/0.30.1920.1050@0.30.1920.1050" timestamp="1598444282879" />
-    <state width="1445" height="321" key="GridCell.Tab.0.center" timestamp="1598444282878">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state width="1445" height="321" key="GridCell.Tab.0.center/0.30.1920.1050@0.30.1920.1050" timestamp="1598444282878" />
-    <state width="1445" height="321" key="GridCell.Tab.0.left" timestamp="1598444282878">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state width="1445" height="321" key="GridCell.Tab.0.left/0.30.1920.1050@0.30.1920.1050" timestamp="1598444282878" />
-    <state width="1445" height="321" key="GridCell.Tab.0.right" timestamp="1598444282879">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state width="1445" height="321" key="GridCell.Tab.0.right/0.30.1920.1050@0.30.1920.1050" timestamp="1598444282879" />
-    <state x="424" y="185" width="992" height="733" key="SettingsEditor" timestamp="1598526147264">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="424" y="185" width="992" height="733" key="SettingsEditor/0.30.1920.1050@0.30.1920.1050" timestamp="1598526147264" />
-    <state x="636" y="249" key="run.anything.popup" timestamp="1598542565849">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="636" y="249" key="run.anything.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1598542565849" />
-    <state x="763" y="249" width="672" height="678" key="search.everywhere.popup" timestamp="1598528864943">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="763" y="249" width="672" height="678" key="search.everywhere.popup/0.30.1920.1050@0.30.1920.1050" timestamp="1598528864943" />
+    <state x="571" y="30" width="845" height="1050" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1611495685409" />
   </component>
 </project>

@@ -79,13 +79,13 @@ class JEqualOp extends JBooleanBinaryExpression {
 }
 
 /**
- * The AST node for a logical AND (&amp;&amp;) expression.
+ * The AST node for a logical-and (&amp;&amp;) expression.
  */
 class JLogicalAndOp extends JBooleanBinaryExpression {
     /**
-     * Constructs an AST node for a logical AND expression.
+     * Constructs an AST node for a logical-and expression.
      *
-     * @param line line in which the logical AND expression occurs in the source file.
+     * @param line line in which the logical-and expression occurs in the source file.
      * @param lhs  lhs operand.
      * @param rhs  rhs operand.
      */
@@ -118,5 +118,68 @@ class JLogicalAndOp extends JBooleanBinaryExpression {
             lhs.codegen(output, targetLabel, false);
             rhs.codegen(output, targetLabel, false);
         }
+    }
+}
+
+/**
+ * The AST node for a logical-or (||) expression.
+ */
+class JLogicalOrOp extends JBooleanBinaryExpression {
+    /**
+     * Constructs an AST node for a logical-or expression.
+     *
+     * @param line line in which the logical-or expression occurs in the source file.
+     * @param lhs  lhs operand.
+     * @param rhs  rhs operand.
+     */
+    public JLogicalOrOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "||", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for a not-equal-to (!=) expression.
+ */
+class JNotEqualOp extends JBooleanBinaryExpression {
+    /**
+     * Constructs an AST node for not-equal-to (!=) expression.
+     *
+     * @param line line number in which the not-equal-to (!=) expression occurs in the source file.
+     * @param lhs  lhs operand.
+     * @param rhs  rhs operand.
+     */
+
+    public JNotEqualOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "!=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public JExpression analyze(Context context) {
+        // TODO
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
+        // TODO
     }
 }

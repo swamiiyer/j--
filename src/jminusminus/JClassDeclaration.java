@@ -16,9 +16,6 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     // Class name.
     private String name;
 
-    // Class block.
-    private ArrayList<JMember> classBlock;
-
     // This class type.
     private Type thisType;
 
@@ -26,7 +23,10 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     private Type superType;
 
     // Implemented interfaces.
-    private ArrayList<TypeName> impls;
+    private ArrayList<TypeName> superInterfaces;
+
+    // Class block.
+    private ArrayList<JMember> classBlock;
 
     // Context for this class.
     private ClassContext context;
@@ -43,20 +43,20 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     /**
      * Constructs an AST node for a class declaration.
      *
-     * @param line       line in which the class declaration occurs in the source file.
-     * @param mods       class modifiers.
-     * @param name       class name.
-     * @param superType  super class type.
-     * @param impls      implemented interfaces.
-     * @param classBlock class block.
+     * @param line            line in which the class declaration occurs in the source file.
+     * @param mods            class modifiers.
+     * @param name            class name.
+     * @param superType       super class type.
+     * @param superInterfaces implemented interfaces.
+     * @param classBlock      class block.
      */
     public JClassDeclaration(int line, ArrayList<String> mods, String name, Type superType,
-                             ArrayList<TypeName> impls, ArrayList<JMember> classBlock) {
+                             ArrayList<TypeName> superInterfaces, ArrayList<JMember> classBlock) {
         super(line);
         this.mods = mods;
         this.name = name;
         this.superType = superType;
-        this.impls = impls;
+        this.superInterfaces = superInterfaces;
         this.classBlock = classBlock;
         hasExplicitConstructor = false;
         instanceFieldInitializations = new ArrayList<JFieldDeclaration>();
@@ -153,8 +153,15 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     /**
      * {@inheritDoc}
      */
+    public ArrayList<TypeName> superInterfaces() {
+        return superInterfaces;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public JAST analyze(Context context) {
-        // Analyze all members
+        // Analyze all members.
         for (JMember member : classBlock) {
             ((JAST) member).analyze(this.context);
         }
@@ -223,9 +230,9 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         }
         e.addAttribute("name", name);
         e.addAttribute("super", superType == null ? "" : superType.toString());
-        if (impls != null) {
+        if (superInterfaces != null) {
             ArrayList<String> value = new ArrayList<String>();
-            for (TypeName impl : impls) {
+            for (TypeName impl : superInterfaces) {
                 value.add(String.format("\"%s\"", impl.toString()));
             }
             e.addAttribute("implements", value);

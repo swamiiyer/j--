@@ -29,7 +29,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
     public JConstructorDeclaration(int line, ArrayList<String> mods, String name,
                                    ArrayList<JFormalParameter> params,
                                    ArrayList<TypeName> exceptions, JBlock body) {
-        super(line, mods, name, Type.CONSTRUCTOR, params, null, body);
+        super(line, mods, name, Type.CONSTRUCTOR, params, exceptions, body);
     }
 
     /**
@@ -141,6 +141,13 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
                         param.type() == null ? "" : param.type().toString()));
             }
             e.addAttribute("parameters", value);
+        }
+        if (exceptions != null) {
+            ArrayList<String> value = new ArrayList<String>();
+            for (TypeName exception : exceptions) {
+                value.add(String.format("\"%s\"", exception.toString()));
+            }
+            e.addAttribute("throws", value);
         }
         if (context != null) {
             context.toJSON(e);

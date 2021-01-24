@@ -83,3 +83,50 @@ class JLessEqualOp extends JComparisonExpression {
         output.addBranchInstruction(onTrue ? IF_ICMPLE : IF_ICMPGT, targetLabel);
     }
 }
+
+/**
+ * The AST node for a greater-than-or-equal-to (&gt;=) expression.
+ */
+class JGreaterEqualOp extends JComparisonExpression {
+
+    /**
+     * Constructs an AST node for a greater-than-or-equal-to expression.
+     *
+     * @param line line in which the greater-than-or-equal-to expression occurs in the source file.
+     * @param lhs  lhs operand.
+     * @param rhs  rhs operand.
+     */
+    public JGreaterEqualOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, ">=", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
+        // TODO
+    }
+}
+
+/**
+ * The AST node for a less-than (&lt;) expression.
+ */
+class JLessThanOp extends JComparisonExpression {
+    /**
+     * Constructs an AST node for a less-than expression.
+     *
+     * @param line line in which the less-than expression occurs in the source file.
+     * @param lhs  lhs operand.
+     * @param rhs  rhs operand.
+     */
+    public JLessThanOp(int line, JExpression lhs, JExpression rhs) {
+        super(line, "<", lhs, rhs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
+        // TODO
+    }
+}

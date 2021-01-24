@@ -2,6 +2,8 @@
 
 package jminusminus;
 
+import java.util.ArrayList;
+
 /**
  * An interface supported by class (or later, interface) declarations.
  */
@@ -36,9 +38,18 @@ interface JTypeDecl {
     public Type thisType();
 
     /**
-     * Returns the super class' type.
+     * Returns the type of the extended class for a class or java.lang.Object for an interface.
      *
-     * @return the super class' type.
+     * @return the type of the extended class for a class or java.lang.Object for an interface.
      */
     public Type superType();
+
+    /**
+     * Returns the types of the implemented interfaces for a class or extended interfaces for an
+     * interface.
+     *
+     * @return the types of the implemented interfaces for a class or extended interfaces for an
+     * interface.
+     */
+    public ArrayList<TypeName> superInterfaces();
 }

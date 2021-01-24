@@ -23,6 +23,15 @@ class JLiteralInt extends JExpression {
     }
 
     /**
+     * Returns the literal as an int.
+     *
+     * @return the literal as an int.
+     */
+    public int toInt() {
+        return Integer.parseInt(text);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
@@ -34,7 +43,7 @@ class JLiteralInt extends JExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        int i = Integer.parseInt(text);
+        int i = toInt();
         switch (i) {
             case 0:
                 output.addNoArgInstruction(ICONST_0);
