@@ -15,9 +15,9 @@ public class JDoStatement extends JStatement {
     private JExpression condition;
 
     /**
-     * Constructs an AST node for a do-while-statement.
+     * Constructs an AST node for a do-statement.
      *
-     * @param line      line in which the do-while-statement occurs in the source file.
+     * @param line      line in which the do-statement occurs in the source file.
      * @param body      the body.
      * @param condition test expression.
      */
