@@ -309,7 +309,7 @@ class Scanner {
                 return "\\r";
             case '"':
                 nextCh();
-                return "\"";
+                return "\\\"";
             case '\'':
                 nextCh();
                 return "\\'";

@@ -167,7 +167,7 @@ TOKEN: {
 
 // Identifiers
 TOKEN: {
-  <IDENTIFIER: ( <LETTER> | "_" | "$") ( <LETTER> | <DIGIT> |"_" | "$" )*>
+  <IDENTIFIER: ( <LETTER> | "_" | "$" ) ( <LETTER> | <DIGIT> | "_" | "$" )*>
 | <#LETTER: [ "a"-"z", "A"-"Z" ]>
 | <#DIGIT: [ "0"-"9" ]>
 }
@@ -175,8 +175,8 @@ TOKEN: {
 // Literals
 TOKEN: {
   <INT_LITERAL: <DIGIT> ( <DIGIT> )*>
-| <CHAR_LITERAL: "'" ( <ESC> | ~[ "'", "\\", "\n", "\r" ]) "'">
-| <STRING_LITERAL: "\"" ( <ESC> | ~[ "\"", "\\", "\n", "\r" ] )* "\"">
+| <CHAR_LITERAL: "'" ( <ESC> | ~[ "'", "\\" ] ) "'">
+| <STRING_LITERAL: "\"" ( <ESC> | ~[ "\"", "\\" ] )* "\"">
 | <#ESC: "\\" [ "n", "t", "b", "r", "f", "\\", "'", "\"" ]>
 }
 
@@ -1172,7 +1172,7 @@ private JExpression relationalExpression():
  * Parses an additive expression and returns an AST for it.
  *
  * <pre>
- *   additiveExpression ::= multiplicativeExpression { MINUS multiplicativeExpression }
+ *   additiveExpression ::= multiplicativeExpression { ( MINUS | PLUS ) multiplicativeExpression }
  * </pre>
  *
  * @return an AST for an additive expression.
@@ -1187,12 +1187,12 @@ private JExpression additiveExpression():
         lhs = multiplicativeExpression()
         { line = lhs.line(); }
         (
-            <PLUS>
-            rhs = multiplicativeExpression()
-            { lhs = new JPlusOp(line, lhs, rhs); } |
             <MINUS>
             rhs = multiplicativeExpression()
-            { lhs = new JSubtractOp(line, lhs, rhs); }
+            { lhs = new JSubtractOp(line, lhs, rhs); } |
+            <PLUS>
+            rhs = multiplicativeExpression()
+            { lhs = new JPlusOp(line, lhs, rhs); }
         )*
     } catch (ParseException e) {
         recoverFromError(new int[] { SEMI, EOF }, e);
