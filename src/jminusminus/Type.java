@@ -44,6 +44,16 @@ class Type {
     public final static Type BOOLEAN = typeFor(boolean.class);
 
     /**
+     * The long type.
+     */
+    public final static Type LONG = typeFor(long.class);
+
+    /**
+     * The double type.
+     */
+    public final static Type DOUBLE = typeFor(double.class);
+
+    /**
      * The java.lang.Integer type.
      */
     public final static Type BOXED_INT = typeFor(java.lang.Integer.class);
@@ -57,6 +67,16 @@ class Type {
      * The java.lang.Boolean type.
      */
     public final static Type BOXED_BOOLEAN = typeFor(java.lang.Boolean.class);
+
+    /**
+     * The java.lang.Long type.
+     */
+    public final static Type BOXED_LONG = typeFor(java.lang.Long.class);
+
+    /**
+     * The java.lang.Double type.
+     */
+    public final static Type BOXED_DOUBLE = typeFor(java.lang.Double.class);
 
     /**
      * The java.lang.String type.
@@ -624,7 +644,9 @@ class Type {
                 : classRep.isArray() ? "[" + descriptorFor(classRep.getComponentType())
                 : classRep.isPrimitive() ? (classRep == int.class ? "I"
                 : classRep == char.class ? "C"
-                : classRep == boolean.class ? "Z" : "?")
+                : classRep == boolean.class ? "Z"
+                : classRep == double.class ? "D"
+                : classRep == long.class ? "J" : "?")
                 : "L" + classRep.getName().replace('.', '/') + ";";
     }
 
