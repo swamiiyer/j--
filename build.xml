@@ -23,6 +23,7 @@ An Ant build configuration file for the jminusminus compiler.
         <echo message="j2h: Generates browsable code using java2html"/>
         <echo message="package: Creates a distributable for j--"/>
         <echo message="clean: Removes generated files and folders"/>
+        <echo message="test: Tests against project test file"/>
     </target>
     
     <!-- javacc: Generates JavaCC scanner and parser. -->
@@ -107,6 +108,19 @@ An Ant build configuration file for the jminusminus compiler.
         <delete dir="${CLASS_DIR}" />
         <delete dir="${JAVADOC_DIR}" />
         <delete dir="${J2H_DIR}" />
+    </target>
+
+    <!-- test: Tests against project test file. -->
+    <target name="test" depends="jar">
+        <echo message="Testing j-- against project test files..."/>
+        <apply executable="./run.py" failifexecutionfails="true">
+            <fileset dir="project1">
+                <patternset>
+                    <exclude name="**/*.txt"/>
+                    <exclude name="GenIsPrime.java"/>
+                </patternset>
+            </fileset>
+        </apply>
     </target>
 
 </project>
