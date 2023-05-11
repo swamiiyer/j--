@@ -615,6 +615,8 @@ public class Parser {
         JExpression expr = expression();
         if (expr instanceof JAssignment
                 || expr instanceof JPreIncrementOp
+                || expr instanceof JPreDecrementOp
+                || expr instanceof JPostIncrementOp
                 || expr instanceof JPostDecrementOp
                 || expr instanceof JMessageExpression
                 || expr instanceof JSuperConstruction

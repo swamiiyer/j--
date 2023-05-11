@@ -81,12 +81,12 @@ class Type {
     /**
      * The java.lang.String type.
      */
-    public static Type STRING = typeFor(java.lang.String.class);
+    public final static Type STRING = typeFor(java.lang.String.class);
 
     /**
      * The java.lang.Object type.
      */
-    public static Type OBJECT = typeFor(java.lang.Object.class);
+    public final static Type OBJECT = typeFor(java.lang.Object.class);
 
     /**
      * The void type.

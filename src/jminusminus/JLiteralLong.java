@@ -23,6 +23,15 @@ class JLiteralLong extends JExpression {
     }
 
     /**
+     * Returns the literal as a long.
+     *
+     * @return the literal as a long.
+     */
+    public long toLong() {
+        return Long.parseLong(text.substring(0, text.length() - 1));
+    }
+
+    /**
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {

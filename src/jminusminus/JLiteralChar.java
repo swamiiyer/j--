@@ -23,6 +23,15 @@ class JLiteralChar extends JExpression {
     }
 
     /**
+     * Returns the literal as an int.
+     *
+     * @return the literal as an int.
+     */
+    public int toInt() {
+        return (int) JAST.unescape(text).charAt(1);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
@@ -34,9 +43,7 @@ class JLiteralChar extends JExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        String s = JAST.unescape(text);
-        char c = s.charAt(1);
-        int i = (int) c;
+        int i = toInt();
         switch (i) {
             case 0:
                 output.addNoArgInstruction(ICONST_0);

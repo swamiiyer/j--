@@ -23,6 +23,15 @@ class JLiteralBoolean extends JExpression {
     }
 
     /**
+     * Returns the literal as a boolean.
+     *
+     * @return the literal as a boolean.
+     */
+    public boolean toBoolean() {
+        return text.equals("true");
+    }
+
+    /**
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
@@ -34,25 +43,16 @@ class JLiteralBoolean extends JExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        if (text.equals("true")) {
-            output.addNoArgInstruction(ICONST_1);
-        } else {
-            output.addNoArgInstruction(ICONST_0);
-        }
+        output.addNoArgInstruction(toBoolean() ? ICONST_1 : ICONST_0);
     }
 
     /**
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
-        if (text.equals("true")) {
-            if (onTrue) {
-                output.addBranchInstruction(GOTO, targetLabel);
-            }
-        } else {
-            if (!onTrue) {
-                output.addBranchInstruction(GOTO, targetLabel);
-            }
+        boolean b = toBoolean();
+        if (b && onTrue || !b && !onTrue) {
+            output.addBranchInstruction(GOTO, targetLabel);
         }
     }
 
