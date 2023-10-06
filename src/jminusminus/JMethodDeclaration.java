@@ -192,8 +192,6 @@ class JMethodDeclaration extends JAST implements JMember {
     public void toJSON(JSONElement json) {
         JSONElement e = new JSONElement();
         json.addChild("JMethodDeclaration:" + line, e);
-        e.addAttribute("name", name);
-        e.addAttribute("returnType", returnType.toString());
         if (mods != null) {
             ArrayList<String> value = new ArrayList<String>();
             for (String mod : mods) {
@@ -201,6 +199,8 @@ class JMethodDeclaration extends JAST implements JMember {
             }
             e.addAttribute("modifiers", value);
         }
+        e.addAttribute("returnType", returnType.toString());
+        e.addAttribute("name", name);
         if (params != null) {
             ArrayList<String> value = new ArrayList<String>();
             for (JFormalParameter param : params) {

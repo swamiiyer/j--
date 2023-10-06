@@ -126,7 +126,6 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
     public void toJSON(JSONElement json) {
         JSONElement e = new JSONElement();
         json.addChild("JConstructorDeclaration:" + line, e);
-        e.addAttribute("name", name);
         if (mods != null) {
             ArrayList<String> value = new ArrayList<String>();
             for (String mod : mods) {
@@ -134,6 +133,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
             }
             e.addAttribute("modifiers", value);
         }
+        e.addAttribute("name", name);
         if (params != null) {
             ArrayList<String> value = new ArrayList<String>();
             for (JFormalParameter param : params) {
