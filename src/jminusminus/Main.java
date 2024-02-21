@@ -31,6 +31,20 @@ import static jminusminus.TokenKind.EOF;
  *   producing a .class or .s (SPIM) file for each defined type (class).</li>
  * </ol>
  */
+enum ExitCode {
+    SUCCESS(0), INVALID_USER_INPUT(1), SOURCE_FILE_NOT_FOUND(2), SCANNING_ERROR(3), PARSING_ERROR(4),
+    AST_PRE_ANALYSIS_ERROR(5), AST_ANALYSIS_ERROR(6), CLEMITTER_ERROR(7), NEMITTER_ERROR(8);
+
+    private final int retCode;
+
+    ExitCode(final int ret) {
+        this.retCode = ret;
+    }
+
+    public int toInt() {
+        return this.retCode;
+    }
+}
 public class Main {
     // Whether an error occurred during compilation.
     private static boolean errorHasOccurred;
@@ -76,6 +90,7 @@ public class Main {
         }
         if (sourceFile.equals("")) {
             printUsage(caller);
+            System.exit(ExitCode.INVALID_USER_INPUT.toInt());
             return;
         }
 
@@ -84,6 +99,7 @@ public class Main {
             scanner = new LookaheadScanner(sourceFile);
         } catch (FileNotFoundException e) {
             System.err.println("Error: file " + sourceFile + " not found.");
+            System.exit(ExitCode.SOURCE_FILE_NOT_FOUND.toInt());
             return;
         }
 
@@ -97,6 +113,9 @@ public class Main {
                         token.image());
             } while (token.kind() != EOF);
             errorHasOccurred |= scanner.errorHasOccured();
+            if (errorHasOccurred)
+                System.exit(ExitCode.SCANNING_ERROR.toInt());
+            System.exit(ExitCode.SUCCESS.toInt());
             return;
         }
 
@@ -111,6 +130,7 @@ public class Main {
             return;
         }
         if (errorHasOccurred) {
+            System.exit(ExitCode.PARSING_ERROR.toInt());
             return;
         }
 
@@ -124,6 +144,7 @@ public class Main {
             return;
         }
         if (errorHasOccurred) {
+            System.exit(ExitCode.AST_PRE_ANALYSIS_ERROR.toInt());
             return;
         }
 
@@ -137,6 +158,7 @@ public class Main {
             return;
         }
         if (errorHasOccurred) {
+            System.exit(ExitCode.AST_ANALYSIS_ERROR.toInt());
             return;
         }
 
@@ -146,6 +168,7 @@ public class Main {
         ast.codegen(clEmitter);
         errorHasOccurred |= clEmitter.errorHasOccurred();
         if (errorHasOccurred) {
+            System.exit(ExitCode.CLEMITTER_ERROR.toInt());
             return;
         }
 
@@ -156,7 +179,9 @@ public class Main {
             nEmitter.destinationDir(outputDir);
             nEmitter.write();
             errorHasOccurred |= nEmitter.errorHasOccurred();
+            System.exit(ExitCode.NEMITTER_ERROR.toInt());
         }
+        System.exit(ExitCode.SUCCESS.toInt());
     }
 
     // Prints command usage to STDOUT.
