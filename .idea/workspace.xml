@@ -1,27 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="635c3b74-0e24-42bf-a84e-cbc6a9391ff1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar" beforeDir="false" afterPath="$PROJECT_DIR$/grammar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/runtests" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/langspec.txt" beforeDir="false" afterPath="$PROJECT_DIR$/langspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/AmbiguousName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/AmbiguousName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLAttributeInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLAttributeInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLCPInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLCPInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLConstantPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLConstantPool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLEmitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLEmitter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLInstruction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLInstruction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLMemberInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/CLMemberInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/CLPath.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/Context.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Context.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/IDefn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Defn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JAST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JAST.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JArrayExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JArrayExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JArrayInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JArrayInitializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JAssignment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JAssignment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JBinaryExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JBinaryExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JBlock.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JBooleanBinaryExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JBooleanBinaryExpression.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jminusminus/JClassDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JClassDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JBreakStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JBreakStatement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JComparisonExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JComparisonExpression.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jminusminus/JConstructorDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JConstructorDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JCompilationUnit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JCompilationUnit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JConditionalExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JConditionalExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JContinueStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JContinueStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JDoStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JDoStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JForStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JForStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JIfStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JIfStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralBoolean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralBoolean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralChar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralChar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralDouble.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralDouble.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralInt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralInt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralLong.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralLong.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralNull.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralNull.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JLiteralString.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JLiteralString.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JMember.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JMethodDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JMethodDeclaration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jminusminus/JTypeDecl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JTypeDecl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jminusminus/JUnaryExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JUnaryExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JReturnStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JReturnStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JSwitchStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JSwitchStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JThrowStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JThrowStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JTryStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JTryStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JVariable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JVariable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JVariableDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JVariableDeclaration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/JWhileStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JWhileStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JWildExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JWildExpression.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/JavaCCMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/JavaCCMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/LookaheadScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/LookaheadScanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NControlFlowGraph.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NEmitter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NGraphRegisterAllocator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NHIRInstruction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NInterval.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NLIRInstruction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NLinearRegisterAllocator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NNaiveRegisterAllocator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NRegister.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/NRegisterAllocator.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/SPIM.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jminusminus/SPIM.s" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Scanner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jminusminus/TokenInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/TokenInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jminusminus/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/Type.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jminusminus/j--.jj" beforeDir="false" afterPath="$PROJECT_DIR$/src/jminusminus/j--.jj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/clemitter/GenExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/clemitter/GenFactorial.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/clemitter/GenHelloWorld.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/clemitter/GenLookupSwitch.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/clemitter/GenNHellos.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/clemitter/GenTableSwitch.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/Casts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/Counter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/DayOfWeek.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/DivisorPattern.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/Euclid.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/Factorial.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/Fibonacci.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/HelloWorld.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/Inheritance.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/InstanceOf.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/LeapYear.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/MatrixSquared.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/Pascal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/PowersOfTwo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/PrimeCounter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/jvm/SumOfPowers.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/spim/Euclid.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/spim/Factorial.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/spim/Fibonacci.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/spim/Formals.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/spim/HelloWorld.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,28 +116,33 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="1WioJqpDF6mSNoLN7qdMmxO1tU5" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/home/siyer/workspace/j--",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.sourceCode",
+    "two.files.diff.last.used.file": "/home/siyer/workspace/j--/out2.txt"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/tests/jvm" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Scan">
+  <component name="RunManager" selected="Application.JavaCCScan">
     <configuration name="Analyze" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="jminusminus.Main" />
       <module name="j--" />
@@ -108,17 +191,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="JavaCCSPIM" type="Application" factoryName="Application">
-      <envs>
-        <env name="j" value="$PROJECT_DIR$/.." />
-      </envs>
-      <option name="MAIN_CLASS_NAME" value="jminusminus.JavaCCMain" />
-      <module name="j--" />
-      <option name="PROGRAM_PARAMETERS" value="-s $Prompt$ -r $Prompt$ $Prompt$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="JavaCCScan" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="jminusminus.JavaCCMain" />
       <module name="j--" />
@@ -149,17 +221,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SPIM" type="Application" factoryName="Application">
-      <envs>
-        <env name="j" value="$PROJECT_DIR$/.." />
-      </envs>
-      <option name="MAIN_CLASS_NAME" value="jminusminus.Main" />
-      <module name="j--" />
-      <option name="PROGRAM_PARAMETERS" value="-s $Prompt$ -r $Prompt$ $Prompt$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Scan" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="jminusminus.Main" />
       <module name="j--" />
@@ -181,11 +242,9 @@
       <item itemvalue="Application.JavaCCCompile" />
       <item itemvalue="Application.JavaCCParse" />
       <item itemvalue="Application.JavaCCPreAnalyze" />
-      <item itemvalue="Application.JavaCCSPIM" />
       <item itemvalue="Application.JavaCCScan" />
       <item itemvalue="Application.Parse" />
       <item itemvalue="Application.PreAnalyze" />
-      <item itemvalue="Application.SPIM" />
       <item itemvalue="Application.Scan" />
     </list>
   </component>
@@ -206,11 +265,5 @@
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.jj" />
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.bat" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="571" y="30" width="845" height="1050" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1611495685409">
-      <screen x="0" y="30" width="1920" height="1050" />
-    </state>
-    <state x="571" y="30" width="845" height="1050" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1611495685409" />
   </component>
 </project>
