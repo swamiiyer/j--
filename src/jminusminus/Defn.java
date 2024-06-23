@@ -3,8 +3,8 @@
 package jminusminus;
 
 /**
- * The IDefn type is used to implement definitions of things (local variables, formal arguments,
- * types) that are named in some context (aka scope).
+ * The IDefn type is used to implement definitions of things (local variables, formal arguments, types) that are
+ * named in some context (aka scope).
  */
 interface IDefn {
     /**
@@ -16,8 +16,8 @@ interface IDefn {
 }
 
 /**
- * A definition of a type name. In the first instance, an identifier, but later resolved to a
- * local name or an imported name.
+ * A definition of a type name. In the first instance, an identifier, but later resolved to a local name or an
+ * imported name.
  */
 class TypeNameDefn implements IDefn {
     /**
@@ -45,9 +45,8 @@ class TypeNameDefn implements IDefn {
 }
 
 /**
- * The definition for a local variable (including formal parameters). All local variables are
- * allocated on the stack at fixed offsets from the base of the stack frame and all have types.
- * Some local variables have initializations.
+ * The definition for a local variable (including formal parameters). All local variables are allocated on the stack
+ * at fixed offsets from the base of the stack frame and all have types. Some local variables have initializations.
  */
 class LocalVariableDefn implements IDefn {
     // The local variable's type.
@@ -63,8 +62,8 @@ class LocalVariableDefn implements IDefn {
      * Constructs a local variable definition for a local variable.
      *
      * @param type   the variable's type.
-     * @param offset the variable's offset from the base of the current stack frame (allocated
-     *               for each method invocation).
+     * @param offset the variable's offset from the base of the current stack frame (allocated for each method
+     *               invocation).
      */
     public LocalVariableDefn(Type type, int offset) {
         this.type = type;
