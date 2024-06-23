@@ -2,7 +2,13 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.GOTO;
+import static jminusminus.CLConstants.ICONST_0;
+import static jminusminus.CLConstants.ICONST_1;
+import static jminusminus.CLConstants.IF_ACMPEQ;
+import static jminusminus.CLConstants.IF_ACMPNE;
+import static jminusminus.CLConstants.IF_ICMPEQ;
+import static jminusminus.CLConstants.IF_ICMPNE;
 
 /**
  * This abstract base class is the AST node for binary expressions that return booleans.
@@ -17,8 +23,7 @@ abstract class JBooleanBinaryExpression extends JBinaryExpression {
      * @param rhs      rhs operand.
      */
 
-    protected JBooleanBinaryExpression(int line, String operator, JExpression lhs,
-                                       JExpression rhs) {
+    protected JBooleanBinaryExpression(int line, String operator, JExpression lhs, JExpression rhs) {
         super(line, operator, lhs, rhs);
     }
 
@@ -57,8 +62,8 @@ class JEqualOp extends JBooleanBinaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        lhs = (JExpression) lhs.analyze(context);
-        rhs = (JExpression) rhs.analyze(context);
+        lhs = lhs.analyze(context);
+        rhs = rhs.analyze(context);
         lhs.type().mustMatchExpected(line(), rhs.type());
         type = Type.BOOLEAN;
         return this;
@@ -97,8 +102,8 @@ class JLogicalAndOp extends JBooleanBinaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        lhs = (JExpression) lhs.analyze(context);
-        rhs = (JExpression) rhs.analyze(context);
+        lhs = lhs.analyze(context);
+        rhs = rhs.analyze(context);
         lhs.type().mustMatchExpected(line(), Type.BOOLEAN);
         rhs.type().mustMatchExpected(line(), Type.BOOLEAN);
         type = Type.BOOLEAN;

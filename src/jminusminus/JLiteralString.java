@@ -7,7 +7,7 @@ package jminusminus;
  */
 class JLiteralString extends JExpression {
     // String representation of the literal.
-    private String text;
+    private final String text;
 
     /**
      * Constructs an AST node for a string literal given its line number and text representation.

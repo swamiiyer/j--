@@ -9,13 +9,13 @@ import java.util.ArrayList;
  */
 class JFieldDeclaration extends JAST implements JMember {
     // Field modifiers.
-    private ArrayList<String> mods;
+    private final ArrayList<String> mods;
 
     // Variable declarators.
-    private ArrayList<JVariableDeclarator> decls;
+    private final ArrayList<JVariableDeclarator> decls;
 
     // Variable initializations.
-    private ArrayList<JStatement> initializations;
+    private final ArrayList<JStatement> initializations;
 
     /**
      * Constructs an AST node for a field declaration.
@@ -24,12 +24,11 @@ class JFieldDeclaration extends JAST implements JMember {
      * @param mods  field modifiers.
      * @param decls variable declarators.
      */
-    public JFieldDeclaration(int line, ArrayList<String> mods,
-                             ArrayList<JVariableDeclarator> decls) {
+    public JFieldDeclaration(int line, ArrayList<String> mods, ArrayList<JVariableDeclarator> decls) {
         super(line);
         this.mods = mods;
         this.decls = decls;
-        initializations = new ArrayList<JStatement>();
+        initializations = new ArrayList<>();
     }
 
     /**
@@ -46,7 +45,7 @@ class JFieldDeclaration extends JAST implements JMember {
      */
     public void preAnalyze(Context context, CLEmitter partial) {
         if (mods.contains("abstract")) {
-            JAST.compilationUnit.reportSemanticError(line(), "Field cannot be declared abstract");
+            JAST.compilationUnit.reportSemanticError(line(), "field cannot be declared abstract");
         }
         for (JVariableDeclarator decl : decls) {
             decl.setType(decl.type().resolve(context));
@@ -60,11 +59,10 @@ class JFieldDeclaration extends JAST implements JMember {
     public JFieldDeclaration analyze(Context context) {
         for (JVariableDeclarator decl : decls) {
             if (decl.initializer() != null) {
-                JAssignOp assignOp = new JAssignOp(decl.line(), new JVariable(decl.line(),
-                        decl.name()), decl.initializer());
+                JAssignOp assignOp = new JAssignOp(decl.line(), new JVariable(decl.line(), decl.name()),
+                        decl.initializer());
                 assignOp.isStatementExpression = true;
-                initializations.add(new JStatementExpression(decl.line(),
-                        assignOp).analyze(context));
+                initializations.add(new JStatementExpression(decl.line(), assignOp).analyze(context));
             }
         }
         return this;
@@ -98,7 +96,7 @@ class JFieldDeclaration extends JAST implements JMember {
         json.addChild("JFieldDeclaration", e);
         e.addAttribute("line", String.valueOf(line()));
         if (mods != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String mod : mods) {
                 value.add(String.format("\"%s\"", mod));
             }

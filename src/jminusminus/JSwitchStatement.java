@@ -4,12 +4,10 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * The AST node for a switch-statement.
  */
-public class JSwitchStatement extends JStatement {
+class JSwitchStatement extends JStatement {
     // Test expression.
     private JExpression condition;
 
@@ -23,8 +21,7 @@ public class JSwitchStatement extends JStatement {
      * @param condition test expression.
      * @param stmtGroup list of statement groups.
      */
-    public JSwitchStatement(int line, JExpression condition,
-                            ArrayList<SwitchStatementGroup> stmtGroup) {
+    public JSwitchStatement(int line, JExpression condition, ArrayList<SwitchStatementGroup> stmtGroup) {
         super(line);
         this.condition = condition;
         this.stmtGroup = stmtGroup;

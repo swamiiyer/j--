@@ -43,8 +43,8 @@ abstract class CLMemberInfo {
      * @param attributesCount member_info.attributes_count item.
      * @param attributes      member_info.attributes item.
      */
-    protected CLMemberInfo(int accessFlags, int nameIndex, int descriptorIndex,
-                           int attributesCount, ArrayList<CLAttributeInfo> attributes) {
+    protected CLMemberInfo(int accessFlags, int nameIndex, int descriptorIndex, int attributesCount,
+                           ArrayList<CLAttributeInfo> attributes) {
         this.accessFlags = accessFlags;
         this.nameIndex = nameIndex;
         this.descriptorIndex = descriptorIndex;
@@ -56,8 +56,7 @@ abstract class CLMemberInfo {
      * Writes the contents of this class member to the specified output stream.
      *
      * @param out output stream.
-     * @throws IOException if the contents of this class member can't be written to the specified
-     *                     output stream.
+     * @throws IOException if the contents of this class member can't be written to the specified output stream.
      */
     public void write(CLOutputStream out) throws IOException {
         out.writeShort(accessFlags);

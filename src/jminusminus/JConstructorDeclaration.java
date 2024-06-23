@@ -4,7 +4,9 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ALOAD_0;
+import static jminusminus.CLConstants.INVOKESPECIAL;
+import static jminusminus.CLConstants.RETURN;
 
 /**
  * The AST node for a constructor declaration.
@@ -26,8 +28,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
      * @param exceptions exceptions thrown.
      * @param body       constructor body.
      */
-    public JConstructorDeclaration(int line, ArrayList<String> mods, String name,
-                                   ArrayList<JFormalParameter> params,
+    public JConstructorDeclaration(int line, ArrayList<String> mods, String name, ArrayList<JFormalParameter> params,
                                    ArrayList<TypeName> exceptions, JBlock body) {
         super(line, mods, name, Type.CONSTRUCTOR, params, exceptions, body);
     }
@@ -38,12 +39,11 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
     public void preAnalyze(Context context, CLEmitter partial) {
         super.preAnalyze(context, partial);
         if (isStatic) {
-            JAST.compilationUnit.reportSemanticError(line(), "Constructor cannot be static");
+            JAST.compilationUnit.reportSemanticError(line(), "constructor cannot be static");
         } else if (isAbstract) {
-            JAST.compilationUnit.reportSemanticError(line(), "Constructor cannot be abstract");
+            JAST.compilationUnit.reportSemanticError(line(), "constructor cannot be abstract");
         }
-        if (body.statements().size() > 0 &&
-                body.statements().get(0) instanceof JStatementExpression) {
+        if (!body.statements().isEmpty() && body.statements().get(0) instanceof JStatementExpression) {
             JStatementExpression first = (JStatementExpression) body.statements().get(0);
             if (first.expr instanceof JSuperConstruction) {
                 ((JSuperConstruction) first.expr).markProperUseOfConstructor();
@@ -62,16 +62,14 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
         // Record the defining class declaration.
         definingClass = (JClassDeclaration) (context.classContext().definition());
 
-        MethodContext methodContext = new MethodContext(context, isStatic, returnType);
-        this.context = methodContext;
+        this.context = new MethodContext(context, isStatic, returnType);
 
         if (!isStatic) {
             // Offset 0 is used to address "this".
             this.context.nextOffset();
         }
 
-        // Declare the parameters. We consider a formal parameter to be always initialized, via a
-        // method call.
+        // Declare the parameters. We consider a formal parameter to be always initialized, via a method call.
         for (JFormalParameter param : params) {
             LocalVariableDefn defn = new LocalVariableDefn(param.type(), this.context.nextOffset());
             defn.initialize();
@@ -92,8 +90,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
         if (!invokesConstructor) {
             partial.addNoArgInstruction(ALOAD_0);
             partial.addMemberAccessInstruction(INVOKESPECIAL,
-                    ((JClassDeclaration) context.classContext().definition()).superType().jvmName(),
-                    "<init>", "()V");
+                    ((JClassDeclaration) context.classContext().definition()).superType().jvmName(), "<init>", "()V");
         }
         partial.addNoArgInstruction(RETURN);
     }
@@ -105,8 +102,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
         output.addMethod(mods, "<init>", descriptor, null, false);
         if (!invokesConstructor) {
             output.addNoArgInstruction(ALOAD_0);
-            output.addMemberAccessInstruction(INVOKESPECIAL, definingClass.superType().jvmName(),
-                    "<init>", "()V");
+            output.addMemberAccessInstruction(INVOKESPECIAL, definingClass.superType().jvmName(), "<init>", "()V");
         }
 
         // Field initializations.
@@ -127,7 +123,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
         JSONElement e = new JSONElement();
         json.addChild("JConstructorDeclaration:" + line, e);
         if (mods != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String mod : mods) {
                 value.add(String.format("\"%s\"", mod));
             }
@@ -135,7 +131,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
         }
         e.addAttribute("name", name);
         if (params != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (JFormalParameter param : params) {
                 value.add(String.format("[\"%s\", \"%s\"]", param.name(),
                         param.type() == null ? "" : param.type().toString()));
@@ -143,7 +139,7 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
             e.addAttribute("parameters", value);
         }
         if (exceptions != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (TypeName exception : exceptions) {
                 value.add(String.format("\"%s\"", exception.toString()));
             }

@@ -5,18 +5,18 @@ package jminusminus;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import static jminusminus.CLConstants.*;
 import static jminusminus.CLConstants.Category.*;
 
 /**
- * Representation of a JVM instruction. It stores the opcode and mnenomic of an instruction, its
- * operand count (DYNAMIC if the instruction has variable number operands), pc (location counter),
- * stack units (words produced - words consumed from the operand stack), and local variable index
- * (IRRELEVANT if the instruction does not operate on local variables).
+ * Representation of a JVM instruction. It stores the opcode and mnenomic of an instruction, its operand count
+ * (DYNAMIC if the instruction has variable number operands), pc (location counter), stack units (words produced -
+ * words consumed from the operand stack), and local variable index (IRRELEVANT if the instruction does not operate
+ * on local variables).
  */
 abstract class CLInstruction {
     /**
@@ -30,8 +30,8 @@ abstract class CLInstruction {
     protected String mnemonic;
 
     /**
-     * Number of operands for this instruction; determined statically for all instructions except
-     * TABLESWITCH and LOOKUPSWITCH.
+     * Number of operands for this instruction; determined statically for all instructions except TABLESWITCH and
+     * LOOKUPSWITCH.
      */
     protected int operandCount;
 
@@ -46,16 +46,15 @@ abstract class CLInstruction {
     protected int stackUnits;
 
     /**
-     * Index of the local variable that this instruction refers to; applies only to instructions
-     * that operate on local variables.
+     * Index of the local variable that this instruction refers to; applies only to instructions that operate on
+     * local variables.
      */
     protected int localVariableIndex;
 
     /**
-     * For each JVM instruction, this array stores its opcode, mnemonic, number of operands
-     * (DYNAMIC for instructions with variable attribute count), local variable index (IRRELEVANT
-     * where not applicable), stack units, and instruction category. For example, for IMUL, these
-     * parameters are IMUL, "imul", 0, IRRELEVANT, -1, ARITHMETIC1.
+     * For each JVM instruction, this array stores its opcode, mnemonic, number of operands (DYNAMIC for instructions
+     * with variable attribute count), local variable index (IRRELEVANT where not applicable), stack units, and
+     * instruction category. For example, for IMUL, these parameters are IMUL, "imul", 0, IRRELEVANT, -1, ARITHMETIC1.
      */
     public static final CLInsInfo[] instructionInfo = {
             new CLInsInfo(NOP, "nop", 0, IRRELEVANT, 0, MISC),
@@ -262,6 +261,13 @@ abstract class CLInstruction {
             new CLInsInfo(JSR_W, "jsr_w", 4, IRRELEVANT, 1, FLOW_CONTROL1)};
 
     /**
+     * Constructs a CLInstruction object.
+     */
+    protected CLInstruction() {
+        // Nothing to do here.
+    }
+
+    /**
      * Returns true if the opcode is valid, and false otherwise.
      *
      * @param opcode instruction opcode.
@@ -364,7 +370,7 @@ abstract class CLInstruction {
  */
 class CLObjectInstruction extends CLInstruction {
     // Index into the constant pool, the item at which identifies the object
-    private int index;
+    private final int index;
 
     /**
      * Constructs a CLObjectInstruction object.
@@ -387,7 +393,7 @@ class CLObjectInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         bytes.add(byteAt(index, 2));
         bytes.add(byteAt(index, 1));
@@ -399,9 +405,8 @@ class CLObjectInstruction extends CLInstruction {
  * Representation for FIELD instructions.
  */
 class CLFieldInstruction extends CLInstruction {
-    // Index into the constant pool, the item at which contains the name and descriptor of the
-    // field.
-    private int index;
+    // Index into the constant pool, the item at which contains the name and descriptor of the field.
+    private final int index;
 
     /**
      * Constructs a CLFieldInstruction object.
@@ -426,7 +431,7 @@ class CLFieldInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         bytes.add(byteAt(index, 2));
         bytes.add(byteAt(index, 1));
@@ -438,8 +443,7 @@ class CLFieldInstruction extends CLInstruction {
  * Representation for METHOD1 and METHOD2 instructions.
  */
 class CLMethodInstruction extends CLInstruction {
-    // Index into the constant pool, the item at which contains the name and descriptor of the
-    // method.
+    // Index into the constant pool, the item at which contains the name and descriptor of the method.
     private int index;
 
     // Number of arguments in case of INVOKEINTERFACE instruction.
@@ -492,14 +496,14 @@ class CLMethodInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         if (instructionInfo[opcode].category == METHOD1) {
             bytes.add(byteAt(index, 2));
             bytes.add(byteAt(index, 1));
 
-            // INVOKEINTERFACE expects the number of arguments of the method as the third operand
-            // and a fourth argument which must always be 0.
+            // INVOKEINTERFACE expects the number of arguments of the method as the third operand and a fourth
+            // argument which must always be 0.
             if (opcode == INVOKEINTERFACE) {
                 bytes.add(byteAt(nArgs, 1));
                 bytes.add(0);
@@ -513,8 +517,8 @@ class CLMethodInstruction extends CLInstruction {
  * Representation for ARRAY1, ARRAY2 and ARRAY3 instructions.
  */
 class CLArrayInstruction extends CLInstruction {
-    // A number identifying the type of primitive array, or an index into the constant pool, the
-    // item at which specifies the reference type of the array.
+    // A number identifying the type of primitive array, or an index into the constant pool, the item at which
+    // specifies the reference type of the array.
     private int type;
 
     // Number of dimensions in case of a multi-dimensional array.
@@ -575,7 +579,7 @@ class CLArrayInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         switch (opcode) {
             case NEWARRAY:
@@ -630,8 +634,7 @@ class CLArithmeticInstruction extends CLInstruction {
      * @param isWidened          whether this instruction is preceeded by the WIDE (widening)
      *                           instruction.
      */
-    public CLArithmeticInstruction(int opcode, int pc, int localVariableIndex, int constVal,
-                                   boolean isWidened) {
+    public CLArithmeticInstruction(int opcode, int pc, int localVariableIndex, int constVal, boolean isWidened) {
         super.opcode = opcode;
         super.pc = pc;
         super.localVariableIndex = localVariableIndex;
@@ -646,7 +649,7 @@ class CLArithmeticInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         if (opcode == IINC) {
             if (isWidened) {
@@ -686,7 +689,7 @@ class CLBitInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         return bytes;
     }
@@ -715,7 +718,7 @@ class CLComparisonInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         return bytes;
     }
@@ -744,7 +747,7 @@ class CLConversionInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         return bytes;
     }
@@ -766,8 +769,7 @@ class CLFlowControlInstruction extends CLInstruction {
     // Whether this instruction is preceeded by a WIDE instruction; applies only to RET instruction.
     private boolean isWidened;
 
-    // These many (0-3) bytes are added before default offset so that the index of the offset is
-    // divisible by 4.
+    // These many (0-3) bytes are added before default offset so that the index of the offset is divisible by 4.
     private int pad;
 
     // Jump label for default value for TABLESWITCH and LOOKUPSWITCH instructions.
@@ -791,8 +793,7 @@ class CLFlowControlInstruction extends CLInstruction {
     // Highest value of index for TABLESWITCH instruction.
     private int high;
 
-    // List of jump labels for TABLESWITCH instruction for each index value from low to high, end
-    // values included.
+    // List of jump labels for TABLESWITCH instruction for each index value from low to high, end values included.
     private ArrayList<String> labels;
 
     // List of offsets (resolved labels from labels) for TABLESWITCH instruction.
@@ -821,8 +822,7 @@ class CLFlowControlInstruction extends CLInstruction {
      *
      * @param pc        index of this instruction within the code array of a method.
      * @param index     index of the local variable containing the return address.
-     * @param isWidened whether this instruction is preceeded by the WIDE (widening)
-     *                  instruction.
+     * @param isWidened whether this instruction is preceeded by the WIDE (widening) instruction.
      */
     public CLFlowControlInstruction(int pc, int index, boolean isWidened) {
         super.opcode = RET;
@@ -891,9 +891,8 @@ class CLFlowControlInstruction extends CLInstruction {
     }
 
     /**
-     * Resolves the jump labels to the corresponding offset values using the given label to pc
-     * mapping. If unable to resolve a label, the offset is set such that the next instruction
-     * will be executed.
+     * Resolves the jump labels to the corresponding offset values using the given label to pc mapping. If unable to
+     * resolve a label, the offset is set such that the next instruction will be executed.
      *
      * @param labelToPC label to pc mapping.
      * @return true if all labels were resolved successfully, and false otherwise.
@@ -914,7 +913,7 @@ class CLFlowControlInstruction extends CLInstruction {
                 defaultOffset = operandCount;
                 allLabelsResolved = false;
             }
-            matchOffsetPairs = new TreeMap<Integer, Integer>();
+            matchOffsetPairs = new TreeMap<>();
             Set<Entry<Integer, String>> matches = matchLabelPairs.entrySet();
             Iterator<Entry<Integer, String>> iter = matches.iterator();
             while (iter.hasNext()) {
@@ -935,7 +934,7 @@ class CLFlowControlInstruction extends CLInstruction {
                 defaultOffset = operandCount;
                 allLabelsResolved = false;
             }
-            offsets = new ArrayList<Integer>();
+            offsets = new ArrayList<>();
             for (String label : labels) {
                 if (labelToPC.containsKey(label)) {
                     offsets.add(labelToPC.get(label) - pc);
@@ -961,7 +960,7 @@ class CLFlowControlInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         switch (opcode) {
             case RET:
@@ -988,8 +987,7 @@ class CLFlowControlInstruction extends CLInstruction {
                 bytes.add(byteAt(high, 3));
                 bytes.add(byteAt(high, 2));
                 bytes.add(byteAt(high, 1));
-                for (int i = 0; i < offsets.size(); i++) {
-                    int jumpOffset = offsets.get(i);
+                for (int jumpOffset : offsets) {
                     bytes.add(byteAt(jumpOffset, 4));
                     bytes.add(byteAt(jumpOffset, 3));
                     bytes.add(byteAt(jumpOffset, 2));
@@ -1043,12 +1041,11 @@ class CLFlowControlInstruction extends CLInstruction {
  * Representation for LOAD_STORE1, LOAD_STORE2, LOAD_STORE3 and LOAD_STORE4 instructions.
  */
 class CLLoadStoreInstruction extends CLInstruction {
-    // Whether this instruction is preceeded by a WIDE instruction; applies only to ILOAD, LLOAD,
-    // FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE.
+    // Whether this instruction is preceeded by a WIDE instruction; applies only to ILOAD, LLOAD, FLOAD, DLOAD,
+    // ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE.
     private boolean isWidened;
 
-    // A byte (for BIPUSH), a short (for SIPUSH), or a constant pool index for LDC, LDC_W, LDC2_W
-    // instructions.
+    // A byte (for BIPUSH), a short (for SIPUSH), or a constant pool index for LDC, LDC_W, LDC2_W instructions.
     private int constVal;
 
     /**
@@ -1072,8 +1069,7 @@ class CLLoadStoreInstruction extends CLInstruction {
      * @param opcode             the opcode for this instruction.
      * @param pc                 index of this instruction within the code array of a method.
      * @param localVariableIndex index of the local variable to increment.
-     * @param isWidened          whether this instruction is preceeded by the WIDE (widening)
-     *                           instruction.
+     * @param isWidened          whether this instruction is preceeded by the WIDE (widening) instruction.
      */
     public CLLoadStoreInstruction(int opcode, int pc, int localVariableIndex, boolean isWidened) {
         super.opcode = opcode;
@@ -1086,13 +1082,11 @@ class CLLoadStoreInstruction extends CLInstruction {
     }
 
     /**
-     * Constructs a CLLoadStoreInstruction object for LOAD_STORE3 and LOAD_STORE4
-     * instructions.
+     * Constructs a CLLoadStoreInstruction object for LOAD_STORE3 and LOAD_STORE4 instructions.
      *
      * @param opcode   the opcode for this instruction.
      * @param pc       index of this instruction within the code array of a method.
-     * @param constVal a byte (for BIPUSH), a short (for SIPUSH), or a constant pool index for
-     *                 LDC instructions.
+     * @param constVal a byte (for BIPUSH), a short (for SIPUSH), or a constant pool index for LDC instructions.
      */
     public CLLoadStoreInstruction(int opcode, int pc, int constVal) {
         super.opcode = opcode;
@@ -1108,7 +1102,7 @@ class CLLoadStoreInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         if (instructionInfo[opcode].operandCount > 0) {
             if (localVariableIndex != IRRELEVANT) {
@@ -1157,7 +1151,7 @@ class CLStackInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         return bytes;
     }
@@ -1186,7 +1180,7 @@ class CLMiscInstruction extends CLInstruction {
      * {@inheritDoc}
      */
     public ArrayList<Integer> toBytes() {
-        ArrayList<Integer> bytes = new ArrayList<Integer>();
+        ArrayList<Integer> bytes = new ArrayList<>();
         bytes.add(opcode);
         return bytes;
     }
@@ -1234,12 +1228,11 @@ class CLInsInfo {
      * @param mnemonic           name for this instruction.
      * @param operandCount       number of operands for this instruction.
      * @param localVariableIndex index of the local variable that this instruction refers to.
-     * @param stackUnits         words produced - words consumed from the operand stack by this
-     *                           instruction.
-     * @param category           category under which this instruction belogs.
+     * @param stackUnits         words produced - words consumed from the operand stack by this instruction.
+     * @param category           category under which this instruction belongs.
      */
-    public CLInsInfo(int opcode, String mnemonic, int operandCount, int localVariableIndex,
-                     int stackUnits, Category category) {
+    public CLInsInfo(int opcode, String mnemonic, int operandCount, int localVariableIndex, int stackUnits,
+                     Category category) {
         this.opcode = opcode;
         this.mnemonic = mnemonic;
         this.operandCount = operandCount;

@@ -2,11 +2,15 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.GOTO;
+import static jminusminus.CLConstants.IADD;
+import static jminusminus.CLConstants.ICONST_0;
+import static jminusminus.CLConstants.ICONST_1;
+import static jminusminus.CLConstants.INEG;
+import static jminusminus.CLConstants.ISUB;
 
 /**
- * This abstract base class is the AST node for an unary expression --- an expression with a
- * single operand.
+ * This abstract base class is the AST node for a unary expression --- an expression with a single operand.
  */
 abstract class JUnaryExpression extends JExpression {
     /**
@@ -64,7 +68,7 @@ class JLogicalNotOp extends JUnaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        operand = (JExpression) operand.analyze(context);
+        operand = operand.analyze(context);
         operand.type().mustMatchExpected(line(), Type.BOOLEAN);
         type = Type.BOOLEAN;
         return this;
@@ -144,10 +148,10 @@ class JPostDecrementOp extends JUnaryExpression {
      */
     public JExpression analyze(Context context) {
         if (!(operand instanceof JLhs)) {
-            JAST.compilationUnit.reportSemanticError(line, "Operand to -- must have an LValue.");
+            JAST.compilationUnit.reportSemanticError(line, "operand to -- must have an LValue.");
             type = Type.ANY;
         } else {
-            operand = (JExpression) operand.analyze(context);
+            operand = operand.analyze(context);
             operand.type().mustMatchExpected(line(), Type.INT);
             type = Type.INT;
         }
@@ -159,8 +163,7 @@ class JPostDecrementOp extends JUnaryExpression {
      */
     public void codegen(CLEmitter output) {
         if (operand instanceof JVariable) {
-            // A local variable; otherwise analyze() would have replaced it with an explicit
-            // field selection.
+            // A local variable; otherwise analyze() would have replaced it with an explicit field selection.
             int offset = ((LocalVariableDefn) ((JVariable) operand).iDefn()).offset();
             if (!isStatementExpression) {
                 // Loading its original rvalue.
@@ -200,10 +203,10 @@ class JPreIncrementOp extends JUnaryExpression {
      */
     public JExpression analyze(Context context) {
         if (!(operand instanceof JLhs)) {
-            JAST.compilationUnit.reportSemanticError(line, "Operand to ++ must have an LValue.");
+            JAST.compilationUnit.reportSemanticError(line, "operand to ++ must have an LValue.");
             type = Type.ANY;
         } else {
-            operand = (JExpression) operand.analyze(context);
+            operand = operand.analyze(context);
             operand.type().mustMatchExpected(line(), Type.INT);
             type = Type.INT;
         }
@@ -215,8 +218,7 @@ class JPreIncrementOp extends JUnaryExpression {
      */
     public void codegen(CLEmitter output) {
         if (operand instanceof JVariable) {
-            // A local variable; otherwise analyze() would have replaced it with an explicit
-            // field selection.
+            // A local variable; otherwise analyze() would have replaced it with an explicit field selection.
             int offset = ((LocalVariableDefn) ((JVariable) operand).iDefn()).offset();
             output.addIINCInstruction(offset, 1);
             if (!isStatementExpression) {
@@ -249,36 +251,6 @@ class JUnaryPlusOp extends JUnaryExpression {
      */
     public JUnaryPlusOp(int line, JExpression operand) {
         super(line, "+", operand);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JExpression analyze(Context context) {
-        // TODO
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void codegen(CLEmitter output) {
-        // TODO
-    }
-}
-
-/**
- * The AST node for a unary complement (~) expression.
- */
-class JComplementOp extends JUnaryExpression {
-    /**
-     * Constructs an AST node for a unary complement expression.
-     *
-     * @param line    line in which the unary complement expression occurs in the source file.
-     * @param operand the operand.
-     */
-    public JComplementOp(int line, JExpression operand) {
-        super(line, "~", operand);
     }
 
     /**

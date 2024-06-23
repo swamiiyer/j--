@@ -2,11 +2,13 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.IADD;
+import static jminusminus.CLConstants.IMUL;
+import static jminusminus.CLConstants.ISUB;
 
 /**
- * This abstract base class is the AST node for a binary expression --- an expression with a binary
- * operator and two operands: lhs and rhs.
+ * This abstract base class is the AST node for a binary expression --- an expression with a binary operator and two
+ * operands: lhs and rhs.
  */
 abstract class JBinaryExpression extends JExpression {
     /**
@@ -75,8 +77,8 @@ class JMultiplyOp extends JBinaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        lhs = (JExpression) lhs.analyze(context);
-        rhs = (JExpression) rhs.analyze(context);
+        lhs = lhs.analyze(context);
+        rhs = rhs.analyze(context);
         lhs.type().mustMatchExpected(line(), Type.INT);
         rhs.type().mustMatchExpected(line(), Type.INT);
         type = Type.INT;
@@ -113,15 +115,15 @@ class JPlusOp extends JBinaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        lhs = (JExpression) lhs.analyze(context);
-        rhs = (JExpression) rhs.analyze(context);
+        lhs = lhs.analyze(context);
+        rhs = rhs.analyze(context);
         if (lhs.type() == Type.STRING || rhs.type() == Type.STRING) {
             return (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
         } else if (lhs.type() == Type.INT && rhs.type() == Type.INT) {
             type = Type.INT;
         } else {
             type = Type.ANY;
-            JAST.compilationUnit.reportSemanticError(line(), "Invalid operand types for +");
+            JAST.compilationUnit.reportSemanticError(line(), "invalid operand types for +");
         }
         return this;
     }
@@ -155,8 +157,8 @@ class JSubtractOp extends JBinaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        lhs = (JExpression) lhs.analyze(context);
-        rhs = (JExpression) rhs.analyze(context);
+        lhs = lhs.analyze(context);
+        rhs = rhs.analyze(context);
         lhs.type().mustMatchExpected(line(), Type.INT);
         rhs.type().mustMatchExpected(line(), Type.INT);
         type = Type.INT;
@@ -217,192 +219,6 @@ class JRemainderOp extends JBinaryExpression {
      */
     public JRemainderOp(int line, JExpression lhs, JExpression rhs) {
         super(line, "%", lhs, rhs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JExpression analyze(Context context) {
-        // TODO
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void codegen(CLEmitter output) {
-        // TODO
-    }
-}
-
-/**
- * The AST node for an inclusive or (|) expression.
- */
-class JOrOp extends JBinaryExpression {
-    /**
-     * Constructs an AST node for an inclusive or expression.
-     *
-     * @param line line in which the inclusive or expression occurs in the source file.
-     * @param lhs  the lhs operand.
-     * @param rhs  the rhs operand.
-     */
-    public JOrOp(int line, JExpression lhs, JExpression rhs) {
-        super(line, "|", lhs, rhs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JExpression analyze(Context context) {
-        // TODO
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void codegen(CLEmitter output) {
-        // TODO
-    }
-}
-
-/**
- * The AST node for an exclusive or (^) expression.
- */
-class JXorOp extends JBinaryExpression {
-    /**
-     * Constructs an AST node for an exclusive or expression.
-     *
-     * @param line line in which the exclusive or expression occurs in the source file.
-     * @param lhs  the lhs operand.
-     * @param rhs  the rhs operand.
-     */
-    public JXorOp(int line, JExpression lhs, JExpression rhs) {
-        super(line, "^", lhs, rhs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JExpression analyze(Context context) {
-        // TODO
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void codegen(CLEmitter output) {
-        // TODO
-    }
-}
-
-/**
- * The AST node for an and (&amp;) expression.
- */
-class JAndOp extends JBinaryExpression {
-    /**
-     * Constructs an AST node for an and expression.
-     *
-     * @param line line in which the and expression occurs in the source file.
-     * @param lhs  the lhs operand.
-     * @param rhs  the rhs operand.
-     */
-    public JAndOp(int line, JExpression lhs, JExpression rhs) {
-        super(line, "&", lhs, rhs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JExpression analyze(Context context) {
-        // TODO
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void codegen(CLEmitter output) {
-        // TODO
-    }
-}
-
-/**
- * The AST node for an arithmetic left shift (&lt;&lt;) expression.
- */
-class JALeftShiftOp extends JBinaryExpression {
-    /**
-     * Constructs an AST node for an arithmetic left shift expression.
-     *
-     * @param line line in which the arithmetic left shift expression occurs in the source file.
-     * @param lhs  the lhs operand.
-     * @param rhs  the rhs operand.
-     */
-    public JALeftShiftOp(int line, JExpression lhs, JExpression rhs) {
-        super(line, "<<", lhs, rhs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JExpression analyze(Context context) {
-        // TODO
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void codegen(CLEmitter output) {
-        // TODO
-    }
-}
-
-/**
- * The AST node for an arithmetic right shift (&rt;&rt;) expression.
- */
-class JARightShiftOp extends JBinaryExpression {
-    /**
-     * Constructs an AST node for an arithmetic right shift expression.
-     *
-     * @param line line in which the arithmetic right shift expression occurs in the source file.
-     * @param lhs  the lhs operand.
-     * @param rhs  the rhs operand.
-     */
-    public JARightShiftOp(int line, JExpression lhs, JExpression rhs) {
-        super(line, ">>", lhs, rhs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public JExpression analyze(Context context) {
-        // TODO
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void codegen(CLEmitter output) {
-        // TODO
-    }
-}
-
-/**
- * The AST node for a logical right shift (&rt;&rt;&rt;) expression.
- */
-class JLRightShiftOp extends JBinaryExpression {
-    /**
-     * Constructs an AST node for a logical right shift expression.
-     *
-     * @param line line in which the logical right shift expression occurs in the source file.
-     * @param lhs  the lhs operand.
-     * @param rhs  the rhs operand.
-     */
-    public JLRightShiftOp(int line, JExpression lhs, JExpression rhs) {
-        super(line, ">>>", lhs, rhs);
     }
 
     /**

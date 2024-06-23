@@ -2,7 +2,8 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.IF_ICMPGT;
+import static jminusminus.CLConstants.IF_ICMPLE;
 
 /**
  * This abstract base class is the AST node for a comparison expression.
@@ -24,8 +25,8 @@ abstract class JComparisonExpression extends JBooleanBinaryExpression {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        lhs = (JExpression) lhs.analyze(context);
-        rhs = (JExpression) rhs.analyze(context);
+        lhs = lhs.analyze(context);
+        rhs = rhs.analyze(context);
         lhs.type().mustMatchExpected(line(), Type.INT);
         rhs.type().mustMatchExpected(line(), lhs.type());
         type = Type.BOOLEAN;

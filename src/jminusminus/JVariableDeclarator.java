@@ -3,18 +3,17 @@
 package jminusminus;
 
 /**
- * The AST node for a variable declarator, which declares a name, its type and (possibly)
- * provides an initialization.
+ * The AST node for a variable declarator, which declares a name, its type and (possibly) provides an initialization.
  */
 class JVariableDeclarator extends JAST {
     // Variable name.
-    private String name;
+    private final String name;
 
     // Variable type.
     private Type type;
 
     // Variable initializer.
-    private JExpression initializer;
+    private final JExpression initializer;
 
     /**
      * Constructs an AST node for a variable declarator.
@@ -65,15 +64,6 @@ class JVariableDeclarator extends JAST {
      */
     public JExpression initializer() {
         return initializer;
-    }
-
-    /**
-     * Sets the variable initializer.
-     *
-     * @param initializer the initializer.
-     */
-    public void setInitializer(JExpression initializer) {
-        this.initializer = initializer;
     }
 
     /**

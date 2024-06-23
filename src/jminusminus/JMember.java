@@ -7,11 +7,10 @@ package jminusminus;
  */
 interface JMember {
     /**
-     * Declares the member names in the specified (class) context and generates the member headers
-     * in the partial class.
+     * Declares the member names in the specified (class) context and generates the member headers in the partial class.
      *
      * @param context class context in which names are resolved.
      * @param partial the code emitter.
      */
-    public void preAnalyze(Context context, CLEmitter partial);
+    void preAnalyze(Context context, CLEmitter partial);
 }

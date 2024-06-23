@@ -2,12 +2,10 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.GOTO;
-
 /**
  * An AST node for a continue-statement.
  */
-public class JContinueStatement extends JStatement {
+class JContinueStatement extends JStatement {
     /**
      * Constructs an AST node for a continue-statement.
      *

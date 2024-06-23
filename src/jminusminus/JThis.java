@@ -2,7 +2,7 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ALOAD_0;
 
 /**
  * The AST for a "this" expression. It serves as a target of some field selection or message.

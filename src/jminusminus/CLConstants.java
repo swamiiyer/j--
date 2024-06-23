@@ -5,7 +5,7 @@ package jminusminus;
 /**
  * This class defines constants related to the JVM bytecode.
  */
-public class CLConstants {
+class CLConstants {
     /**
      * Magic number (0xCAFEBABE) identifying the class file format.
      */
@@ -1341,23 +1341,107 @@ public class CLConstants {
      * We classify the JVM instructions into the following categories.
      */
     enum Category {
-        OBJECT, FIELD, METHOD1, METHOD2, ARRAY1, ARRAY2, ARRAY3, ARITHMETIC1, ARITHMETIC2, BIT,
-        COMPARISON, CONVERSION, FLOW_CONTROL1, FLOW_CONTROL2, FLOW_CONTROL3, FLOW_CONTROL4,
-        LOAD_STORE1, LOAD_STORE2, LOAD_STORE3, LOAD_STORE4, STACK, MISC;
+        /**
+         * Arithmetic instructions.
+         */
+        ARITHMETIC1,
+        /**
+         * Arithmetic instructions.
+         */
+        ARITHMETIC2,
+        /**
+         * Array instructions.
+         */
+        ARRAY1,
+        /**
+         * Array instructions.
+         */
+        ARRAY2,
+        /**
+         * Array instructions.
+         */
+        ARRAY3,
+        /**
+         * Bitwise instructions.
+         */
+        BIT,
+        /**
+         * Comparison instructions.
+         */
+        COMPARISON,
+        /**
+         * Conversion instructions.
+         */
+        CONVERSION,
+        /**
+         * Field instructions.
+         */
+        FIELD,
+        /**
+         * Control-flow instructions.
+         */
+        FLOW_CONTROL1,
+        /**
+         * Control-flow instructions.
+         */
+        FLOW_CONTROL2,
+        /**
+         * Control-flow instructions.
+         */
+        FLOW_CONTROL3,
+        /**
+         * Control-flow instructions.
+         */
+        FLOW_CONTROL4,
+        /**
+         * Load-store instructions.
+         */
+        LOAD_STORE1,
+        /**
+         * Load-store instructions.
+         */
+        LOAD_STORE2,
+        /**
+         * Load-store instructions.
+         */
+        LOAD_STORE3,
+        /**
+         * Load-store instructions.
+         */
+        LOAD_STORE4,
+        /**
+         * Method instructions.
+         */
+        METHOD1,
+        /**
+         * Method instructions.
+         */
+        METHOD2,
+        /**
+         * Miscellaneous instructions.
+         */
+        MISC,
+        /**
+         * Object instructions.
+         */
+        OBJECT,
+        /**
+         * Stack instructions.
+         */
+        STACK
     }
 
-    // The constants below simply serve as markers. We are not interested in their values, which
-    // however have been picked so as not to conflict with others.
+    // The constants below simply serve as markers. We are not interested in their values, which however have been
+    // picked so as not to conflict with others.
 
     /**
-     * Denotes values that are irrelevant to certain instructions. For example, local variable
-     * index for arithmetic instructions.
+     * Denotes values that are irrelevant to certain instructions. For example, local variable index for arithmetic
+     * instructions.
      */
     public static final int IRRELEVANT = -1;
 
     /**
-     * Denotes values that are not statically known. For example, stack units for field
-     * instructions.
+     * Denotes values that are not statically known. For example, stack units for field instructions.
      */
     public static final int DYNAMIC = 300;
 
@@ -1370,4 +1454,9 @@ public class CLConstants {
      * Stack units for the instructions that set the operand stack to unit size.
      */
     public static final int UNIT_SIZE_STACK = 302;
+
+    // This class is not meant to be instantiated.
+    private CLConstants() {
+        // Nothing to do here.
+    }
 }

@@ -2,17 +2,39 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ALOAD;
+import static jminusminus.CLConstants.ALOAD_0;
+import static jminusminus.CLConstants.ALOAD_1;
+import static jminusminus.CLConstants.ALOAD_2;
+import static jminusminus.CLConstants.ALOAD_3;
+import static jminusminus.CLConstants.ASTORE;
+import static jminusminus.CLConstants.ASTORE_0;
+import static jminusminus.CLConstants.ASTORE_1;
+import static jminusminus.CLConstants.ASTORE_2;
+import static jminusminus.CLConstants.ASTORE_3;
+import static jminusminus.CLConstants.DUP;
+import static jminusminus.CLConstants.IFEQ;
+import static jminusminus.CLConstants.IFNE;
+import static jminusminus.CLConstants.ILOAD;
+import static jminusminus.CLConstants.ILOAD_0;
+import static jminusminus.CLConstants.ILOAD_1;
+import static jminusminus.CLConstants.ILOAD_2;
+import static jminusminus.CLConstants.ILOAD_3;
+import static jminusminus.CLConstants.ISTORE;
+import static jminusminus.CLConstants.ISTORE_0;
+import static jminusminus.CLConstants.ISTORE_1;
+import static jminusminus.CLConstants.ISTORE_2;
+import static jminusminus.CLConstants.ISTORE_3;
 
 /**
  * The AST node for an identifier used as a primary expression.
  */
 class JVariable extends JExpression implements JLhs {
     // The variable's name.
-    private String name;
+    private final String name;
 
     // The variable's definition.
-    private IDefn iDefn;
+    private Defn defn;
 
     // Was analyzeLhs() done?
     private boolean analyzeLhs;
@@ -42,39 +64,35 @@ class JVariable extends JExpression implements JLhs {
      *
      * @return the identifier's definition.
      */
-    public IDefn iDefn() {
-        return iDefn;
+    public Defn iDefn() {
+        return defn;
     }
 
     /**
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        iDefn = context.lookup(name);
-        if (iDefn == null) {
+        defn = context.lookup(name);
+        if (defn == null) {
             // Not a local, but is it a field?
             Type definingType = context.definingType();
             Field field = definingType.fieldFor(name);
             if (field == null) {
                 type = Type.ANY;
-                JAST.compilationUnit.reportSemanticError(line, "Cannot find name: " + name);
+                JAST.compilationUnit.reportSemanticError(line, "cannot find name: " + name);
             } else {
                 // Rewrite a variable denoting a field as an explicit field selection.
                 type = field.type();
                 JExpression newTree = new JFieldSelection(line(),
-                        field.isStatic() || (context.methodContext() != null &&
-                                context.methodContext().isStatic()) ?
-                                new JVariable(line(), definingType.toString()) : new JThis(line),
-                        name);
-                return (JExpression) newTree.analyze(context);
+                        field.isStatic() || (context.methodContext() != null && context.methodContext().isStatic()) ?
+                                new JVariable(line(), definingType.toString()) : new JThis(line), name);
+                return newTree.analyze(context);
             }
         } else {
-            if (!analyzeLhs && iDefn instanceof LocalVariableDefn &&
-                    !((LocalVariableDefn) iDefn).isInitialized()) {
-                JAST.compilationUnit.reportSemanticError(line, "Variable " + name +
-                        " might not have been initialized");
+            if (!analyzeLhs && defn instanceof LocalVariableDefn && !((LocalVariableDefn) defn).isInitialized()) {
+                JAST.compilationUnit.reportSemanticError(line, "variable " + name + " might not have been initialized");
             }
-            type = iDefn.type();
+            type = defn.type();
         }
         return this;
     }
@@ -87,7 +105,7 @@ class JVariable extends JExpression implements JLhs {
         JExpression newTree = analyze(context);
         if (newTree instanceof JVariable) {
             // Could (now) be a JFieldSelection, but if it's (still) a JVariable...
-            if (iDefn != null && !(iDefn instanceof LocalVariableDefn)) {
+            if (defn != null && !(defn instanceof LocalVariableDefn)) {
                 JAST.compilationUnit.reportSemanticError(line(), name + " is a bad LHS to a =");
             }
         }
@@ -98,8 +116,8 @@ class JVariable extends JExpression implements JLhs {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        if (iDefn instanceof LocalVariableDefn) {
-            int offset = ((LocalVariableDefn) iDefn).offset();
+        if (defn instanceof LocalVariableDefn) {
+            int offset = ((LocalVariableDefn) defn).offset();
             if (type.isReference()) {
                 switch (offset) {
                     case 0:
@@ -147,13 +165,9 @@ class JVariable extends JExpression implements JLhs {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
-        if (iDefn instanceof LocalVariableDefn) {
+        if (defn instanceof LocalVariableDefn) {
             codegen(output);
-            if (onTrue) {
-                output.addBranchInstruction(IFNE, targetLabel);
-            } else {
-                output.addBranchInstruction(IFEQ, targetLabel);
-            }
+            output.addBranchInstruction(onTrue ? IFNE : IFEQ, targetLabel);
         }
     }
 
@@ -175,7 +189,7 @@ class JVariable extends JExpression implements JLhs {
      * {@inheritDoc}
      */
     public void codegenDuplicateRvalue(CLEmitter output) {
-        if (iDefn instanceof LocalVariableDefn) {
+        if (defn instanceof LocalVariableDefn) {
             // It's copied atop the stack.
             output.addNoArgInstruction(DUP);
         }
@@ -185,8 +199,8 @@ class JVariable extends JExpression implements JLhs {
      * {@inheritDoc}
      */
     public void codegenStore(CLEmitter output) {
-        if (iDefn instanceof LocalVariableDefn) {
-            int offset = ((LocalVariableDefn) iDefn).offset();
+        if (defn instanceof LocalVariableDefn) {
+            int offset = ((LocalVariableDefn) defn).offset();
             if (type.isReference()) {
                 switch (offset) {
                     case 0:
@@ -237,5 +251,6 @@ class JVariable extends JExpression implements JLhs {
         JSONElement e = new JSONElement();
         json.addChild("JVariable:" + line, e);
         e.addAttribute("name", name());
+        e.addAttribute("type", type == null? "" : type.toString());
     }
 }

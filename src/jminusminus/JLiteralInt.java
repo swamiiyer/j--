@@ -2,14 +2,21 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.BIPUSH;
+import static jminusminus.CLConstants.ICONST_0;
+import static jminusminus.CLConstants.ICONST_1;
+import static jminusminus.CLConstants.ICONST_2;
+import static jminusminus.CLConstants.ICONST_3;
+import static jminusminus.CLConstants.ICONST_4;
+import static jminusminus.CLConstants.ICONST_5;
+import static jminusminus.CLConstants.SIPUSH;
 
 /**
  * The AST node for an int literal.
  */
 class JLiteralInt extends JExpression {
     // String representation of the literal.
-    private String text;
+    private final String text;
 
     /**
      * Constructs an AST node for an int literal given its line number and string representation.

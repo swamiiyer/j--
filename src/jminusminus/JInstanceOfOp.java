@@ -2,11 +2,12 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.IFEQ;
+import static jminusminus.CLConstants.IFNE;
+import static jminusminus.CLConstants.INSTANCEOF;
 
 /**
- * The AST node for an instanceof expression, having two arguments: an expression and a reference
- * type.
+ * The AST node for an instanceof expression, having two arguments: an expression and a reference type.
  */
 class JInstanceOfOp extends JExpression {
     // The expression denoting the value to be tested.
@@ -32,20 +33,16 @@ class JInstanceOfOp extends JExpression {
      * {@inheritDoc}
      */
     public JInstanceOfOp analyze(Context context) {
-        expr = (JExpression) expr.analyze(context);
+        expr = expr.analyze(context);
         typeSpec = typeSpec.resolve(context);
         if (!typeSpec.isReference()) {
-            JAST.compilationUnit.reportSemanticError(line(),
-                    "RHS of instanceof must be a reference type");
-        } else if (!(expr.type() == Type.NULLTYPE || expr.type() == Type.ANY ||
-                expr.type().isReference())) {
-            JAST.compilationUnit.reportSemanticError(line(),
-                    "LHS of instanceof must be a reference type");
+            JAST.compilationUnit.reportSemanticError(line(), "RHS of instanceof must be a reference type");
+        } else if (!(expr.type() == Type.NULLTYPE || expr.type() == Type.ANY || expr.type().isReference())) {
+            JAST.compilationUnit.reportSemanticError(line(), "LHS of instanceof must be a reference type");
         } else if (expr.type().isReference() && !typeSpec.isJavaAssignableFrom(expr.type()) &&
                 !expr.type().isJavaAssignableFrom(typeSpec)) {
             JAST.compilationUnit.reportSemanticError(line(),
-                    "It is impossible for the expression to be an instance of " +
-                            typeSpec.toString());
+                    "impossible for the expression to be an instance of " + typeSpec.toString());
         }
         type = Type.BOOLEAN;
         return this;
@@ -64,11 +61,7 @@ class JInstanceOfOp extends JExpression {
      */
     public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
         codegen(output);
-        if (onTrue) {
-            output.addBranchInstruction(IFNE, targetLabel);
-        } else {
-            output.addBranchInstruction(IFEQ, targetLabel);
-        }
+        output.addBranchInstruction(onTrue ? IFNE : IFEQ, targetLabel);
     }
 
     /**

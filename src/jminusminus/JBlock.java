@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 class JBlock extends JStatement {
     // List of statements forming the block body.
-    private ArrayList<JStatement> statements;
+    private final ArrayList<JStatement> statements;
 
     // The new context (built in analyze()) represented by this block.
     private LocalContext context;

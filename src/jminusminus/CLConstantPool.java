@@ -13,14 +13,14 @@ class CLConstantPool {
     private int cpIndex;
 
     // List of constant pool items.
-    private ArrayList<CLCPInfo> cpItems;
+    private final ArrayList<CLCPInfo> cpItems;
 
     /**
      * Constructs an empty constant pool.
      */
     public CLConstantPool() {
         cpIndex = 1;
-        cpItems = new ArrayList<CLCPInfo>();
+        cpItems = new ArrayList<>();
     }
 
     /**
@@ -66,9 +66,8 @@ class CLConstantPool {
         cpInfo.cpIndex = cpIndex++;
         cpItems.add(cpInfo);
 
-        // long and double, with their lower and higher words, are treated by JVM as two items in
-        // the constant pool. We have a single representation for each, so we add a null as
-        // a placeholder in the second slot.
+        // long and double, with their lower and higher words, are treated by JVM as two items in the constant pool.
+        // We have a single representation for each, so we add a null as a placeholder in the second slot.
         if ((cpInfo instanceof CLConstantLongInfo) || (cpInfo instanceof CLConstantDoubleInfo)) {
             cpIndex++;
             cpItems.add(null);
@@ -110,8 +109,7 @@ class CLConstantPool {
      * @return constant pool index.
      */
     public int constantFieldRefInfo(String className, String name, String type) {
-        CLCPInfo c = new CLConstantFieldRefInfo(constantClassInfo(className),
-                constantNameAndTypeInfo(name, type));
+        CLCPInfo c = new CLConstantFieldRefInfo(constantClassInfo(className), constantNameAndTypeInfo(name, type));
         return findOrAdd(c);
     }
 
@@ -124,8 +122,7 @@ class CLConstantPool {
      * @return constant pool index.
      */
     public int constantMethodRefInfo(String className, String name, String type) {
-        CLCPInfo c = new CLConstantMethodRefInfo(constantClassInfo(className),
-                constantNameAndTypeInfo(name, type));
+        CLCPInfo c = new CLConstantMethodRefInfo(constantClassInfo(className), constantNameAndTypeInfo(name, type));
         return findOrAdd(c);
     }
 
@@ -138,8 +135,8 @@ class CLConstantPool {
      * @return constant pool index.
      */
     public int constantInterfaceMethodRefInfo(String className, String name, String type) {
-        CLCPInfo c = new CLConstantInterfaceMethodRefInfo(
-                constantClassInfo(className), constantNameAndTypeInfo(name, type));
+        CLCPInfo c = new CLConstantInterfaceMethodRefInfo(constantClassInfo(className),
+                constantNameAndTypeInfo(name, type));
         return findOrAdd(c);
     }
 
@@ -221,8 +218,8 @@ class CLConstantPool {
         return findOrAdd(c);
     }
 
-    // Returns the index of the specified item in the constant pool. If the item does not exist,
-    // adds the item to the pool and return its (new) index.
+    // Returns the index of the specified item in the constant pool. If the item does not exist, adds the item to the
+    // pool and returns its (new) index.
     private int findOrAdd(CLCPInfo cpInfo) {
         int index = find(cpInfo);
         if (index == -1) {

@@ -4,18 +4,18 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ANEWARRAY;
+import static jminusminus.CLConstants.NEWARRAY;
 
 /**
- * The AST node for a "new" array operation. It keeps track of its base type and a list of its
- * dimensions.
+ * The AST node for a "new" array operation. It keeps track of its base type and a list of its dimensions.
  */
 class JNewArrayOp extends JExpression {
     // The base (component) type of the array.
-    private Type typeSpec;
+    private final Type typeSpec;
 
     // Dimensions of the array.
-    private ArrayList<JExpression> dimExprs;
+    private final ArrayList<JExpression> dimExprs;
 
     /**
      * Constructs an AST node for a "new" array operation.

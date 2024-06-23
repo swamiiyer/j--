@@ -92,6 +92,13 @@ class CLFile {
     public ArrayList<CLAttributeInfo> attributes;
 
     /**
+     * Constructs a CLFile object.
+     */
+    public CLFile() {
+        // Nothing to do here.
+    }
+
+    /**
      * Writes the contents of this class to the specified output stream.
      *
      * @param out output stream.
@@ -108,7 +115,7 @@ class CLFile {
         out.writeShort(superClass);
         out.writeShort(interfacesCount);
         for (Integer index : interfaces) {
-            out.writeShort(index.intValue());
+            out.writeShort(index);
         }
         out.writeShort(fieldsCount);
         for (CLMemberInfo fieldInfo : fields) {
@@ -131,14 +138,14 @@ class CLFile {
     }
 
     /**
-     * Returns a string identifying the inner class access permissions and properties contained in
-     * the specified mask of flags.
+     * Returns a string identifying the inner class access permissions and properties contained in the specified mask
+     * of flags.
      *
      * @param accessFlags mask of access flags.
      * @return a string identifying the inner class access permissions and properties.
      */
     public static String innerClassAccessFlagsToString(int accessFlags) {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         if ((accessFlags & ACC_PUBLIC) != 0) {
             b.append("public ");
         }
@@ -173,14 +180,14 @@ class CLFile {
     }
 
     /**
-     * Returns a string identifying the field access permissions and properties contained in the
-     * specified mask of flags.
+     * Returns a string identifying the field access permissions and properties contained in the specified mask of
+     * flags.
      *
      * @param accessFlags mask of access flags.
      * @return a string identifying the field access permissions and properties.
      */
     public static String fieldAccessFlagsToString(int accessFlags) {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         if ((accessFlags & ACC_PUBLIC) != 0) {
             b.append("public ");
         }
@@ -215,14 +222,14 @@ class CLFile {
     }
 
     /**
-     * Returns a string identifying the method access permissions and properties contained in the
-     * specified mask of flags.
+     * Returns a string identifying the method access permissions and properties contained in the specified mask of
+     * flags.
      *
      * @param accessFlags mask of access flags.
      * @return a string identifying the method access permissions and properties.
      */
     public static String methodAccessFlagsToString(int accessFlags) {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         if ((accessFlags & ACC_PUBLIC) != 0) {
             b.append("public ");
         }

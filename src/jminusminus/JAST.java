@@ -37,6 +37,16 @@ abstract class JAST {
     }
 
     /**
+     * Performs first phase of semantic analysis on this AST.
+     *
+     * @param context the environment (scope) in which code is pre-analyzed.
+     * @param partial the code emitter.
+     */
+    public void preAnalyze(Context context, CLEmitter partial) {
+        // A dummy -- redefined where necessary.
+    }
+
+    /**
      * Performs semantic analysis on this AST and returns the (possibly modified) AST.
      *
      * @param context the environment (scope) in which code is analyzed.
@@ -45,10 +55,9 @@ abstract class JAST {
     public abstract JAST analyze(Context context);
 
     /**
-     * Generates a partial class for a type, reflecting only the member information required to
-     * do analysis.
+     * Generates a partial class for a type, reflecting only the member information required to do analysis.
      *
-     * @param context the parent (class) context.
+     * @param context the parent context.
      * @param partial the code emitter.
      */
     public void partialCodegen(Context context, CLEmitter partial) {
@@ -68,7 +77,7 @@ abstract class JAST {
      * @param json the JSON emitter.
      */
     public void toJSON(JSONElement json) {
-        // Nothing here.
+        // A dummy -- redefined where necessary.
     }
 
     /**
@@ -78,7 +87,7 @@ abstract class JAST {
      * @return the unescaped string.
      */
     public static String unescape(String s) {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (c == '\\') {
@@ -126,16 +135,16 @@ abstract class JAST {
  */
 class JSONElement {
     // List of attribute names.
-    private ArrayList<String> attrNames;
+    private final ArrayList<String> attrNames;
 
     // List of attribute values.
-    private ArrayList<String> attrValues;
+    private final ArrayList<String> attrValues;
 
     // List of children names.
-    private ArrayList<String> childrenNames;
+    private final ArrayList<String> childrenNames;
 
     // List of children.
-    private ArrayList<JSONElement> children;
+    private final ArrayList<JSONElement> children;
 
     // Indentation level.
     private int indentation;
@@ -144,10 +153,10 @@ class JSONElement {
      * Constructs an empty JSON element.
      */
     public JSONElement() {
-        this.attrNames = new ArrayList<String>();
-        this.attrValues = new ArrayList<String>();
-        this.childrenNames = new ArrayList<String>();
-        this.children = new ArrayList<JSONElement>();
+        this.attrNames = new ArrayList<>();
+        this.attrValues = new ArrayList<>();
+        this.childrenNames = new ArrayList<>();
+        this.children = new ArrayList<>();
         indentation = 0;
     }
 
@@ -205,7 +214,7 @@ class JSONElement {
             } else {
                 sb.append(String.format("\"%s\": \"%s\"", name, value));
             }
-            if (i < attrNames.size() - 1 || childrenNames.size() > 0) {
+            if (i < attrNames.size() - 1 || !childrenNames.isEmpty()) {
                 sb.append(",\n");
             } else {
                 sb.append("\n");

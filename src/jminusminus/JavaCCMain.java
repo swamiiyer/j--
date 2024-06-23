@@ -57,21 +57,6 @@ public class JavaCCMain {
                 debugOption = args[i];
             } else if (args[i].endsWith("-d") && (i + 1) < args.length) {
                 outputDir = args[++i];
-            } else if (args[i].endsWith("-s") && (i + 1) < args.length) {
-                spimOutput = true;
-                registerAllocation = args[++i];
-                if (!registerAllocation.equals("naive") &&
-                        !registerAllocation.equals("linear") &&
-                        !registerAllocation.equals("graph")
-                        || registerAllocation.equals("")) {
-                    printUsage(caller);
-                    return;
-                }
-            } else if (args[i].endsWith("-r") && (i + 1) < args.length) {
-                NPhysicalRegister.MAX_COUNT = Math.min(18, Integer
-                        .parseInt(args[++i]));
-                NPhysicalRegister.MAX_COUNT = Math.max(1,
-                        NPhysicalRegister.MAX_COUNT);
             } else {
                 printUsage(caller);
                 return;
@@ -161,15 +146,6 @@ public class JavaCCMain {
         if (errorHasOccurred) {
             return;
         }
-
-        // If SPIM output was asked for, convert the in-memory JVM instructions to SPIM using the
-        // specified register allocation scheme.
-        if (spimOutput) {
-            NEmitter nEmitter = new NEmitter(sourceFile, ast.clFiles(), registerAllocation);
-            nEmitter.destinationDir(outputDir);
-            nEmitter.write();
-            errorHasOccurred |= nEmitter.errorHasOccurred();
-        }
     }
 
     // Prints command usage to STDOUT.
@@ -177,13 +153,11 @@ public class JavaCCMain {
         String usage = "Usage: " + caller
                 + " <options> <source file>\n"
                 + "Where possible options include:\n"
-                + "  -t  Only tokenize input and print tokens to STDOUT\n"
-                + "  -p  Only parse input and print AST to STDOUT\n"
-                + "  -pa Only parse and pre-analyze input and print AST to STDOUT\n"
-                + "  -a  Only parse, pre-analyze, and analyze input and print AST to STDOUT\n"
-                + "  -s  <naive|linear|graph> Generate SPIM code\n"
-                + "  -r  <num> Physical registers (1-18) available for allocation; default = 8\n"
-                + "  -d  <dir> Specify where to place output files; default = .";
+                + "  -t  Tokenize input and print tokens to STDOUT\n"
+                + "  -p  Parse input and print AST to STDOUT\n"
+                + "  -pa Pre-analyze input and print AST to STDOUT\n"
+                + "  -a  Analyze input and print AST to STDOUT\n"
+                + "  -d  <dir> Specify where to place output (.class) files; default = .";
         System.out.println(usage);
     }
 }

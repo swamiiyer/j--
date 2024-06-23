@@ -3,8 +3,8 @@
 package jminusminus;
 
 /**
- * The AST node for an expression that appears as a statement. Only the expressions that have a
- * side-effect are valid statement expressions.
+ * The AST node for an expression that appears as a statement. Only the expressions that have a side-effect are valid
+ * statement expressions.
  */
 class JStatementExpression extends JStatement {
     /**

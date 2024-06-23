@@ -2,14 +2,12 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * The AST node for a long literal.
  */
 class JLiteralLong extends JExpression {
     // String representation of the literal.
-    private String text;
+    private final String text;
 
     /**
      * Constructs an AST node for a long literal given its line number and string representation.

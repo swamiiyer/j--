@@ -2,11 +2,23 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.AALOAD;
+import static jminusminus.CLConstants.AASTORE;
+import static jminusminus.CLConstants.BALOAD;
+import static jminusminus.CLConstants.BASTORE;
+import static jminusminus.CLConstants.CALOAD;
+import static jminusminus.CLConstants.CASTORE;
+import static jminusminus.CLConstants.DUP2;
+import static jminusminus.CLConstants.DUP2_X1;
+import static jminusminus.CLConstants.DUP_X2;
+import static jminusminus.CLConstants.IALOAD;
+import static jminusminus.CLConstants.IASTORE;
+import static jminusminus.CLConstants.IFEQ;
+import static jminusminus.CLConstants.IFNE;
 
 /**
- * The AST for an array indexing operation. It has an expression denoting an array object and an
- * expression denoting an integer index.
+ * The AST for an array indexing operation. It has an expression denoting an array object and an expression denoting
+ * an integer index.
  */
 class JArrayExpression extends JExpression implements JLhs {
     // The array.
@@ -32,15 +44,14 @@ class JArrayExpression extends JExpression implements JLhs {
      * {@inheritDoc}
      */
     public JExpression analyze(Context context) {
-        theArray = (JExpression) theArray.analyze(context);
-        indexExpr = (JExpression) indexExpr.analyze(context);
+        theArray = theArray.analyze(context);
+        indexExpr = indexExpr.analyze(context);
         if (!(theArray.type().isArray())) {
             JAST.compilationUnit.reportSemanticError(line(), "attempt to index a non-array object");
             this.type = Type.ANY;
-        } else {
-            this.type = theArray.type().componentType();
         }
         indexExpr.type().mustMatchExpected(line(), Type.INT);
+        type = theArray.type().componentType();
         return this;
     }
 
@@ -74,11 +85,7 @@ class JArrayExpression extends JExpression implements JLhs {
      */
     public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
         codegen(output);
-        if (onTrue) {
-            output.addBranchInstruction(IFNE, targetLabel);
-        } else {
-            output.addBranchInstruction(IFEQ, targetLabel);
-        }
+        output.addBranchInstruction(onTrue ? IFNE : IFEQ, targetLabel);
     }
 
     /**
@@ -93,11 +100,7 @@ class JArrayExpression extends JExpression implements JLhs {
      * {@inheritDoc}
      */
     public void codegenLoadLhsRvalue(CLEmitter output) {
-        if (type == Type.STRING) {
-            output.addNoArgInstruction(DUP2_X1);
-        } else {
-            output.addNoArgInstruction(DUP2);
-        }
+        output.addNoArgInstruction(type == Type.STRING ? DUP2_X1 : DUP2);
         if (type == Type.INT) {
             output.addNoArgInstruction(IALOAD);
         } else if (type == Type.BOOLEAN) {

@@ -4,20 +4,18 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ALOAD_0;
+import static jminusminus.CLConstants.INVOKESPECIAL;
 
 /**
  * The AST node for a this(...) constructor.
  */
 class JThisConstruction extends JExpression {
     // Arguments to the constructor.
-    private ArrayList<JExpression> arguments;
+    private final ArrayList<JExpression> arguments;
 
     // Constructor representation of the constructor.
     private Constructor constructor;
-
-    // Types of arguments.
-    private Type[] argTypes;
 
     // Whether this constructor is used properly, ie, as the first statement within a constructor.
     private boolean properUseOfConstructor;
@@ -48,26 +46,24 @@ class JThisConstruction extends JExpression {
         type = Type.VOID;
 
         // Analyze the arguments, collecting their types (in Class form) as argTypes.
-        argTypes = new Type[arguments.size()];
+        Type[] argTypes = new Type[arguments.size()];
         for (int i = 0; i < arguments.size(); i++) {
-            arguments.set(i, (JExpression) arguments.get(i).analyze(context));
+            arguments.set(i, arguments.get(i).analyze(context));
             argTypes[i] = arguments.get(i).type();
         }
 
         if (!properUseOfConstructor) {
-            JAST.compilationUnit.reportSemanticError(line(),
-                    "this" + Type.argTypesAsString(argTypes)
+            JAST.compilationUnit.reportSemanticError(line(), "this" + Type.argTypesAsString(argTypes)
                     + " must be first statement in the constructor's body");
             return this;
         }
 
         // Get the constructor this(...) refers to..
-        constructor =
-                ((JTypeDecl) context.classContext.definition()).thisType().constructorFor(argTypes);
+        constructor = ((JTypeDecl) context.classContext.definition()).thisType().constructorFor(argTypes);
 
         if (constructor == null) {
             JAST.compilationUnit.reportSemanticError(line(),
-                    "No such constructor: this" + Type.argTypesAsString(argTypes));
+                    "no such constructor: this" + Type.argTypesAsString(argTypes));
 
         }
         return this;
@@ -81,8 +77,8 @@ class JThisConstruction extends JExpression {
         for (JExpression argument : arguments) {
             argument.codegen(output);
         }
-        output.addMemberAccessInstruction(INVOKESPECIAL, constructor.declaringType().jvmName(),
-                "<init>", constructor.toDescriptor());
+        output.addMemberAccessInstruction(INVOKESPECIAL, constructor.declaringType().jvmName(), "<init>",
+                constructor.toDescriptor());
     }
 
     /**

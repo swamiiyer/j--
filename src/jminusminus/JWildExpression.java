@@ -3,14 +3,14 @@
 package jminusminus;
 
 /**
- * The AST node for a "wild" expression. A wild expression is a placeholder expression, used when
- * there is a syntax error.
+ * The AST node for a "wild" expression. A wild expression is a placeholder expression, used when there is a syntax
+ * error.
  */
 class JWildExpression extends JExpression {
     /**
      * Constructs an AST node for a "wild" expression.
      *
-     * @param line line in which the "wild" expression occurs occurs in the source file.
+     * @param line line in which the "wild" expression occurs in the source file.
      */
 
     public JWildExpression(int line) {
@@ -38,5 +38,7 @@ class JWildExpression extends JExpression {
     public void toJSON(JSONElement json) {
         JSONElement e = new JSONElement();
         json.addChild("JWildExpression:" + line, e);
+        e.addAttribute("type", type == null ? "" : type.toString());
+        e.addAttribute("value", "");
     }
 }

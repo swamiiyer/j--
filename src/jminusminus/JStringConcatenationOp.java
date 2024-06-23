@@ -2,12 +2,15 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.DUP;
+import static jminusminus.CLConstants.INVOKESPECIAL;
+import static jminusminus.CLConstants.INVOKEVIRTUAL;
+import static jminusminus.CLConstants.NEW;
 
 /**
- * The AST node for a string concatenation operation. Nodes of this type are not produced by the
- * parser, but by analysis of a + operation where the arguments are strings. Such operations are
- * rewritten to be string concatenation operations.
+ * The AST node for a string concatenation operation. Nodes of this type are not produced by the parser, but by
+ * analysis of a + operation where the arguments are strings. Such operations are rewritten to be string
+ * concatenation operations.
  */
 class JStringConcatenationOp extends JBinaryExpression {
     /**
@@ -36,19 +39,17 @@ class JStringConcatenationOp extends JBinaryExpression {
         // Firstly, create a StringBuilder.
         output.addReferenceInstruction(NEW, "java/lang/StringBuilder");
         output.addNoArgInstruction(DUP);
-        output.addMemberAccessInstruction(INVOKESPECIAL, "java/lang/StringBuilder", "<init>",
-                "()V");
+        output.addMemberAccessInstruction(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V");
 
         // Lhs and Rhs.
         nestedCodegen(output);
 
         // Finally, make into a String.
-        output.addMemberAccessInstruction(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString",
-                "()Ljava/lang/String;");
+        output.addMemberAccessInstruction(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;");
     }
 
-    // Like codegen() method, but we needn't (and shouldn't) create a StringBuilder nor convert
-    // the result to a String, as that will be done in a parent.
+    // Like codegen() method, but we needn't (and shouldn't) create a StringBuilder nor convert the result to a
+    // String, as that will be done in a parent.
     private void nestedCodegen(CLEmitter output) {
         // Lhs.
         if (lhs instanceof JStringConcatenationOp) {

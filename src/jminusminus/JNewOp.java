@@ -4,18 +4,20 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.DUP;
+import static jminusminus.CLConstants.INVOKESPECIAL;
+import static jminusminus.CLConstants.NEW;
 
 /**
- * The AST node for a new expression. It keeps track of the constructor representing the
- * expression, its arguments and their types.
+ * The AST node for a new expression. It keeps track of the constructor representing the expression, its arguments
+ * and their types.
  */
 class JNewOp extends JExpression {
     // The constructor representing this "new" expression.
     private Constructor constructor;
 
     // The arguments to the constructor.
-    private ArrayList<JExpression> arguments;
+    private final ArrayList<JExpression> arguments;
 
     // Types of the arguments.
     private Type[] argTypes;
@@ -43,14 +45,13 @@ class JNewOp extends JExpression {
         // Analyze the arguments, collecting their types (in Class form) as argTypes.
         argTypes = new Type[arguments.size()];
         for (int i = 0; i < arguments.size(); i++) {
-            arguments.set(i, (JExpression) arguments.get(i).analyze(context));
+            arguments.set(i, arguments.get(i).analyze(context));
             argTypes[i] = arguments.get(i).type();
         }
 
         // Can't instantiate an abstract type.
         if (type.isAbstract()) {
-            JAST.compilationUnit.reportSemanticError(line(),
-                    "Cannot instantiate an abstract type: " + type.toString());
+            JAST.compilationUnit.reportSemanticError(line(), "cannot instantiate an abstract type: " + type.toString());
         }
 
         // Then get the proper constructor, given the arguments.
@@ -58,7 +59,7 @@ class JNewOp extends JExpression {
 
         if (constructor == null) {
             JAST.compilationUnit.reportSemanticError(line(),
-                    "Cannot find constructor: " + Type.signatureFor(type.toString(), argTypes));
+                    "cannot find constructor: " + Type.signatureFor(type.toString(), argTypes));
         }
         return this;
     }
@@ -72,10 +73,7 @@ class JNewOp extends JExpression {
         for (JExpression argument : arguments) {
             argument.codegen(output);
         }
-        output.addMemberAccessInstruction(INVOKESPECIAL,
-                type.jvmName(),
-                "<init>",
-                constructor.toDescriptor());
+        output.addMemberAccessInstruction(INVOKESPECIAL, type.jvmName(), "<init>", constructor.toDescriptor());
     }
 
     /**

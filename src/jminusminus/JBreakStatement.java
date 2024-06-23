@@ -2,12 +2,10 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * An AST node for a break-statement.
  */
-public class JBreakStatement extends JStatement {
+class JBreakStatement extends JStatement {
     /**
      * Constructs an AST node for a break-statement.
      *

@@ -7,13 +7,12 @@ import java.util.Stack;
 import java.util.Vector;
 
 /**
- * A lexical analyzer for j-- that interfaces with the hand-written parser (Parser). It
- * provides a backtracking mechanism, and makes use of the underlying hand-written scanner
- * (Scanner).
+ * A lexical analyzer for j-- that interfaces with the hand-written parser (Parser). It provides a backtracking
+ * mechanism, and makes use of the underlying hand-written scanner (Scanner).
  */
 class LookaheadScanner {
     // The underlying hand-written scanner.
-    private Scanner scanner;
+    private final Scanner scanner;
 
     // Backtracking queue.
     private Vector<TokenInfo> backtrackingQueue;
@@ -22,7 +21,7 @@ class LookaheadScanner {
     private Vector<TokenInfo> nextQueue;
 
     // Stack of token queues for nested lookahead.
-    private Stack<Vector<TokenInfo>> queueStack;
+    private final Stack<Vector<TokenInfo>> queueStack;
 
     // Whether we are looking ahead.
     public boolean isLookingAhead;
@@ -41,9 +40,9 @@ class LookaheadScanner {
      */
     public LookaheadScanner(String fileName) throws FileNotFoundException {
         scanner = new Scanner(fileName);
-        backtrackingQueue = new Vector<TokenInfo>();
-        nextQueue = new Vector<TokenInfo>();
-        queueStack = new Stack<Vector<TokenInfo>>();
+        backtrackingQueue = new Vector<>();
+        nextQueue = new Vector<>();
+        queueStack = new Stack<>();
         isLookingAhead = false;
     }
 
@@ -52,7 +51,7 @@ class LookaheadScanner {
      */
     public void next() {
         previousToken = token;
-        if (backtrackingQueue.size() == 0) {
+        if (backtrackingQueue.isEmpty()) {
             token = scanner.getNextToken();
         } else {
             token = backtrackingQueue.remove(0);
@@ -63,14 +62,13 @@ class LookaheadScanner {
     }
 
     /**
-     * Records the current position in the input, so that we can start looking ahead in the input
-     * (and later return to this position) --- the current and subsequent tokens are queued until
-     * returnToPosition() is invoked.
+     * Records the current position in the input, so that we can start looking ahead in the input (and later return
+     * to this position) --- the current and subsequent tokens are queued until returnToPosition() is invoked.
      */
     public void recordPosition() {
         isLookingAhead = true;
         queueStack.push(nextQueue);
-        nextQueue = new Vector<TokenInfo>();
+        nextQueue = new Vector<>();
         nextQueue.add(previousToken);
         nextQueue.add(token);
     }
@@ -79,14 +77,14 @@ class LookaheadScanner {
      * Returns to the previously recorded position in the input stream of tokens.
      */
     public void returnToPosition() {
-        while (backtrackingQueue.size() > 0) {
+        while (!backtrackingQueue.isEmpty()) {
             nextQueue.add(backtrackingQueue.remove(0));
         }
         backtrackingQueue = nextQueue;
         nextQueue = queueStack.pop();
         isLookingAhead = !(queueStack.empty());
 
-        // Restore previous and current tokens
+        // Restore previous and current tokens.
         previousToken = backtrackingQueue.remove(0);
         token = backtrackingQueue.remove(0);
     }

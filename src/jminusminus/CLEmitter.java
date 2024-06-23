@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
@@ -20,21 +19,19 @@ import java.util.TreeMap;
 import static jminusminus.CLConstants.*;
 
 /**
- * This class provides a high level interface for creating (in-memory and file based)
- * representation of Java classes.
+ * This class provides a high level interface for creating (in-memory and file based) representation of Java classes.
  * <p>
- * j-- uses this interface to produce target JVM bytecode from a j-- source program. During the
- * pre-analysis and analysis phases, j-- produces partial (in-memory) classes for the type
- * declarations within the compilation unit, and during the code generation phase, it produces
- * file-based classes for the declarations.
+ * j-- uses this interface to produce target JVM bytecode from a j-- source program. During the pre-analysis and
+ * analysis phases, j-- produces partial (in-memory) classes for the type declarations within the compilation unit,
+ * and during the code generation phase, it produces file-based classes for the declarations.
  */
 public class CLEmitter {
     // Name of the class.
     private String name;
 
-    // If true, the in-memory representation of the class will be written to the file system.
-    // Otherwise, it won't be saved as a file.
-    private boolean toFile;
+    // If true, the in-memory representation of the class will be written to the file system. Otherwise, it won't be
+    // saved as a file.
+    private final boolean toFile;
 
     // Destination directory for the class.
     private String destDir;
@@ -78,12 +75,11 @@ public class CLEmitter {
     // Index into the constant pool, the item at which specifies the name of the method last added.
     private int mNameIndex;
 
-    // Index into the constant pool, the item at which specifies the descriptor of the method
-    // last added.
+    // Index into the constant pool, the item at which specifies the descriptor of the method last added.
     private int mDescriptorIndex;
 
-    // Number of arguments for the method last added.
-    private int mArgumentCount;
+    // Number of locals for the method last added.
+    private int mLocalsCount;
 
     // Code attributes of the method last added.
     private ArrayList<CLAttributeInfo> mCodeAttributes;
@@ -91,22 +87,21 @@ public class CLEmitter {
     // Whether the method last added needs closing.
     private boolean isMethodOpen;
 
-    // Stores jump labels for the method last added. When a label is created, a mapping from the
-    // label to an Integer representing the pc of the next instruction is created. Later on, when
-    // the label is added, its Integer value is replaced by the value of pc then.
+    // Stores jump labels for the method last added. When a label is created, a mapping from the label to an Integer
+    // representing the pc of the next instruction is created. Later on, when the label is added, its Integer value
+    // is replaced by the value of pc then.
     private Hashtable<String, Integer> mLabels;
 
     // Counter for creating unique jump labels.
     private int mLabelCount;
 
-    // Whether there was an instruction added after the last call to addLabel( String label). If
-    // not, the branch instruction that was added with that label would jump beyond the code
-    // section, which is not acceptable to the runtime class loader. Therefore, if this flag is
-    // false, we add a NOP instruction at the end of the code section to make the jump valid.
+    // Whether there was an instruction added after the last call to addLabel( String label). If not, the branch
+    // instruction that was added with that label would jump beyond the code section, which is not acceptable to the
+    // runtime class loader. Therefore, if this flag is false, we add a NOP instruction at the end of the code
+    // section to make the jump valid.
     private boolean mInstructionAfterLabel = false;
 
-    // Location counter; index of the next instruction within the code section of the method last
-    // added.
+    // Location counter; index of the next instruction within the code section of the method last added.
     private int mPC;
 
     // Name of the method last added; used for error reporting.
@@ -119,11 +114,11 @@ public class CLEmitter {
     private static ByteClassLoader byteClassLoader;
 
     /**
-     * Constructs a CLEmitter instance given a boolean on whether or not the class file will be
-     * written to the file system.
+     * Constructs a CLEmitter instance given a boolean on whether or not the class file will be written to the file
+     * system.
      *
-     * @param toFile if true the in-memory representation of the class file will be written to
-     *               the file system. Otherwise, it won't be saved as a file.
+     * @param toFile if true the in-memory representation of the class file will be written to the file system.
+     *               Otherwise, it won't be saved as a file.
      */
     public CLEmitter(boolean toFile) {
         destDir = ".";
@@ -151,26 +146,25 @@ public class CLEmitter {
     /**
      * Adds a class or interface to the class file.
      * <p>
-     * This method instantiates a class file representation in memory, so this method
-     * <em>must</em> be called prior to methods that add information (fields, methods,
-     * instructions, etc.) to the class.
+     * This method instantiates a class file representation in memory, so this method <em>must</em> be called prior
+     * to methods that add information (fields, methods, instructions, etc.) to the class.
      *
      * @param accessFlags     the access flags for the class or interface.
      * @param thisClass       fully qualified name of the class or interface in internal form.
      * @param superClass      fully qualified name of the parent class in internal form.
-     * @param superInterfaces list of direct super interfaces of this class or interface as fully
-     *                        qualified names in internal form.
+     * @param superInterfaces list of direct super interfaces of this class or interface as fully qualified names in
+     *                        internal form.
      * @param isSynthetic     whether the class or interface is synthetic.
      */
     public void addClass(ArrayList<String> accessFlags, String thisClass, String superClass,
                          ArrayList<String> superInterfaces, boolean isSynthetic) {
         clFile = new CLFile();
         constantPool = new CLConstantPool();
-        interfaces = new ArrayList<Integer>();
-        fields = new ArrayList<CLFieldInfo>();
-        methods = new ArrayList<CLMethodInfo>();
-        attributes = new ArrayList<CLAttributeInfo>();
-        innerClasses = new ArrayList<CLInnerClassInfo>();
+        interfaces = new ArrayList<>();
+        fields = new ArrayList<>();
+        methods = new ArrayList<>();
+        attributes = new ArrayList<>();
+        innerClasses = new ArrayList<>();
         errorHasOccurred = false;
         clFile.magic = MAGIC;
         clFile.majorVersion = MAJOR_VERSION;
@@ -203,26 +197,22 @@ public class CLEmitter {
     }
 
     /**
-     * Adds an inner class. Note that this only registers the inner class with its parent and
-     * does not create the class.
+     * Adds an inner class. Note that this only registers the inner class with its parent and does not create the class.
      *
      * @param accessFlags access flags for the inner class.
      * @param innerClass  fully qualified name of the inner class in internal form.
      * @param outerClass  fully qualified name of the outer class in internal form.
      * @param innerName   simple name of the inner class.
      */
-    public void addInnerClass(ArrayList<String> accessFlags, String innerClass, String outerClass,
-                              String innerName) {
+    public void addInnerClass(ArrayList<String> accessFlags, String innerClass, String outerClass, String innerName) {
         int flags = 0;
         if (accessFlags != null) {
             for (String s : accessFlags) {
                 flags |= CLFile.accessFlagToInt(s);
             }
         }
-        CLInnerClassInfo innerClassInfo = new CLInnerClassInfo(constantPool
-                .constantClassInfo(innerClass), constantPool
-                .constantClassInfo(outerClass), constantPool
-                .constantUtf8Info(innerName), flags);
+        CLInnerClassInfo innerClassInfo = new CLInnerClassInfo(constantPool.constantClassInfo(innerClass),
+                constantPool.constantClassInfo(outerClass), constantPool.constantUtf8Info(innerName), flags);
         innerClasses.add(innerClassInfo);
     }
 
@@ -234,16 +224,14 @@ public class CLEmitter {
      * @param type        type descriptor of the field.
      * @param isSynthetic is this a synthetic field?
      */
-    public void addField(ArrayList<String> accessFlags, String name, String type,
-                         boolean isSynthetic) {
+    public void addField(ArrayList<String> accessFlags, String name, String type, boolean isSynthetic) {
         addFieldInfo(accessFlags, name, type, isSynthetic, -1);
     }
 
     /**
-     * Adds an int, short, char, byte, or boolean field with initialization. If the field is
-     * final, the initialization is added to the constant pool. The initializations are
-     * all stored as ints, where boolean true and false are 1 and 0 respectively, and short,
-     * char, and byte must be cast to int.
+     * Adds an int, short, char, byte, or boolean field with initialization. If the field is final, the
+     * initialization is added to the constant pool. The initializations are all stored as ints, where boolean true
+     * and false are 1 and 0 respectively, and short, char, and byte must be cast to int.
      *
      * @param accessFlags access flags for the field.
      * @param name        name of the field.
@@ -251,14 +239,12 @@ public class CLEmitter {
      * @param isSynthetic is this a synthetic field?
      * @param i           int value.
      */
-    public void addField(ArrayList<String> accessFlags, String name, String type,
-                         boolean isSynthetic, int i) {
+    public void addField(ArrayList<String> accessFlags, String name, String type, boolean isSynthetic, int i) {
         addFieldInfo(accessFlags, name, type, isSynthetic, constantPool.constantIntegerInfo(i));
     }
 
     /**
-     * Adds a float field with initialization. If the field is final, the initialization is added
-     * to the constant pool.
+     * Adds a float field with initialization. If the field is final, the initialization is added to the constant pool.
      *
      * @param accessFlags access flags for the field.
      * @param name        name of the field.
@@ -270,8 +256,7 @@ public class CLEmitter {
     }
 
     /**
-     * Adds a long field with initialization. If the field is final, the initialization is added
-     * to the constant pool.
+     * Adds a long field with initialization. If the field is final, the initialization is added to the constant pool.
      *
      * @param accessFlags access flags for the field.
      * @param name        name of the field.
@@ -283,48 +268,42 @@ public class CLEmitter {
     }
 
     /**
-     * Adds a double field with initialization. If the field is final, the initialization is
-     * added to the constant pool.
+     * Adds a double field with initialization. If the field is final, the initialization is added to the constant pool.
      *
      * @param accessFlags access flags for the field.
      * @param name        name of the field.
      * @param isSynthetic is this a synthetic field?
      * @param d           double value.
      */
-    public void addField(ArrayList<String> accessFlags, String name, boolean isSynthetic,
-                         double d) {
+    public void addField(ArrayList<String> accessFlags, String name, boolean isSynthetic, double d) {
         addFieldInfo(accessFlags, name, "D", isSynthetic, constantPool.constantDoubleInfo(d));
     }
 
     /**
-     * Adds a String type field with initialization. If the field is final, the initialization is
-     * added to the constant pool.
+     * Adds a String type field with initialization. If the field is final, the initialization is added to the
+     * constant pool.
      *
      * @param accessFlags access flags for the field.
      * @param name        name of the field.
      * @param isSynthetic is this a synthetic field?
      * @param s           String value.
      */
-    public void addField(ArrayList<String> accessFlags, String name, boolean isSynthetic,
-                         String s) {
-        addFieldInfo(accessFlags, name, "Ljava/lang/String;", isSynthetic,
-                constantPool.constantStringInfo(s));
+    public void addField(ArrayList<String> accessFlags, String name, boolean isSynthetic, String s) {
+        addFieldInfo(accessFlags, name, "Ljava/lang/String;", isSynthetic, constantPool.constantStringInfo(s));
     }
 
     /**
-     * Adds a method. Instructions can subsequently be added to this method using the appropriate
-     * methods for adding instructions.
+     * Adds a method. Instructions can subsequently be added to this method using the appropriate methods for adding
+     * instructions.
      *
      * @param accessFlags access flags for the method.
      * @param name        name of the method.
-     * @param descriptor  descriptor specifying the return type and the types of the formal
-     *                    parameters of the method.
-     * @param exceptions  exceptions thrown by the method, each being a name in fully qualified
-     *                    internal form.
+     * @param descriptor  descriptor specifying the return type and the types of the formal parameters of the method.
+     * @param exceptions  exceptions thrown by the method, each being a name in fully qualified internal form.
      * @param isSynthetic whether this is a synthetic method?
      */
-    public void addMethod(ArrayList<String> accessFlags, String name, String descriptor,
-                          ArrayList<String> exceptions, boolean isSynthetic) {
+    public void addMethod(ArrayList<String> accessFlags, String name, String descriptor, ArrayList<String> exceptions,
+                          boolean isSynthetic) {
         if (!validMethodDescriptor(descriptor)) {
             reportEmitterError("'%s' is not a valid type descriptor for method", descriptor);
         }
@@ -337,10 +316,10 @@ public class CLEmitter {
                 mAccessFlags |= CLFile.accessFlagToInt(s);
             }
         }
-        mArgumentCount = argumentCount(descriptor) + (accessFlags.contains("static") ? 0 : 1);
+        mLocalsCount = localsCount(descriptor) + (accessFlags != null && accessFlags.contains("static") ? 0 : 1);
         mNameIndex = constantPool.constantUtf8Info(name);
         mDescriptorIndex = constantPool.constantUtf8Info(descriptor);
-        if (exceptions != null && exceptions.size() > 0) {
+        if (exceptions != null && !exceptions.isEmpty()) {
             addMethodAttribute(exceptionsAttribute(exceptions));
         }
         if (isSynthetic) {
@@ -351,16 +330,14 @@ public class CLEmitter {
     /**
      * Adds an exception handler.
      *
-     * @param startLabel   the exception handler is active from the instruction following this
-     *                     label in the code section of the current method being added ...
-     * @param endLabel     to the instruction following this label. Formally, the handler is
-     *                     active while the program counter is within the interval [startLabel,
-     *                     endLabel).
+     * @param startLabel   the exception handler is active from the instruction following this label in the code
+     *                     section of the current method being added.
+     * @param endLabel     to the instruction following this label. Formally, the handler is active while the program
+     *                     counter is within the interval [startLabel, endLabel).
      * @param handlerLabel the handler begins with instruction following this label.
-     * @param catchType    the exception type that this exception handler is designated to catch,
-     *                     as a fully qualified name in internal form. If null, this exception
-     *                     handler is called for all exceptions; this is used to implement
-     *                     "finally".
+     * @param catchType    the exception type that this exception handler is designated to catch, as a fully
+     *                     qualified name in internal form. If null, this exception handler is called for all
+     *                     exceptions; this is used to implement "finally".
      */
     public void addExceptionHandler(String startLabel, String endLabel, String handlerLabel,
                                     String catchType) {
@@ -378,16 +355,16 @@ public class CLEmitter {
      * Arithmetic Instructions:
      *
      * <pre>
-     *   IADD, LADD, FADD, DADD, ISUB, LSUB, FSUB, DSUB, IMUL, LMUL, FMUL, DMUL, IDIV, LDIV, FDIV,
-     *   DDIV, IREM, LREM, FREM, DREM, INEG, LNEG, FNEG, DNEG
+     *   IADD, LADD, FADD, DADD, ISUB, LSUB, FSUB, DSUB, IMUL, LMUL, FMUL, DMUL, IDIV, LDIV, FDIV, DDIV, IREM, LREM,
+     *   FREM, DREM, INEG, LNEG, FNEG, DNEG
      * </pre>
      *
      * <p>
      * Array Instructions:
      *
      * <pre>
-     *   IALOAD, LALOAD, FALOAD, DALOAD, AALOAD, BALOAD, CALOAD, SALOAD, IASTORE, LASTORE, FASTORE,
-     *   DASTORE, AASTORE, BASTORE, CASTORE, SASTORE, ARRAYLENGTH
+     *   IALOAD, LALOAD, FALOAD, DALOAD, AALOAD, BALOAD, CALOAD, SALOAD, IASTORE, LASTORE, FASTORE, DASTORE, AASTORE,
+     *   BASTORE, CASTORE, SASTORE, ARRAYLENGTH
      * </pre>
      *
      * <p>
@@ -415,12 +392,11 @@ public class CLEmitter {
      * Load Store Instructions:
      *
      * <pre>
-     *   ILOAD_0, ILOAD_1, ILOAD_2, ILOAD_3, LLOAD_0, LLOAD_1, LLOAD_2, LLOAD_3, FLOAD_0, FLOAD_1,
-     *   FLOAD_2, FLOAD_3, DLOAD_0, DLOAD_1, DLOAD_2, DLOAD_3, ALOAD_0, ALOAD_1, ALOAD_2, ALOAD_3,
-     *   ISTORE_0, ISTORE_1, ISTORE_2, ISTORE_3, LSTORE_0, LSTORE_1, LSTORE_2, LSTORE_3, FSTORE_0,
-     *   FSTORE_1, FSTORE_2, FSTORE_3, DSTORE_0, DSTORE_1, DSTORE_2, DSTORE_3, ASTORE_0, ASTORE_1,
-     *   ASTORE_2, ASTORE_3, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1,
-     *   LCONST_0, LCONST_1, FCONST_0, FCONST_1, FCONST_2, DCONST_0, DCONST_1, ACONST_NULL,
+     *   ILOAD_0, ILOAD_1, ILOAD_2, ILOAD_3, LLOAD_0, LLOAD_1, LLOAD_2, LLOAD_3, FLOAD_0, FLOAD_1, FLOAD_2, FLOAD_3,
+     *   DLOAD_0, DLOAD_1, DLOAD_2, DLOAD_3, ALOAD_0, ALOAD_1, ALOAD_2, ALOAD_3, ISTORE_0, ISTORE_1, ISTORE_2,
+     *   ISTORE_3, LSTORE_0, LSTORE_1, LSTORE_2, LSTORE_3, FSTORE_0, FSTORE_1, FSTORE_2, FSTORE_3, DSTORE_0, DSTORE_1,
+     *   DSTORE_2, DSTORE_3, ASTORE_0, ASTORE_1, ASTORE_2, ASTORE_3, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4,
+     *   ICONST_5, ICONST_M1, LCONST_0, LCONST_1, FCONST_0, FCONST_1, FCONST_2, DCONST_0, DCONST_1, ACONST_NULL,
      *   WIDE (added automatically where necesary)
      * </pre>
      *
@@ -490,9 +466,8 @@ public class CLEmitter {
     }
 
     /**
-     * Adds a one argument instruction. Wideable instructions are widened if necessary by adding
-     * a WIDE instruction before the instruction. The following instructions can be added using
-     * this method:
+     * Adds a one argument instruction. Wideable instructions are widened if necessary by adding a WIDE instruction
+     * before the instruction. The following instructions can be added using this method:
      *
      * <p>
      * Load Store Instructions:
@@ -511,13 +486,13 @@ public class CLEmitter {
      * The opcodes for instructions are defined in CLConstants class.
      *
      * @param opcode opcode of the instruction.
-     * @param arg    the argument. For the instructions that deal with local variables, the
-     *               argument is the local variable index; for BIPUSH and SIPUSH instructions,
-     *               the argument is the constant byte or short value.
+     * @param arg    the argument. For the instructions that deal with local variables, the argument is the local
+     *               variable index; for BIPUSH and SIPUSH instructions, the argument is the constant byte or short
+     *               value.
      */
     public void addOneArgInstruction(int opcode, int arg) {
         CLInstruction instr = null;
-        boolean isWidened = false;
+        boolean isWidened;
         switch (CLInstruction.instructionInfo[opcode].category) {
             case LOAD_STORE2:
                 isWidened = arg > 255;
@@ -549,8 +524,8 @@ public class CLEmitter {
     }
 
     /**
-     * Adds an IINC instruction to increment a variable by a constant. The instruction is widened
-     * if necessary by adding a WIDE instruction before the instruction.
+     * Adds an IINC instruction to increment a variable by a constant. The instruction is widened if necessary by
+     * adding a WIDE instruction before the instruction.
      *
      * @param index    local variable index.
      * @param constVal increment value.
@@ -561,16 +536,14 @@ public class CLEmitter {
             CLLoadStoreInstruction wideInstr = new CLLoadStoreInstruction(WIDE, mPC++);
             mCode.add(wideInstr);
         }
-        CLArithmeticInstruction instr = new CLArithmeticInstruction(IINC, mPC++, index, constVal,
-                isWidened);
+        CLArithmeticInstruction instr = new CLArithmeticInstruction(IINC, mPC++, index, constVal, isWidened);
         mPC += instr.operandCount();
         mCode.add(instr);
         mInstructionAfterLabel = true;
     }
 
     /**
-     * Adds a member (field and method) access instruction. The following instructions can be
-     * added using this method:
+     * Adds a member (field and method) access instruction. The following instructions can be added using this method:
      *
      * <p>
      * Field Instructions:
@@ -602,22 +575,19 @@ public class CLEmitter {
         switch (CLInstruction.instructionInfo[opcode].category) {
             case FIELD:
                 if (!validTypeDescriptor(type)) {
-                    reportEmitterError("%s: '%s' is not a valid type descriptor for field",
-                            eCurrentMethod, type);
+                    reportEmitterError("%s: '%s' is not a valid type descriptor for field", eCurrentMethod, type);
                 }
                 index = constantPool.constantFieldRefInfo(target, name, type);
                 stackUnits = typeStackResidue(type);
                 if ((opcode == GETFIELD) || (opcode == PUTFIELD)) {
-                    // This is because target of this method is also consumed from the operand
-                    // stack.
+                    // This is because target of this method is also consumed from the operand stack.
                     stackUnits--;
                 }
                 instr = new CLFieldInstruction(opcode, mPC++, index, stackUnits);
                 break;
             case METHOD1:
                 if (!validMethodDescriptor(type)) {
-                    reportEmitterError("%s: '%s' is not a valid type descriptor for method",
-                            eCurrentMethod, type);
+                    reportEmitterError("%s: '%s' is not a valid type descriptor for method", eCurrentMethod, type);
                 }
                 if (opcode == INVOKEINTERFACE) {
                     index = constantPool.constantInterfaceMethodRefInfo(target, name, type);
@@ -626,14 +596,12 @@ public class CLEmitter {
                 }
                 stackUnits = methodStackResidue(type);
                 if (opcode != INVOKESTATIC) {
-                    // This is because target of this method is also consumed from the operand
-                    // stack.
+                    // This is because target of this method is also consumed from the operand stack.
                     stackUnits--;
                 }
                 instr = new CLMethodInstruction(opcode, mPC++, index, stackUnits);
 
-                // INVOKEINTERFACE expects the number of arguments in the method to be specified
-                // explicitly.
+                // INVOKEINTERFACE expects the number of arguments in the method to be specified explicitly.
                 if (opcode == INVOKEINTERFACE) {
                     // We add 1 to account for "this".
                     ((CLMethodInstruction) instr).setArgumentCount(argumentCount(type) + 1);
@@ -649,8 +617,7 @@ public class CLEmitter {
     }
 
     /**
-     * Adds a reference (object) instruction. The following instructions can be added using this
-     * method:
+     * Adds a reference (object) instruction. The following instructions can be added using this method:
      *
      * <pre>
      *   NEW, CHECKCAST, INSTANCEOF
@@ -663,8 +630,7 @@ public class CLEmitter {
      */
     public void addReferenceInstruction(int opcode, String type) {
         if (!validTypeDescriptor(type) && !validInternalForm(type)) {
-            reportEmitterError("%s: '%s' is neither a type descriptor nor in internal form",
-                    eCurrentMethod, type);
+            reportEmitterError("%s: '%s' is neither a type descriptor nor in internal form", eCurrentMethod, type);
         }
         CLInstruction instr = null;
         switch (CLInstruction.instructionInfo[opcode].category) {
@@ -691,10 +657,9 @@ public class CLEmitter {
      * The opcodes for instructions are defined in CLConstants class.
      *
      * @param opcode opcode of the instruction.
-     * @param type   array type. In case of NEWARRAY, the primitive types are specified as: "Z"
-     *               for boolean, "C" for char, "F" for float, "D" for double, "B" for byte, "S"
-     *               for short, "I" for int, "J" for long. In case of ANEWARRAY, reference types
-     *               are specified in internal form.
+     * @param type   array type. In case of NEWARRAY, the primitive types are specified as: "Z" for boolean, "C" for
+     *               char, "F" for float, "D" for double, "B" for byte, "S" for short, "I" for int, "J" for long. In
+     *               case of ANEWARRAY, reference types are specified in internal form.
      */
     public void addArrayInstruction(int opcode, String type) {
         CLInstruction instr = null;
@@ -719,13 +684,12 @@ public class CLEmitter {
                     } else if (type.equalsIgnoreCase("J")) {
                         index = 11;
                     } else {
-                        reportEmitterError("%s: '%s' is not a valid primitive type",
-                                eCurrentMethod, type);
+                        reportEmitterError("%s: '%s' is not a valid primitive type", eCurrentMethod, type);
                     }
                 } else {
                     if (!validTypeDescriptor(type) && !validInternalForm(type)) {
-                        reportEmitterError("%s: '%s' is not a valid type descriptor for an array",
-                                eCurrentMethod, type);
+                        reportEmitterError("%s: '%s' is not a valid type descriptor for an array", eCurrentMethod,
+                                type);
                     }
                     index = constantPool.constantClassInfo(type);
                 }
@@ -747,25 +711,22 @@ public class CLEmitter {
      * @param dim  number of dimensions.
      */
     public void addMULTIANEWARRAYInstruction(String type, int dim) {
-        CLInstruction instr = null;
+        CLInstruction instr;
         if (!validTypeDescriptor(type)) {
-            reportEmitterError("%s: '%s' is not a valid type descriptor for an array",
-                    eCurrentMethod, type);
+            reportEmitterError("%s: '%s' is not a valid type descriptor for an array", eCurrentMethod, type);
         }
         int index = constantPool.constantClassInfo(type);
         instr = new CLArrayInstruction(MULTIANEWARRAY, mPC++, index, dim);
-        if (instr != null) {
-            mPC += instr.operandCount();
-            mCode.add(instr);
-        }
+        mPC += instr.operandCount();
+        mCode.add(instr);
     }
 
     /**
      * Adds a branch instruction. The following instructions can be added using this method:
      *
      * <pre>
-     *   IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE, IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT,
-     *   IF_ICMPLE, IF_ACMPEQ, IF_ACMPNE, GOTO, JSR, IF_NULL, IF_NONNULL, GOTO_W, JSR_W
+     *   IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE, IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE,
+     *   IF_ACMPEQ, IF_ACMPNE, GOTO, JSR, IF_NULL, IF_NONNULL, GOTO_W, JSR_W
      * </pre>
      * <p>
      * The opcodes for instructions are defined in CLConstants class.
@@ -795,13 +756,11 @@ public class CLEmitter {
      * @param defaultLabel jump label for default value.
      * @param low          smallest value of index.
      * @param high         highest value of index.
-     * @param labels       list of jump labels for each index value from low to high, end
-     *                     values included.
+     * @param labels       list of jump labels for each index value from low to high, end values included.
      */
-    public void addTABLESWITCHInstruction(String defaultLabel, int low, int high,
-                                          ArrayList<String> labels) {
-        CLFlowControlInstruction instr = new CLFlowControlInstruction(TABLESWITCH, mPC++,
-                defaultLabel, low, high, labels);
+    public void addTABLESWITCHInstruction(String defaultLabel, int low, int high, ArrayList<String> labels) {
+        CLFlowControlInstruction instr = new CLFlowControlInstruction(TABLESWITCH, mPC++, defaultLabel, low, high,
+                labels);
         mPC += instr.operandCount();
         mCode.add(instr);
         mInstructionAfterLabel = true;
@@ -816,8 +775,8 @@ public class CLEmitter {
      */
     public void addLOOKUPSWITCHInstruction(String defaultLabel, int numPairs, TreeMap<Integer,
             String> matchLabelPairs) {
-        CLFlowControlInstruction instr = new CLFlowControlInstruction(LOOKUPSWITCH, mPC++,
-                defaultLabel, numPairs, matchLabelPairs);
+        CLFlowControlInstruction instr = new CLFlowControlInstruction(LOOKUPSWITCH, mPC++, defaultLabel, numPairs,
+                matchLabelPairs);
         mPC += instr.operandCount();
         mCode.add(instr);
         mInstructionAfterLabel = true;
@@ -902,8 +861,7 @@ public class CLEmitter {
     }
 
     /**
-     * Adds the specified code attribute to the attribute section of the code for the method last
-     * added.
+     * Adds the specified code attribute to the attribute section of the code for the method last added.
      *
      * @param attribute code attribute.
      */
@@ -914,9 +872,8 @@ public class CLEmitter {
     }
 
     /**
-     * Adds a jump label to the code section of the method being added. A flow control
-     * instruction that was added with this label will jump to the instruction right after the
-     * label.
+     * Adds a jump label to the code section of the method being added. A flow control instruction that was added
+     * with this label will jump to the instruction right after the label.
      *
      * @param label jump label.
      */
@@ -989,16 +946,16 @@ public class CLEmitter {
             byteClassLoader.setClassBytes(classBytes);
             theClass = byteClassLoader.loadClass(name, true);
         } catch (IOException e) {
-            reportEmitterError("Cannot write class to byte stream");
+            reportEmitterError("cannot write class to byte stream");
         } catch (ClassNotFoundException e) {
-            reportEmitterError("Cannot load class from byte stream");
+            reportEmitterError("cannot load class from byte stream");
         }
         return theClass;
     }
 
     /**
-     * Writes out the class to the file system as a .class file if toFile is true. The
-     * destination directory for the file can be set using the destinationDir() method.
+     * Writes out the class to the file system as a .class file if toFile is true. The destination directory for the
+     * file can be set using the destinationDir() method.
      */
     public void write() {
         endOpenMethodIfAny();
@@ -1007,39 +964,35 @@ public class CLEmitter {
         }
         String outFile = destDir + File.separator + name + ".class";
         try {
-            File file = new File(destDir + File.separator +
-                    name.substring(0, name.lastIndexOf("/") + 1));
+            File file = new File(destDir + File.separator + name.substring(0, name.lastIndexOf("/") + 1));
             file.mkdirs();
-            CLOutputStream out =
-                    new CLOutputStream(new BufferedOutputStream(new FileOutputStream(outFile)));
+            CLOutputStream out = new CLOutputStream(new BufferedOutputStream(new FileOutputStream(outFile)));
             clFile.write(out);
             out.close();
         } catch (FileNotFoundException e) {
-            reportEmitterError("File %s not found", outFile);
+            reportEmitterError("file %s not found", outFile);
         } catch (IOException e) {
-            reportEmitterError("Cannot write to file %s", outFile);
+            reportEmitterError("cannot write to file %s", outFile);
         }
     }
 
-    // Initializes all variables used for adding a method to the ClassFile structure to their
-    // appropriate values.
+    // Initializes all variables used for adding a method to the ClassFile structure to their appropriate values.
     private void initializeMethodVariables() {
         mAccessFlags = 0;
         mNameIndex = -1;
         mDescriptorIndex = -1;
-        mArgumentCount = 0;
         mPC = 0;
-        mAttributes = new ArrayList<CLAttributeInfo>();
-        mExceptionHandlers = new ArrayList<CLException>();
-        mCode = new ArrayList<CLInstruction>();
-        mCodeAttributes = new ArrayList<CLAttributeInfo>();
-        mLabels = new Hashtable<String, Integer>();
+        mAttributes = new ArrayList<>();
+        mExceptionHandlers = new ArrayList<>();
+        mCode = new ArrayList<>();
+        mCodeAttributes = new ArrayList<>();
+        mLabels = new Hashtable<>();
         mLabelCount = 1;
         mInstructionAfterLabel = false;
     }
 
-    // Adds the method created using addMethod() to the ClassFile structure. This involves adding
-    // an instance of CLMethodInfo to ClassFile.methods for the method.
+    // Adds the method created using addMethod() to the ClassFile structure. This involves adding an instance of
+    // CLMethodInfo to ClassFile.methods for the method.
     private void endOpenMethodIfAny() {
         if (isMethodOpen) {
             isMethodOpen = false;
@@ -1049,25 +1002,22 @@ public class CLEmitter {
             }
 
             // Resolve jump labels in exception handlers.
-            ArrayList<CLExceptionInfo> exceptionTable = new ArrayList<CLExceptionInfo>();
+            ArrayList<CLExceptionInfo> exceptionTable = new ArrayList<>();
             for (CLException e : mExceptionHandlers) {
                 if (!e.resolveLabels(mLabels)) {
-                    reportEmitterError("%s: Unable to resolve exception handler label(s)",
-                            eCurrentMethod);
+                    reportEmitterError("%s: unable to resolve exception handler label(s)", eCurrentMethod);
                 }
 
-                // We allow catchType to be null (mapping to index 0), implying this exception
-                // handler is called for all exceptions. This is used to implement "finally"
-                int catchTypeIndex = (e.catchType == null) ?
-                        0 : constantPool.constantClassInfo(e.catchType);
-                CLExceptionInfo c = new CLExceptionInfo(e.startPC, e.endPC, e.handlerPC,
-                        catchTypeIndex);
+                // We allow catchType to be null (mapping to index 0), implying this exception handler is called for
+                // all exceptions. This is used to implement "finally"
+                int catchTypeIndex = (e.catchType == null) ? 0 : constantPool.constantClassInfo(e.catchType);
+                CLExceptionInfo c = new CLExceptionInfo(e.startPC, e.endPC, e.handlerPC, catchTypeIndex);
                 exceptionTable.add(c);
             }
 
             // Convert Instruction objects to bytes.
-            ArrayList<Integer> byteCode = new ArrayList<Integer>();
-            int maxLocals = mArgumentCount;
+            ArrayList<Integer> byteCode = new ArrayList<>();
+            int maxLocals = mLocalsCount;
             for (CLInstruction instr : mCode) {
                 // Compute maxLocals.
                 int localVariableIndex = instr.localVariableIndex();
@@ -1100,7 +1050,7 @@ public class CLEmitter {
                 // Resolve jump labels in flow control instructions.
                 if (instr instanceof CLFlowControlInstruction) {
                     if (!((CLFlowControlInstruction) instr).resolveLabels(mLabels)) {
-                        reportEmitterError("%s: Unable to resolve jump label(s)", eCurrentMethod);
+                        reportEmitterError("%s: unable to resolve jump label(s)", eCurrentMethod);
                     }
                 }
 
@@ -1108,20 +1058,17 @@ public class CLEmitter {
             }
 
             // Code attribute; add only if method is neither native nor abstract.
-            if (!((mAccessFlags & ACC_NATIVE) == ACC_NATIVE ||
-                    (mAccessFlags & ACC_ABSTRACT) == ACC_ABSTRACT)) {
-                addMethodAttribute(codeAttribute(byteCode, exceptionTable, stackDepth(),
-                        maxLocals));
+            if (!((mAccessFlags & ACC_NATIVE) == ACC_NATIVE || (mAccessFlags & ACC_ABSTRACT) == ACC_ABSTRACT)) {
+                addMethodAttribute(codeAttribute(byteCode, exceptionTable, stackDepth(), maxLocals));
             }
 
-            methods.add(new CLMethodInfo(mAccessFlags, mNameIndex, mDescriptorIndex,
-                    mAttributes.size(), mAttributes));
+            methods.add(new CLMethodInfo(mAccessFlags, mNameIndex, mDescriptorIndex, mAttributes.size(), mAttributes));
         }
 
         // This method could be the last method, so we need the following wrap up code:
 
         // Add the InnerClass attribute if this class has inner classes.
-        if (innerClasses.size() > 0) {
+        if (!innerClasses.isEmpty()) {
             addClassAttribute(innerClassesAttribute());
         }
 
@@ -1139,15 +1086,14 @@ public class CLEmitter {
     }
 
     // Adds a field.
-    private void addFieldInfo(ArrayList<String> accessFlags, String name, String type,
-                              boolean isSynthetic, int c) {
+    private void addFieldInfo(ArrayList<String> accessFlags, String name, String type, boolean isSynthetic, int c) {
         if (!validTypeDescriptor(type)) {
             reportEmitterError("'%s' is not a valid type descriptor for field", type);
         }
         int flags = 0;
         int nameIndex = constantPool.constantUtf8Info(name);
         int descriptorIndex = constantPool.constantUtf8Info(type);
-        fAttributes = new ArrayList<CLAttributeInfo>();
+        fAttributes = new ArrayList<>();
         if (accessFlags != null) {
             for (String s : accessFlags) {
                 flags |= CLFile.accessFlagToInt(s);
@@ -1159,39 +1105,39 @@ public class CLEmitter {
         if (c != -1) {
             addFieldAttribute(constantValueAttribute(c));
         }
-        fields.add(new CLFieldInfo(flags, nameIndex, descriptorIndex, fAttributes.size(),
-                fAttributes));
+        fields.add(new CLFieldInfo(flags, nameIndex, descriptorIndex, fAttributes.size(), fAttributes));
     }
 
-    // Returns the number of units a type with the specified descriptor produces or consumes from
-    // the operand stack; 0 is returned if the specified descriptor is invalid.
+    // Returns the number of units a type with the specified descriptor produces or consumes from the operand stack;
+    // 0 is returned if the specified descriptor is invalid.
     private int typeStackResidue(String descriptor) {
         int i = 0;
         char c = descriptor.charAt(0);
         switch (c) {
             case 'B':
             case 'C':
-            case 'I':
             case 'F':
+            case 'I':
             case 'L':
             case 'S':
             case 'Z':
             case '[':
                 i = 1;
                 break;
-            case 'J':
             case 'D':
+            case 'J':
                 i = 2;
                 break;
         }
         return i;
     }
 
-    // Returns the difference between the number of units consumed from the operand stack by a
-    // method with the specified descriptor and the number of units produced by the method in the
-    // operand stack; 0 is returned if the descriptor is invalid.
+    // Returns the difference between the number of units consumed from the operand stack by a method with the
+    // specified descriptor and the number of units produced by the method in the operand stack; 0 is returned if the
+    // descriptor is invalid.
     private int methodStackResidue(String descriptor) {
         int i = 0;
+        boolean isArray = false;
 
         // Extract types of arguments and the return type from the method descriptor.
         String argTypes = descriptor.substring(1, descriptor.lastIndexOf(")"));
@@ -1203,22 +1149,25 @@ public class CLEmitter {
             switch (c) {
                 case 'B':
                 case 'C':
-                case 'I':
                 case 'F':
+                case 'I':
                 case 'S':
                 case 'Z':
                     i -= 1;
+                    isArray = false;
                     break;
-                case '[':
-                    break;
-                case 'J':
                 case 'D':
-                    i -= 2;
+                case 'J':
+                    i -= isArray ? 1 : 2;
+                    isArray = false;
                     break;
                 case 'L':
-                    int k = argTypes.indexOf(";", j);
-                    j = k;
+                    j = argTypes.indexOf(";", j);
                     i -= 1;
+                    isArray = false;
+                    break;
+                case '[':
+                    isArray = true;
                     break;
             }
         }
@@ -1228,46 +1177,82 @@ public class CLEmitter {
         return i;
     }
 
-    // Returns the argument count (number of formal parameters) for the specified method. 0 is
-    // returned if the descriptor is invalid.
-    private int argumentCount(String descriptor) {
+    // Returns the number of locals for the specified method. 0 is returned if the descriptor is invalid.
+    private int localsCount(String descriptor) {
         int i = 0;
+        boolean isArray = false;
 
         // Extract types of arguments and the return type from the method descriptor.
         String argTypes = descriptor.substring(1, descriptor.lastIndexOf(")"));
 
-        // Find number of arguments,
+        // Find number of locals.
         for (int j = 0; j < argTypes.length(); j++) {
             char c = argTypes.charAt(j);
             switch (c) {
                 case 'B':
                 case 'C':
-                case 'I':
                 case 'F':
+                case 'I':
                 case 'S':
                 case 'Z':
                     i += 1;
+                    isArray = false;
                     break;
-                case '[':
-                    break;
-                case 'J':
                 case 'D':
-                    i += 2;
+                case 'J':
+                    i += isArray ? 1 : 2;
+                    isArray = false;
                     break;
                 case 'L':
-                    int k = argTypes.indexOf(";", j);
-                    j = k;
+                    j = argTypes.indexOf(";", j);
                     i += 1;
+                    isArray = false;
+                    break;
+                case '[':
+                    isArray = true;
                     break;
             }
         }
         return i;
     }
 
-    // Returns true if the specified name is in the internal form of a fully qualified class or
-    // interface name, and false otherwise.
+    // Returns the argument count (number of formal parameters) for the specified method. 0 is returned if the
+    // descriptor is invalid.
+    private int argumentCount(String descriptor) {
+        int i = 0;
+
+        // Extract types of arguments and the return type from the method descriptor.
+        String argTypes = descriptor.substring(1, descriptor.lastIndexOf(")"));
+
+        // Find number of arguments.
+        for (int j = 0; j < argTypes.length(); j++) {
+            char c = argTypes.charAt(j);
+            switch (c) {
+                case 'B':
+                case 'C':
+                case 'D':
+                case 'F':
+                case 'I':
+                case 'J':
+                case 'S':
+                case 'Z':
+                    i += 1;
+                    break;
+                case 'L':
+                    j = argTypes.indexOf(";", j);
+                    i += 1;
+                    break;
+                case '[':
+                    break;
+            }
+        }
+        return i;
+    }
+
+    // Returns true if the specified name is in the internal form of a fully qualified class or interface name, and
+    // false otherwise.
     private boolean validInternalForm(String name) {
-        if ((name == null) || name.equals("") || name.startsWith("/") || name.endsWith("/")) {
+        if ((name == null) || name.isEmpty() || name.startsWith("/") || name.endsWith("/")) {
             return false;
         }
         StringTokenizer t = new StringTokenizer(name, "/");
@@ -1320,7 +1305,7 @@ public class CLEmitter {
 
     // Returns true if the specified string is a valid method descriptor, and false otherwise.
     private boolean validMethodDescriptor(String s) {
-        if ((s != null) && (s.length() > 0)) {
+        if ((s != null) && (!s.isEmpty())) {
             try {
                 // Extract types of arguments and the return type from the string.
                 String argTypes = s.substring(1, s.lastIndexOf(")"));
@@ -1365,8 +1350,7 @@ public class CLEmitter {
         return false;
     }
 
-    // Returns the instruction with the specified pc within the code array of the current method
-    // being added, or null.
+    // Returns the instruction with the specified pc within the code array of the current method being added, or null.
     private CLInstruction instruction(int pc) {
         for (CLInstruction instruction : mCode) {
             if (instruction.pc() == pc) {
@@ -1376,8 +1360,8 @@ public class CLEmitter {
         return null;
     }
 
-    // Returns the index of the instruction with the specified pc, within the code array of the
-    // current method being added, or -1.
+    // Returns the index of the instruction with the specified pc, within the code array of the current method being
+    // added, or -1.
     private int instructionIndex(int pc) {
         for (int i = 0; i < mCode.size(); i++) {
             if (mCode.get(i).pc() == pc) {
@@ -1454,16 +1438,15 @@ public class CLEmitter {
 
     // Adds LDC (LDC_W if index is wide) instruction.
     private void ldcInstruction(int index) {
-        CLLoadStoreInstruction instr = index <= 255 ?
-                new CLLoadStoreInstruction(LDC, mPC++, index) :
+        CLLoadStoreInstruction instr = index <= 255 ? new CLLoadStoreInstruction(LDC, mPC++, index) :
                 new CLLoadStoreInstruction(LDC_W, mPC++, index);
         mPC += instr.operandCount();
         mCode.add(instr);
         mInstructionAfterLabel = true;
     }
 
-    // Adds LDC2_W instruction (used for long and double constants). Note that only a wide-index
-    // version of LDC2_W instruction exists.
+    // Adds LDC2_W instruction (used for long and double constants). Note that only a wide-index version of LDC2_W
+    // instruction exists.
     private void ldc2wInstruction(int index) {
         CLLoadStoreInstruction instr = new CLLoadStoreInstruction(LDC2_W, mPC++, index);
         mPC += instr.operandCount();
@@ -1477,27 +1460,24 @@ public class CLEmitter {
         return new CLConstantValueAttribute(attributeNameIndex, 2, c);
     }
 
-    // Constructs and returns a Code attribute given the list of bytes that make up the
-    // instructions and their operands, exception table, maximum depth of operand stack, and
-    // maximum number of local variables.
-    private CLCodeAttribute codeAttribute(ArrayList<Integer> byteCode,
-                                          ArrayList<CLExceptionInfo> exceptionTable, int stackDepth,
-                                          int maxLocals) {
+    // Constructs and returns a Code attribute given the list of bytes that make up the instructions and their
+    // operands, exception table, maximum depth of operand stack, and maximum number of local variables.
+    private CLCodeAttribute codeAttribute(ArrayList<Integer> byteCode, ArrayList<CLExceptionInfo> exceptionTable,
+                                          int stackDepth, int maxLocals) {
         int codeLength = byteCode.size();
         int attributeNameIndex = constantPool.constantUtf8Info(ATT_CODE);
         int attributeLength = codeLength + 8 * exceptionTable.size() + 12;
         for (CLAttributeInfo info : mCodeAttributes) {
             attributeLength += 6 + info.attributeLength;
         }
-        return new CLCodeAttribute(attributeNameIndex, attributeLength, stackDepth, maxLocals,
-                (long) codeLength, byteCode, exceptionTable.size(), exceptionTable,
-                mCodeAttributes.size(), mCodeAttributes);
+        return new CLCodeAttribute(attributeNameIndex, attributeLength, stackDepth, maxLocals, codeLength,
+                byteCode, exceptionTable.size(), exceptionTable, mCodeAttributes.size(), mCodeAttributes);
     }
 
     // Constructs and returns an ExceptionsAttribute given the list of exceptions.
     private CLExceptionsAttribute exceptionsAttribute(ArrayList<String> exceptions) {
         int attributeNameIndex = constantPool.constantUtf8Info(ATT_EXCEPTIONS);
-        ArrayList<Integer> exceptionIndexTable = new ArrayList<Integer>();
+        ArrayList<Integer> exceptionIndexTable = new ArrayList<>();
         for (String exception : exceptions) {
             exceptionIndexTable.add(constantPool.constantClassInfo(exception));
         }
@@ -1509,8 +1489,7 @@ public class CLEmitter {
     private CLInnerClassesAttribute innerClassesAttribute() {
         int attributeNameIndex = constantPool.constantUtf8Info(ATT_INNER_CLASSES);
         long attributeLength = innerClasses.size() * 8 + 2;
-        return new CLInnerClassesAttribute(attributeNameIndex, attributeLength,
-                innerClasses.size(), innerClasses);
+        return new CLInnerClassesAttribute(attributeNameIndex, attributeLength, innerClasses.size(), innerClasses);
     }
 
     // Constructs and returns a Synthetic attribute.
@@ -1523,18 +1502,19 @@ public class CLEmitter {
     // incorrect method from CLEmitter is used to add the opcode.
     private void reportOpcodeError(int opcode) {
         if (!CLInstruction.isValid(opcode)) {
-            reportEmitterError("%s: Invalid opcode '%d'", eCurrentMethod, opcode);
+            reportEmitterError("%s: invalid opcode '%d'", eCurrentMethod, opcode);
         } else {
-            reportEmitterError("%s: Incorrect method used to add instruction '%s'",
-                    eCurrentMethod, CLInstruction.instructionInfo[opcode].mnemonic);
+            reportEmitterError("%s: incorrect method used to add instruction '%s'", eCurrentMethod,
+                    CLInstruction.instructionInfo[opcode].mnemonic);
         }
     }
 
     // Used to report any error that occurs while creating/writing the class, to STDERR.
     private void reportEmitterError(String message, Object... args) {
+        errorHasOccurred = true;
+        System.err.print("CLEmitter error: ");
         System.err.printf(message, args);
         System.err.println();
-        errorHasOccurred = true;
     }
 }
 
@@ -1542,41 +1522,53 @@ public class CLEmitter {
  * Representation of an exception handler.
  */
 class CLException {
-    // The exception handler is active from this instruction in the code section of the current
-    // method being added to ...
+    /**
+     * The exception handler is active from this instruction in the code section of the current method being added
+     * to ...
+     */
     public String startLabel;
 
-    // this instruction. Formally, the handler is active while the program counter is within the
-    // interval [startPC, endPC).
+    /**
+     * this instruction. Formally, the handler is active while the program counter is within the interval [startPC,
+     * endPC).
+     */
     public String endLabel;
 
-    // Instruction after this label is first instruction of the handler.
+    /**
+     * Instruction after this label is first instruction of the handler.
+     */
     public String handlerLabel;
 
-    // The class of exceptions that this exception handler is designated to catch.
+    /**
+     * The class of exceptions that this exception handler is designated to catch.
+     */
     public String catchType;
 
-    // startLabel is resolved to this value.
+    /**
+     * startLabel is resolved to this value.
+     */
     public int startPC;
 
-    // endLabel is resolved to this value.
+    /**
+     * endLabel is resolved to this value.
+     */
     public int endPC;
 
-    // handlerLabel is resolved to this value.
+    /**
+     * handlerLabel is resolved to this value.
+     */
     public int handlerPC;
 
     /**
      * Constructs a CLException object.
      *
-     * @param startLabel   the exception handler is active from the instruction following this
-     *                     label in the code section of the current method being
-     *                     added ...
-     * @param endLabel     to the instruction following this label. Formally, the handler is
-     *                     active while the program counter is within the interval [startLabel,
-     *                     endLabel).
+     * @param startLabel   the exception handler is active from the instruction following this label in the code
+     *                     section of the current method being added.
+     * @param endLabel     to the instruction following this label. Formally, the handler is active while the program
+     *                     counter is within the interval [startLabel, endLabel).
      * @param handlerLabel the handler begins with instruction following this label.
-     * @param catchType    the exception type that this exception handler is designated to catch,
-     *                     as a fully qualified name in internal form.
+     * @param catchType    the exception type that this exception handler is designated to catch, as a fully
+     *                     qualified name in internal form.
      */
     public CLException(String startLabel, String endLabel, String handlerLabel, String catchType) {
         this.startLabel = startLabel;
@@ -1586,8 +1578,8 @@ class CLException {
     }
 
     /**
-     * Resolves the jump labels to the corresponding pc values using the given label to pc
-     * mapping. If unable to resolve a label, the corresponding pc is set to 0.
+     * Resolves the jump labels to the corresponding pc values using the given label to pc mapping. If unable to
+     * resolve a label, the corresponding pc is set to 0.
      *
      * @param labelToPC label to pc mapping.
      * @return true if all labels were resolved successfully, and false otherwise.
@@ -1617,8 +1609,8 @@ class CLException {
 }
 
 /**
- * Instances of this class form the elements of the CLBranchStack which is used for control flow
- * analysis to compute maximum depth of operand stack for a method.
+ * Instances of this class form the elements of the CLBranchStack which is used for control flow analysis to compute
+ * maximum depth of operand stack for a method.
  */
 class CLBranchTarget {
     /**
@@ -1649,22 +1641,22 @@ class CLBranchTarget {
  */
 class CLBranchStack {
     // Branch targets yet to visit.
-    private Stack<CLBranchTarget> branchTargets;
+    private final Stack<CLBranchTarget> branchTargets;
 
     // Branch targets already visited.
-    private Hashtable<CLInstruction, CLBranchTarget> visitedTargets;
+    private final Hashtable<CLInstruction, CLBranchTarget> visitedTargets;
 
     /**
      * Constructs a CLBranchStack object.
      */
     public CLBranchStack() {
-        this.branchTargets = new Stack<CLBranchTarget>();
-        this.visitedTargets = new Hashtable<CLInstruction, CLBranchTarget>();
+        this.branchTargets = new Stack<>();
+        this.visitedTargets = new Hashtable<>();
     }
 
     /**
-     * Pushes the specified information into the stack as a CLBranchTarget instance if the target
-     * has not been visited yet.
+     * Pushes the specified information into the stack as a CLBranchTarget instance if the target has not been
+     * visited yet.
      *
      * @param target     the target instruction.
      * @param stackDepth depth of stack before the target instruction is executed.
@@ -1683,14 +1675,12 @@ class CLBranchStack {
      */
     public CLBranchTarget pop() {
         if (!branchTargets.empty()) {
-            CLBranchTarget bt = (CLBranchTarget) branchTargets.pop();
-            return bt;
+            return branchTargets.pop();
         }
         return null;
     }
 
-    // Returns an instance of CLBranchTarget with the specified information and records the
-    // target as visited.
+    // Returns an instance of CLBranchTarget with the specified information and records the target as visited.
     private CLBranchTarget visit(CLInstruction target, int stackDepth) {
         CLBranchTarget bt = new CLBranchTarget(target, stackDepth);
         visitedTargets.put(target, bt);
@@ -1711,7 +1701,15 @@ class ByteClassLoader extends ClassLoader {
     private byte[] bytes;
 
     // Has a package been defined for this class loader?
-    private boolean pkgDefined = false;
+    private boolean pkgDefined;
+
+    /**
+     * Constructs a ByteClassLoader.
+     */
+    public ByteClassLoader() {
+        bytes = null;
+        pkgDefined = false;
+    }
 
     /**
      * Sets the bytes representing the class.
@@ -1737,18 +1735,17 @@ class ByteClassLoader extends ClassLoader {
             } catch (Exception e) {
                 // Ignore these.
             } catch (NoClassDefFoundError e) {
-                // If we get here we know the class exists, so change the name to its binary name
-                // as defined in the Java Language Specifications.
+                // If we get here we know the class exists, so change the name to its binary name as defined in the
+                // Java Language Specifications.
                 cls = findSystemClass(name.replace("/", "."));
             }
         }
         if (cls == null) {
             name = name.replace("/", ".");
-            String pkg = name.lastIndexOf('.') == -1 ? "" : name.substring(0,
-                    name.lastIndexOf('.'));
+            String pkg = name.lastIndexOf('.') == -1 ? "" : name.substring(0, name.lastIndexOf('.'));
             if (!pkgDefined) {
-                // Packages must be created before the class is defined, and package names must
-                // be unique within a class loader and cannot be redefined or changed once created.
+                // Packages must be created before the class is defined, and package names must be unique within a
+                // class loader and cannot be redefined or changed once created.
                 definePackage(pkg, "", "", "", "", "", "", null);
                 pkgDefined = true;
             }
@@ -1762,8 +1759,8 @@ class ByteClassLoader extends ClassLoader {
 }
 
 /**
- * Inherits from java.out.DataOutputStream and provides an extra function for writing unsigned
- * int to the output stream, which is required for writing Java class files.
+ * Inherits from java.out.DataOutputStream and provides an extra function for writing unsigned int to the output
+ * stream, which is required for writing Java class files.
  */
 class CLOutputStream extends DataOutputStream {
     /**
@@ -1776,8 +1773,8 @@ class CLOutputStream extends DataOutputStream {
     }
 
     /**
-     * Writes four bytes to the output stream to represent the value of the argument. The byte
-     * values to be written, in the order shown, are:
+     * Writes four bytes to the output stream to represent the value of the argument. The byte values to be written,
+     * in the order shown, are:
      *
      * <pre>
      *     (byte) ( 0xFF &amp; ( v &gt;&gt; 24 ) )

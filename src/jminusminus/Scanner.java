@@ -18,10 +18,10 @@ class Scanner {
     public final static char EOFCH = CharReader.EOFCH;
 
     // Keywords in j--.
-    private Hashtable<String, TokenKind> reserved;
+    private final Hashtable<String, TokenKind> reserved;
 
     // Source characters.
-    private CharReader input;
+    private final CharReader input;
 
     // Next unscanned character.
     private char ch;
@@ -30,7 +30,7 @@ class Scanner {
     private boolean isInError;
 
     // Source file name.
-    private String fileName;
+    private final String fileName;
 
     // Line number of current token.
     private int line;
@@ -47,7 +47,7 @@ class Scanner {
         isInError = false;
 
         // Keywords in j--
-        reserved = new Hashtable<String, TokenKind>();
+        reserved = new Hashtable<>();
         reserved.put(ABSTRACT.image(), ABSTRACT);
         reserved.put(BOOLEAN.image(), BOOLEAN);
         reserved.put(CHAR.image(), CHAR);
@@ -83,7 +83,7 @@ class Scanner {
      * @return the next scanned token.
      */
     public TokenInfo getNextToken() {
-        StringBuffer buffer;
+        StringBuilder buffer;
         boolean moreWhiteSpace = true;
         while (moreWhiteSpace) {
             while (isWhitespace(ch)) {
@@ -97,7 +97,7 @@ class Scanner {
                         nextCh();
                     }
                 } else {
-                    reportScannerError("Operator / is not supported in j--");
+                    reportScannerError("operator / is not supported in j--");
                 }
             } else {
                 moreWhiteSpace = false;
@@ -105,6 +105,8 @@ class Scanner {
         }
         line = input.line();
         switch (ch) {
+            case EOFCH:
+                return new TokenInfo(EOF, line);
             case ',':
                 nextCh();
                 return new TokenInfo(COMMA, line);
@@ -132,9 +134,14 @@ class Scanner {
             case ';':
                 nextCh();
                 return new TokenInfo(SEMI, line);
-            case '*':
+            case '-':
                 nextCh();
-                return new TokenInfo(STAR, line);
+                if (ch == '-') {
+                    nextCh();
+                    return new TokenInfo(DEC, line);
+                } else {
+                    return new TokenInfo(MINUS, line);
+                }
             case '+':
                 nextCh();
                 if (ch == '=') {
@@ -146,14 +153,9 @@ class Scanner {
                 } else {
                     return new TokenInfo(PLUS, line);
                 }
-            case '-':
+            case '*':
                 nextCh();
-                if (ch == '-') {
-                    nextCh();
-                    return new TokenInfo(DEC, line);
-                } else {
-                    return new TokenInfo(MINUS, line);
-                }
+                return new TokenInfo(STAR, line);
             case '=':
                 nextCh();
                 if (ch == '=') {
@@ -171,7 +173,7 @@ class Scanner {
                     nextCh();
                     return new TokenInfo(LE, line);
                 } else {
-                    reportScannerError("Operator < is not supported in j--");
+                    reportScannerError("operator < is not supported in j--");
                     return getNextToken();
                 }
             case '!':
@@ -183,11 +185,11 @@ class Scanner {
                     nextCh();
                     return new TokenInfo(LAND, line);
                 } else {
-                    reportScannerError("Operator & is not supported in j--");
+                    reportScannerError("operator & is not supported in j--");
                     return getNextToken();
                 }
             case '\'':
-                buffer = new StringBuffer();
+                buffer = new StringBuilder();
                 buffer.append('\'');
                 nextCh();
                 if (ch == '\\') {
@@ -210,7 +212,7 @@ class Scanner {
                     return new TokenInfo(CHAR_LITERAL, buffer.toString(), line);
                 }
             case '"':
-                buffer = new StringBuffer();
+                buffer = new StringBuilder();
                 buffer.append("\"");
                 nextCh();
                 while (ch != '"' && ch != '\n' && ch != EOFCH) {
@@ -223,17 +225,15 @@ class Scanner {
                     }
                 }
                 if (ch == '\n') {
-                    reportScannerError("Unexpected end of line found in string");
+                    reportScannerError("unexpected end of line found in string");
                 } else if (ch == EOFCH) {
-                    reportScannerError("Unexpected end of file found in string");
+                    reportScannerError("unexpected end of file found in string");
                 } else {
                     // Scan the closing "
                     nextCh();
                     buffer.append("\"");
                 }
                 return new TokenInfo(STRING_LITERAL, buffer.toString(), line);
-            case EOFCH:
-                return new TokenInfo(EOF, line);
             case '0':
             case '1':
             case '2':
@@ -244,7 +244,7 @@ class Scanner {
             case '7':
             case '8':
             case '9':
-                buffer = new StringBuffer();
+                buffer = new StringBuilder();
                 while (isDigit(ch)) {
                     buffer.append(ch);
                     nextCh();
@@ -252,7 +252,7 @@ class Scanner {
                 return new TokenInfo(INT_LITERAL, buffer.toString(), line);
             default:
                 if (isIdentifierStart(ch)) {
-                    buffer = new StringBuffer();
+                    buffer = new StringBuilder();
                     while (isIdentifierPart(ch)) {
                         buffer.append(ch);
                         nextCh();
@@ -264,7 +264,7 @@ class Scanner {
                         return new TokenInfo(IDENTIFIER, identifier, line);
                     }
                 } else {
-                    reportScannerError("Unidentified input token: '%c'", ch);
+                    reportScannerError("unidentified input token '%c'", ch);
                     nextCh();
                     return getNextToken();
                 }
@@ -329,12 +329,12 @@ class Scanner {
         try {
             ch = input.nextChar();
         } catch (Exception e) {
-            reportScannerError("Unable to read characters from input");
+            reportScannerError("unable to read characters from input");
         }
     }
 
-    // Reports a lexical error and records the fact that an error has occurred. This fact can be
-    // ascertained from the Scanner by sending it an errorHasOccurred message.
+    // Reports a lexical error and records the fact that an error has occurred. This fact can be ascertained from the
+    // Scanner by sending it an errorHasOccurred message.
     private void reportScannerError(String message, Object... args) {
         isInError = true;
         System.err.printf("%s:%d: error: ", fileName, line);
@@ -357,26 +357,25 @@ class Scanner {
         return (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '_' || c == '$');
     }
 
-    // Returns true if the specified character can be part of an identifier name, and false
-    // otherwise.
+    // Returns true if the specified character can be part of an identifier name, and false otherwise.
     private boolean isIdentifierPart(char c) {
         return (isIdentifierStart(c) || isDigit(c));
     }
 }
 
 /**
- * A buffered character reader, which abstracts out differences between platforms, mapping all new
- * lines to '\n', and also keeps track of line numbers.
+ * A buffered character reader, which abstracts out differences between platforms, mapping all new lines to '\n', and
+ * also keeps track of line numbers.
  */
 class CharReader {
     // Representation of the end of file as a character.
     public final static char EOFCH = (char) -1;
 
     // The underlying reader records line numbers.
-    private LineNumberReader lineNumberReader;
+    private final LineNumberReader lineNumberReader;
 
     // Name of the file that is being read.
-    private String fileName;
+    private final String fileName;
 
     /**
      * Constructs a CharReader from a file name.

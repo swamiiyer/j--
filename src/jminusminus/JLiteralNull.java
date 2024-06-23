@@ -2,7 +2,7 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ACONST_NULL;
 
 /**
  * The AST node for the null literal.

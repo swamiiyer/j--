@@ -2,8 +2,6 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * The AST node for a conditional expression.
  */
@@ -25,8 +23,7 @@ class JConditionalExpression extends JExpression {
      * @param thenPart  then part.
      * @param elsePart  else part.
      */
-    public JConditionalExpression(int line, JExpression condition, JExpression thenPart,
-                                  JExpression elsePart) {
+    public JConditionalExpression(int line, JExpression condition, JExpression thenPart, JExpression elsePart) {
         super(line);
         this.condition = condition;
         this.thenPart = thenPart;

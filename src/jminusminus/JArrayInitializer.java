@@ -4,14 +4,20 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.AASTORE;
+import static jminusminus.CLConstants.ANEWARRAY;
+import static jminusminus.CLConstants.BASTORE;
+import static jminusminus.CLConstants.CASTORE;
+import static jminusminus.CLConstants.DUP;
+import static jminusminus.CLConstants.IASTORE;
+import static jminusminus.CLConstants.NEWARRAY;
 
 /**
  * The AST node for an array initializer.
  */
 class JArrayInitializer extends JExpression {
     // The initializations.
-    private ArrayList<JExpression> initials;
+    private final ArrayList<JExpression> initials;
 
     /**
      * Constructs an AST node for an array initializer.
@@ -32,7 +38,7 @@ class JArrayInitializer extends JExpression {
     public JExpression analyze(Context context) {
         type = type.resolve(context);
         if (!type.isArray()) {
-            JAST.compilationUnit.reportSemanticError(line, "Cannot initialize a " + type.toString()
+            JAST.compilationUnit.reportSemanticError(line, "cannot initialize a " + type.toString()
                     + " with an array sequence {...}");
             return this;
         }
@@ -57,8 +63,7 @@ class JArrayInitializer extends JExpression {
         (new JLiteralInt(line, String.valueOf(initials.size()))).codegen(output);
 
         // Code to create the (empty) array.
-        output.addArrayInstruction(componentType.isReference() ? ANEWARRAY : NEWARRAY,
-                componentType.jvmName());
+        output.addArrayInstruction(componentType.isReference() ? ANEWARRAY : NEWARRAY, componentType.jvmName());
 
         // Code to load initial values and store them as elements in the newly created array.
         for (int i = 0; i < initials.size(); i++) {

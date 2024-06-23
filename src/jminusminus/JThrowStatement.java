@@ -2,8 +2,6 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * An AST node for a throw-statement.
  */

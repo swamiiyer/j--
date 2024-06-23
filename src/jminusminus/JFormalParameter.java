@@ -7,7 +7,7 @@ package jminusminus;
  */
 class JFormalParameter extends JAST {
     // Parameter name.
-    private String name;
+    private final String name;
 
     // Parameter type.
     private Type type;

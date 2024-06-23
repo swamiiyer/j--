@@ -3,27 +3,27 @@
 package jminusminus;
 
 /**
- * The IDefn type is used to implement definitions of things (local variables, formal arguments, types) that are
+ * The Defn type is used to implement definitions of things (local variables, formal arguments, types) that are
  * named in some context (aka scope).
  */
-interface IDefn {
+interface Defn {
     /**
      * The (local variable, formal parameter, or local or imported name) definition's type.
      *
      * @return the definition's type.
      */
-    public Type type();
+    Type type();
 }
 
 /**
  * A definition of a type name. In the first instance, an identifier, but later resolved to a local name or an
  * imported name.
  */
-class TypeNameDefn implements IDefn {
+class TypeNameDefn implements Defn {
     /**
      * The definition's type.
      */
-    private Type type;
+    private final Type type;
 
     /**
      * Constructs a type name definition for a type.
@@ -48,12 +48,12 @@ class TypeNameDefn implements IDefn {
  * The definition for a local variable (including formal parameters). All local variables are allocated on the stack
  * at fixed offsets from the base of the stack frame and all have types. Some local variables have initializations.
  */
-class LocalVariableDefn implements IDefn {
+class LocalVariableDefn implements Defn {
     // The local variable's type.
-    private Type type;
+    private final Type type;
 
     // The local variable's offset from the base of the current the stack frame.
-    private int offset;
+    private final int offset;
 
     // Has this local variable been initialized?
     private boolean isInitialized;
@@ -98,7 +98,7 @@ class LocalVariableDefn implements IDefn {
     /**
      * Returns true if this local variable has been initialized, and false otherwise.
      *
-     * @returntrue if this local variable has been initialized, and false otherwise.
+     * @return true if this local variable has been initialized, and false otherwise.
      */
     public boolean isInitialized() {
         return isInitialized;

@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import static jminusminus.TokenKind.*;
 
 /**
- * A recursive descent parser that, given a lexical analyzer (a LookaheadScanner), parses a j--
- * compilation unit (program file), taking tokens from the LookaheadScanner, and produces an
- * abstract syntax tree (AST) for it.
+ * A recursive descent parser that, given a lexical analyzer (a LookaheadScanner), parses a j-- compilation unit
+ * (program file), taking tokens from the LookaheadScanner, and produces an abstract syntax tree (AST) for it.
  */
-public class Parser {
+class Parser {
     // The lexical analyzer with which tokens are scanned.
-    private LookaheadScanner scanner;
+    private final LookaheadScanner scanner;
 
     // Whether a parser error has been found.
     private boolean isInError;
@@ -64,17 +63,15 @@ public class Parser {
             packageName = qualifiedIdentifier();
             mustBe(SEMI);
         }
-        ArrayList<TypeName> imports = new ArrayList<TypeName>();
+        ArrayList<TypeName> imports = new ArrayList<>();
         while (have(IMPORT)) {
             imports.add(qualifiedIdentifier());
             mustBe(SEMI);
         }
-        ArrayList<JAST> typeDeclarations = new ArrayList<JAST>();
+        ArrayList<JAST> typeDeclarations = new ArrayList<>();
         while (!see(EOF)) {
             JAST typeDeclaration = typeDeclaration();
-            if (typeDeclaration != null) {
-                typeDeclarations.add(typeDeclaration);
-            }
+            typeDeclarations.add(typeDeclaration);
         }
         mustBe(EOF);
         return new JCompilationUnit(fileName, line, packageName, imports, typeDeclarations);
@@ -124,7 +121,7 @@ public class Parser {
      * @return a list of modifiers.
      */
     private ArrayList<String> modifiers() {
-        ArrayList<String> mods = new ArrayList<String>();
+        ArrayList<String> mods = new ArrayList<>();
         boolean scannedPUBLIC = false;
         boolean scannedPROTECTED = false;
         boolean scannedPRIVATE = false;
@@ -135,46 +132,46 @@ public class Parser {
             if (have(ABSTRACT)) {
                 mods.add("abstract");
                 if (scannedABSTRACT) {
-                    reportParserError("Repeated modifier: abstract");
+                    reportParserError("repeated modifier: abstract");
                 }
                 scannedABSTRACT = true;
             } else if (have(PRIVATE)) {
                 mods.add("private");
                 if (scannedPRIVATE) {
-                    reportParserError("Repeated modifier: private");
+                    reportParserError("repeated modifier: private");
                 }
                 if (scannedPUBLIC || scannedPROTECTED) {
-                    reportParserError("Access conflict in modifiers");
+                    reportParserError("access conflict in modifiers");
                 }
                 scannedPRIVATE = true;
             } else if (have(PROTECTED)) {
                 mods.add("protected");
                 if (scannedPROTECTED) {
-                    reportParserError("Repeated modifier: protected");
+                    reportParserError("repeated modifier: protected");
                 }
                 if (scannedPUBLIC || scannedPRIVATE) {
-                    reportParserError("Access conflict in modifiers");
+                    reportParserError("access conflict in modifiers");
                 }
                 scannedPROTECTED = true;
             } else if (have(PUBLIC)) {
                 mods.add("public");
                 if (scannedPUBLIC) {
-                    reportParserError("Repeated modifier: public");
+                    reportParserError("repeated modifier: public");
                 }
                 if (scannedPROTECTED || scannedPRIVATE) {
-                    reportParserError("Access conflict in modifiers");
+                    reportParserError("access conflict in modifiers");
                 }
                 scannedPUBLIC = true;
             } else if (have(STATIC)) {
                 mods.add("static");
                 if (scannedSTATIC) {
-                    reportParserError("Repeated modifier: static");
+                    reportParserError("repeated modifier: static");
                 }
                 scannedSTATIC = true;
             } else if (have(ABSTRACT)) {
                 mods.add("abstract");
                 if (scannedABSTRACT) {
-                    reportParserError("Repeated modifier: abstract");
+                    reportParserError("repeated modifier: abstract");
                 }
                 scannedABSTRACT = true;
             } else {
@@ -218,7 +215,7 @@ public class Parser {
      * @return a list of members in the class body.
      */
     private ArrayList<JMember> classBody() {
-        ArrayList<JMember> members = new ArrayList<JMember>();
+        ArrayList<JMember> members = new ArrayList<>();
         mustBe(LCURLY);
         while (!see(RCURLY) && !see(EOF)) {
             ArrayList<String> mods = modifiers();
@@ -242,7 +239,7 @@ public class Parser {
      */
     private JMember memberDecl(ArrayList<String> mods) {
         int line = scanner.token().line();
-        JMember memberDecl = null;
+        JMember memberDecl;
         if (seeIdentLParen()) {
             // A constructor.
             mustBe(IDENTIFIER);
@@ -251,7 +248,7 @@ public class Parser {
             JBlock body = block();
             memberDecl = new JConstructorDeclaration(line, mods, name, params, null, body);
         } else {
-            Type type = null;
+            Type type;
             if (have(VOID)) {
                 // A void method.
                 type = Type.VOID;
@@ -290,7 +287,7 @@ public class Parser {
      */
     private JBlock block() {
         int line = scanner.token().line();
-        ArrayList<JStatement> statements = new ArrayList<JStatement>();
+        ArrayList<JStatement> statements = new ArrayList<>();
         mustBe(LCURLY);
         while (!see(RCURLY) && !see(EOF)) {
             statements.add(blockStatement());
@@ -372,7 +369,7 @@ public class Parser {
      * @return a list of formal parameters.
      */
     private ArrayList<JFormalParameter> formalParameters() {
-        ArrayList<JFormalParameter> parameters = new ArrayList<JFormalParameter>();
+        ArrayList<JFormalParameter> parameters = new ArrayList<>();
         mustBe(LPAREN);
         if (have(RPAREN)) {
             return parameters;
@@ -445,7 +442,7 @@ public class Parser {
      * @return a list of variable declarators.
      */
     private ArrayList<JVariableDeclarator> variableDeclarators(Type type) {
-        ArrayList<JVariableDeclarator> variableDeclarators = new ArrayList<JVariableDeclarator>();
+        ArrayList<JVariableDeclarator> variableDeclarators = new ArrayList<>();
         do {
             variableDeclarators.add(variableDeclarator(type));
         } while (have(COMMA));
@@ -491,8 +488,7 @@ public class Parser {
      * Parses an array initializer and returns an AST for it.
      *
      * <pre>
-     *   arrayInitializer ::= LCURLY [ variableInitializer { COMMA variableInitializer }
-     *                                 [ COMMA ] ] RCURLY
+     *   arrayInitializer ::= LCURLY [ variableInitializer { COMMA variableInitializer } [ COMMA ] ] RCURLY
      * </pre>
      *
      * @param type type of the array.
@@ -500,7 +496,7 @@ public class Parser {
      */
     private JArrayInitializer arrayInitializer(Type type) {
         int line = scanner.token().line();
-        ArrayList<JExpression> initials = new ArrayList<JExpression>();
+        ArrayList<JExpression> initials = new ArrayList<>();
         mustBe(LCURLY);
         if (have(RCURLY)) {
             return new JArrayInitializer(line, type, initials);
@@ -523,7 +519,7 @@ public class Parser {
      * @return a list of arguments.
      */
     private ArrayList<JExpression> arguments() {
-        ArrayList<JExpression> args = new ArrayList<JExpression>();
+        ArrayList<JExpression> args = new ArrayList<>();
         mustBe(LPAREN);
         if (have(RPAREN)) {
             return args;
@@ -568,7 +564,7 @@ public class Parser {
         } else if (have(INT)) {
             return Type.INT;
         } else {
-            reportParserError("Type sought where %s found", scanner.token().image());
+            reportParserError("type sought where %s found", scanner.token().image());
             return Type.ANY;
         }
     }
@@ -584,7 +580,7 @@ public class Parser {
      * @return a reference type.
      */
     private Type referenceType() {
-        Type type = null;
+        Type type;
         if (!see(IDENTIFIER)) {
             type = basicType();
             mustBe(LBRACK);
@@ -626,7 +622,7 @@ public class Parser {
             // So as not to save on stack.
             expr.isStatementExpression = true;
         } else {
-            reportParserError("Invalid statement expression; it does not have a side-effect");
+            reportParserError("invalid statement expression; it does not have a side-effect");
         }
         return new JStatementExpression(line, expr);
     }
@@ -648,8 +644,7 @@ public class Parser {
      * Parses an assignment expression and returns an AST for it.
      *
      * <pre>
-     *   assignmentExpression ::= conditionalAndExpression
-     *                                [ ( ASSIGN | PLUS_ASSIGN ) assignmentExpression ]
+     *   assignmentExpression ::= conditionalAndExpression [ ( ASSIGN | PLUS_ASSIGN ) assignmentExpression ]
      * </pre>
      *
      * @return an AST for an assignment expression.
@@ -986,8 +981,7 @@ public class Parser {
      * Parses a new array declarator and returns an AST for it.
      *
      * <pre>
-     *   newArrayDeclarator ::= LBRACK expression RBRACK
-     *                              { LBRACK expression RBRACK } { LBRACK RBRACK }
+     *   newArrayDeclarator ::= LBRACK expression RBRACK { LBRACK expression RBRACK } { LBRACK RBRACK }
      * </pre>
      *
      * @param line line in which the declarator occurred.
@@ -995,7 +989,7 @@ public class Parser {
      * @return an AST for a new array declarator.
      */
     private JNewArrayOp newArrayDeclarator(int line, Type type) {
-        ArrayList<JExpression> dimensions = new ArrayList<JExpression>();
+        ArrayList<JExpression> dimensions = new ArrayList<>();
         mustBe(LBRACK);
         dimensions.add(expression());
         mustBe(RBRACK);
@@ -1042,7 +1036,7 @@ public class Parser {
         } else if (have(TRUE)) {
             return new JLiteralBoolean(line, scanner.previousToken().image());
         } else {
-            reportParserError("Literal sought where %s found", scanner.token().image());
+            reportParserError("literal sought where %s found", scanner.token().image());
             return new JWildExpression(line);
         }
     }
@@ -1056,8 +1050,8 @@ public class Parser {
         return (sought == scanner.token().kind());
     }
 
-    // If the current token equals sought, scans it and returns true. Otherwise, returns false
-    // without scanning the token.
+    // If the current token equals sought, scans it and returns true. Otherwise, returns false without scanning the
+    // token.
     private boolean have(TokenKind sought) {
         if (see(sought)) {
             scanner.next();
@@ -1067,13 +1061,11 @@ public class Parser {
         }
     }
 
-    // Attempts to match a token we're looking for with the current input token. On success,
-    // scans the token and goes into a "Recovered" state. On failure, what happens next depends
-    // on whether or not the parser is currently in a "Recovered" state: if so, it reports the
-    // error and goes into an "Unrecovered" state; if not, it repeatedly scans tokens until it
-    // finds the one it is looking for (or EOF) and then returns to a "Recovered" state. This
-    // gives us a kind of poor man's syntactic error recovery, a strategy due to David Turner and
-    // Ron Morrison.
+    // Attempts to match a token we're looking for with the current input token. On success, scans the token and goes
+    // into a "Recovered" state. On failure, what happens next depends on whether or not the parser is currently in a
+    // "Recovered" state: if so, it reports the error and goes into an "Unrecovered" state; if not, it repeatedly
+    // scans tokens until it finds the one it is looking for (or EOF) and then returns to a "Recovered" state. This
+    // gives us a kind of poor man's syntactic error recovery, a strategy due to David Turner and Ron Morrison.
     private void mustBe(TokenKind sought) {
         if (scanner.token().kind() == sought) {
             scanner.next();
@@ -1082,8 +1074,7 @@ public class Parser {
             isRecovered = false;
             reportParserError("%s found where %s sought", scanner.token().image(), sought.image());
         } else {
-            // Do not report the (possibly spurious) error, but rather attempt to recover by
-            // forcing a match.
+            // Do not report the (possibly spurious) error, but rather attempt to recover by forcing a match.
             while (!see(sought) && !see(EOF)) {
                 scanner.next();
             }

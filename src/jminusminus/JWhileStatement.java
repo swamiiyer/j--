@@ -2,7 +2,7 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.GOTO;
 
 /**
  * The AST node for a while-statement.
@@ -41,13 +41,13 @@ class JWhileStatement extends JStatement {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        String test = output.createLabel();
-        String out = output.createLabel();
-        output.addLabel(test);
-        condition.codegen(output, out, false);
+        String testLabel = output.createLabel();
+        String endLabel = output.createLabel();
+        output.addLabel(testLabel);
+        condition.codegen(output, endLabel, false);
         body.codegen(output);
-        output.addBranchInstruction(GOTO, test);
-        output.addLabel(out);
+        output.addBranchInstruction(GOTO, testLabel);
+        output.addLabel(endLabel);
     }
 
     /**

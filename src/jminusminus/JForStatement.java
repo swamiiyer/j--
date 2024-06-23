@@ -4,8 +4,6 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * The AST node for a for-statement.
  */
@@ -31,8 +29,8 @@ class JForStatement extends JStatement {
      * @param update    the update.
      * @param body      the body.
      */
-    public JForStatement(int line, ArrayList<JStatement> init, JExpression condition,
-                         ArrayList<JStatement> update, JStatement body) {
+    public JForStatement(int line, ArrayList<JStatement> init, JExpression condition, ArrayList<JStatement> update,
+                         JStatement body) {
         super(line);
         this.init = init;
         this.condition = condition;

@@ -2,14 +2,21 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.BIPUSH;
+import static jminusminus.CLConstants.ICONST_0;
+import static jminusminus.CLConstants.ICONST_1;
+import static jminusminus.CLConstants.ICONST_2;
+import static jminusminus.CLConstants.ICONST_3;
+import static jminusminus.CLConstants.ICONST_4;
+import static jminusminus.CLConstants.ICONST_5;
+import static jminusminus.CLConstants.SIPUSH;
 
 /**
  * The AST node for a char literal.
  */
 class JLiteralChar extends JExpression {
     // String representation of the literal.
-    private String text;
+    private final String text;
 
     /**
      * Constructs an AST node for a char literal given its line number and string representation.
@@ -28,7 +35,7 @@ class JLiteralChar extends JExpression {
      * @return the literal as an int.
      */
     public int toInt() {
-        return (int) JAST.unescape(text).charAt(1);
+        return JAST.unescape(text).charAt(1);
     }
 
     /**
@@ -66,10 +73,8 @@ class JLiteralChar extends JExpression {
             default:
                 if (i >= 6 && i <= 127) {
                     output.addOneArgInstruction(BIPUSH, i);
-                } else if (i >= 128 && i <= 32767) {
-                    output.addOneArgInstruction(SIPUSH, i);
                 } else {
-                    output.addLDCInstruction(i);
+                    output.addOneArgInstruction(SIPUSH, i);
                 }
         }
     }

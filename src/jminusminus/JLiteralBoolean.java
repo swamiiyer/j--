@@ -2,14 +2,16 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.GOTO;
+import static jminusminus.CLConstants.ICONST_0;
+import static jminusminus.CLConstants.ICONST_1;
 
 /**
  * The AST node for a boolean literal.
  */
 class JLiteralBoolean extends JExpression {
     // String representation of the literal.
-    private String text;
+    private final String text;
 
     /**
      * Constructs an AST node for a boolean literal given its line number and string representation.

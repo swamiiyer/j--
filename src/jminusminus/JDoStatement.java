@@ -2,12 +2,10 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * The AST node for a do-statement.
  */
-public class JDoStatement extends JStatement {
+class JDoStatement extends JStatement {
     // Body.
     private JStatement body;
 

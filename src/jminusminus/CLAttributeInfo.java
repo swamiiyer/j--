@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import static jminusminus.CLConstants.*;
 
 /**
- * The abstract base class for the representation of attribute_info} structure. Classes
- * representing individual attributes inherit this class. This file has representations for all
- * attributes specified in JVM Spec Second Edition, including the ones that were added for JDK 1.5.
+ * The abstract base class for the representation of attribute_info structure. Classes representing individual
+ * attributes inherit this class. This file has representations for all attributes specified in JVM Spec Second
+ * Edition, including the ones that were added for JDK 1.5.
  * <p>
- * Attributes are used in the CLFile, CLFieldInfo, CLMethodInfo, and CLCodeAttribute structures
- * of the class file. While there are many kinds of attributes, only some are mandatory; these
- * include:
+ * Attributes are used in the CLFile, CLFieldInfo, CLMethodInfo, and CLCodeAttribute structures of the class file.
+ * While there are many kinds of attributes, only some are mandatory; these include:
  * <ul>
  *   <li> InnerClasses_attribute (class attribute)</li>
  *   <li> Synthetic_attribute (class, field, and method attribute)</li>
@@ -22,9 +21,9 @@ import static jminusminus.CLConstants.*;
  *   <li> Exceptions_attribute (method attribute)</li>
  * </ul>
  * <p>
- * CLEmitter implicitly adds the required attributes to the appropriate structure. The optional
- * attributes have to be added explicitly using the CLEmitter methods addClassAttribute(),
- * addFieldAttribute(), addMethodAttribute(), and addCodeAttribute().
+ * CLEmitter implicitly adds the required attributes to the appropriate structure. The optional attributes have to be
+ * added explicitly using the CLEmitter methods addClassAttribute(), addFieldAttribute(), addMethodAttribute(), and
+ * addCodeAttribute().
  */
 abstract class CLAttributeInfo {
     /**
@@ -57,7 +56,7 @@ abstract class CLAttributeInfo {
 
     public void write(CLOutputStream out) throws IOException {
         out.writeShort(attributeNameIndex);
-        out.writeInt((long) attributeLength);
+        out.writeInt(attributeLength);
     }
 }
 
@@ -77,8 +76,7 @@ class CLConstantValueAttribute extends CLAttributeInfo {
      * @param attributeLength    ConstantValue_attribute.attribute_length item.
      * @param constantValueIndex ConstantValue_attribute.constantvalue_index item.
      */
-    public CLConstantValueAttribute(int attributeNameIndex, long attributeLength,
-                                    int constantValueIndex) {
+    public CLConstantValueAttribute(int attributeNameIndex, long attributeLength, int constantValueIndex) {
         super(attributeNameIndex, attributeLength);
         this.constantValueIndex = constantValueIndex;
     }
@@ -203,10 +201,10 @@ class CLCodeAttribute extends CLAttributeInfo {
      * @param attributesCount      Code_attribute.attributes_count item.
      * @param attributes           Code_attribute.attributes item.
      */
-    public CLCodeAttribute(int attributeNameIndex, long attributeLength, int maxStack,
-                           int maxLocals, long codeLength, ArrayList<Integer> code,
-                           int exceptionTableLength, ArrayList<CLExceptionInfo> exceptionTable,
-                           int attributesCount, ArrayList<CLAttributeInfo> attributes) {
+    public CLCodeAttribute(int attributeNameIndex, long attributeLength, int maxStack, int maxLocals,
+                           long codeLength, ArrayList<Integer> code, int exceptionTableLength,
+                           ArrayList<CLExceptionInfo> exceptionTable, int attributesCount,
+                           ArrayList<CLAttributeInfo> attributes) {
         super(attributeNameIndex, attributeLength);
         this.maxStack = maxStack;
         this.maxLocals = maxLocals;
@@ -262,8 +260,8 @@ class CLExceptionsAttribute extends CLAttributeInfo {
      * @param numberOfExceptions  Exceptions_attribute.number_of_exceptions item.
      * @param exceptionIndexTable Exceptions_attribute.exception_index_table item.
      */
-    public CLExceptionsAttribute(int attributeNameIndex, long attributeLength,
-                                 int numberOfExceptions, ArrayList<Integer> exceptionIndexTable) {
+    public CLExceptionsAttribute(int attributeNameIndex, long attributeLength, int numberOfExceptions,
+                                 ArrayList<Integer> exceptionIndexTable) {
         super(attributeNameIndex, attributeLength);
         this.numberOfExceptions = numberOfExceptions;
         this.exceptionIndexTable = exceptionIndexTable;
@@ -360,8 +358,8 @@ class CLInnerClassesAttribute extends CLAttributeInfo {
      * @param numberOfClasses    InnerClasses_attribute.number_of_classes item.
      * @param classes            InnerClasses_attribute.classes item.
      */
-    public CLInnerClassesAttribute(int attributeNameIndex, long attributeLength,
-                                   int numberOfClasses, ArrayList<CLInnerClassInfo> classes) {
+    public CLInnerClassesAttribute(int attributeNameIndex, long attributeLength, int numberOfClasses,
+                                   ArrayList<CLInnerClassInfo> classes) {
         super(attributeNameIndex, attributeLength);
         this.numberOfClasses = numberOfClasses;
         this.classes = classes;
@@ -402,8 +400,7 @@ class CLEnclosingMethodAttribute extends CLAttributeInfo {
      * @param methodIndex        EnclosingMethod_attribute.method_index item.
      */
 
-    public CLEnclosingMethodAttribute(int attributeNameIndex, long attributeLength,
-                                      int classIndex, int methodIndex) {
+    public CLEnclosingMethodAttribute(int attributeNameIndex, long attributeLength, int classIndex, int methodIndex) {
         super(attributeNameIndex, attributeLength);
         this.classIndex = classIndex;
         this.methodIndex = methodIndex;
@@ -487,8 +484,7 @@ class CLSourceFileAttribute extends CLAttributeInfo {
      * @param attributeLength    SourceFile_attribute.attribute_length item.
      * @param sourceFileIndex    SourceFile_attribute.sourcefile_index item.
      */
-    public CLSourceFileAttribute(int attributeNameIndex, long attributeLength,
-                                 int sourceFileIndex) {
+    public CLSourceFileAttribute(int attributeNameIndex, long attributeLength, int sourceFileIndex) {
         super(attributeNameIndex, attributeLength);
         this.sourceFileIndex = sourceFileIndex;
     }
@@ -518,8 +514,7 @@ class CLSourceDebugExtensionAttribute extends CLAttributeInfo {
      * @param attributeLength    SourceDebugExtension_attribute.attribute_length item.
      * @param debugExtension     SourceDebugExtension_attribute.debug_extension item.
      */
-    public CLSourceDebugExtensionAttribute(int attributeNameIndex, long attributeLength,
-                                           byte[] debugExtension) {
+    public CLSourceDebugExtensionAttribute(int attributeNameIndex, long attributeLength, byte[] debugExtension) {
         super(attributeNameIndex, attributeLength);
         this.debugExtension = debugExtension;
     }
@@ -578,13 +573,17 @@ class CLLineNumberInfo {
      * @return true if this LineNumber_info object is the same as other, and false otherwise.
      */
     public boolean equals(Object other) {
-        if (other instanceof CLLineNumberInfo) {
-            CLLineNumberInfo c = (CLLineNumberInfo) other;
-            if (c.lineNumber == lineNumber) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLLineNumberInfo a = this, b = (CLLineNumberInfo) other;
+        return a.lineNumber == b.lineNumber;
     }
 }
 
@@ -610,8 +609,7 @@ class CLLineNumberTableAttribute extends CLAttributeInfo {
      * @param lineNumberTableLength LineNumberTable_attribute.line_number_table_length item.
      * @param lineNumberTable       LineNumberTable_attribute.line_number_table item.
      */
-    public CLLineNumberTableAttribute(int attributeNameIndex, long attributeLength,
-                                      int lineNumberTableLength,
+    public CLLineNumberTableAttribute(int attributeNameIndex, long attributeLength, int lineNumberTableLength,
                                       ArrayList<CLLineNumberInfo> lineNumberTable) {
         super(attributeNameIndex, attributeLength);
         this.lineNumberTableLength = lineNumberTableLength;
@@ -668,8 +666,7 @@ class CLLocalVariableInfo {
      * @param descriptorIndex local_variable_table_entry.descriptor_index item.
      * @param index           local_variable_table_entry.index item.
      */
-    public CLLocalVariableInfo(int startPC, int length, int nameIndex, int descriptorIndex,
-                               int index) {
+    public CLLocalVariableInfo(int startPC, int length, int nameIndex, int descriptorIndex, int index) {
         this.startPC = startPC;
         this.length = length;
         this.nameIndex = nameIndex;
@@ -714,8 +711,7 @@ class CLLocalVariableTableAttribute extends CLAttributeInfo {
      * @param localVariableTableLength LocalVariableTable_attribute.local_variable_table_length item.
      * @param localVariableTable       LocalVariableTable_attribute.local_variable_table item.
      */
-    public CLLocalVariableTableAttribute(int attributeNameIndex, long attributeLength,
-                                         int localVariableTableLength,
+    public CLLocalVariableTableAttribute(int attributeNameIndex, long attributeLength, int localVariableTableLength,
                                          ArrayList<CLLocalVariableInfo> localVariableTable) {
         super(attributeNameIndex, attributeLength);
         this.localVariableTableLength = localVariableTableLength;
@@ -773,8 +769,7 @@ class CLLocalVariableTypeInfo {
      * @param index          local_variable_type_table_entry.index item.
      */
 
-    public CLLocalVariableTypeInfo(int startPC, int length, int nameIndex, int signatureIndex,
-                                   int index) {
+    public CLLocalVariableTypeInfo(int startPC, int length, int nameIndex, int signatureIndex, int index) {
         this.startPC = startPC;
         this.length = length;
         this.nameIndex = nameIndex;
@@ -824,8 +819,7 @@ class CLLocalVariableTypeTableAttribute extends CLAttributeInfo {
      */
     public CLLocalVariableTypeTableAttribute(int attributeNameIndex, long attributeLength,
                                              int localVariableTypeTableLength,
-                                             ArrayList<CLLocalVariableTypeInfo>
-                                                     localVariableTypeTable) {
+                                             ArrayList<CLLocalVariableTypeInfo> localVariableTypeTable) {
         super(attributeNameIndex, attributeLength);
         this.localVariableTypeTableLength = localVariableTypeTableLength;
         this.localVariableTypeTable = localVariableTypeTable;
@@ -891,8 +885,7 @@ class CLAnnotation {
      * @param numElementValuePairs annotation.num_element_value_pairs item.
      * @param elementValuePairs    annotation.element_value_pairs item.
      */
-    public CLAnnotation(int typeIndex, int numElementValuePairs,
-                        ArrayList<CLElementValuePair> elementValuePairs) {
+    public CLAnnotation(int typeIndex, int numElementValuePairs, ArrayList<CLElementValuePair> elementValuePairs) {
         this.typeIndex = typeIndex;
         this.numElementValuePairs = numElementValuePairs;
         this.elementValuePairs = elementValuePairs;
@@ -1110,8 +1103,7 @@ class CLRuntimeVisibleAnnotationsAttribute extends CLAttributeInfo {
      * @param numAnnotations     RuntimeVisibleAnnotations_attribute.num_annotations item.
      * @param annotations        RuntimeVisibleAnnotations_attribute.annotations item.
      */
-    public CLRuntimeVisibleAnnotationsAttribute(int attributeNameIndex, long attributeLength,
-                                                int numAnnotations,
+    public CLRuntimeVisibleAnnotationsAttribute(int attributeNameIndex, long attributeLength, int numAnnotations,
                                                 ArrayList<CLAnnotation> annotations) {
         super(attributeNameIndex, attributeLength);
         this.numAnnotations = numAnnotations;
@@ -1153,8 +1145,7 @@ class CLRuntimeInvisibleAnnotationsAttribute extends CLAttributeInfo {
      * @param numAnnotations     RuntimeVisibleAnnotations_attribute.num_annotations item.
      * @param annotations        RuntimeInvisibleAnnotations_attribute.annotations item.
      */
-    public CLRuntimeInvisibleAnnotationsAttribute(int attributeNameIndex, long attributeLength,
-                                                  int numAnnotations,
+    public CLRuntimeInvisibleAnnotationsAttribute(int attributeNameIndex, long attributeLength, int numAnnotations,
                                                   ArrayList<CLAnnotation> annotations) {
         super(attributeNameIndex, attributeLength);
         this.numAnnotations = numAnnotations;
@@ -1238,10 +1229,9 @@ class CLRuntimeVisibleParameterAnnotationsAttribute extends CLAttributeInfo {
      * @param parameterAnnotations RuntimeVisibleParameterAnnotations_attribute.
      *                             parameter_annotations item.
      */
-    public CLRuntimeVisibleParameterAnnotationsAttribute(int attributeNameIndex,
-                                                         long attributeLength, short numParameters,
-                                                         ArrayList<CLParameterAnnotationInfo>
-                                                                 parameterAnnotations) {
+    public CLRuntimeVisibleParameterAnnotationsAttribute(int attributeNameIndex, long attributeLength,
+                                                         short numParameters,
+                                                         ArrayList<CLParameterAnnotationInfo> parameterAnnotations) {
         super(attributeNameIndex, attributeLength);
         this.numParameters = numParameters;
         this.parameterAnnotations = parameterAnnotations;
@@ -1286,11 +1276,9 @@ class CLRuntimeInvisibleParameterAnnotationsAttribute extends CLAttributeInfo {
      * @param parameterAnnotations RuntimeInvisibleParameterAnnotations_attribute.
      *                             parameter_annotations item.
      */
-    public CLRuntimeInvisibleParameterAnnotationsAttribute(int attributeNameIndex,
-                                                           long attributeLength,
+    public CLRuntimeInvisibleParameterAnnotationsAttribute(int attributeNameIndex, long attributeLength,
                                                            short numParameters,
-                                                           ArrayList<CLParameterAnnotationInfo>
-                                                                   parameterAnnotations) {
+                                                           ArrayList<CLParameterAnnotationInfo> parameterAnnotations) {
         super(attributeNameIndex, attributeLength);
         this.numParameters = numParameters;
         this.parameterAnnotations = parameterAnnotations;
@@ -1324,8 +1312,7 @@ class CLAnnotationDefaultAttribute extends CLAttributeInfo {
      * @param attributeLength    AnnotationDefault_attribute.attribute_length item.
      * @param defaultValue       AnnotationDefault_attribute.defaultValue item.
      */
-    public CLAnnotationDefaultAttribute(int attributeNameIndex, long attributeLength,
-                                        CLElementValue defaultValue) {
+    public CLAnnotationDefaultAttribute(int attributeNameIndex, long attributeLength, CLElementValue defaultValue) {
         super(attributeNameIndex, attributeLength);
         this.defaultValue = defaultValue;
     }

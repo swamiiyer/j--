@@ -2,7 +2,6 @@
 
 package jminusminus;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import static jminusminus.CLConstants.*;
@@ -20,6 +19,13 @@ abstract class CLCPInfo {
      * cp_info.tag item.
      */
     public short tag;
+
+    /**
+     * Constructs a CLCPInfo object.
+     */
+    protected CLCPInfo() {
+        // Nothing to do here.
+    }
 
     /**
      * Writes the contents of this constant pool item to the specified output stream.
@@ -73,19 +79,22 @@ class CLConstantClassInfo extends CLCPInfo {
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantClassInfo) {
-            CLConstantClassInfo c = (CLConstantClassInfo) other;
-            if (c.nameIndex == nameIndex) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantClassInfo a = this, b = (CLConstantClassInfo) other;
+        return a.nameIndex == b.nameIndex;
     }
 }
 
 /**
- * Abstract super class of CONSTANT_Fieldref_info, CONSTANT_Methodref_info,
- * CONSTANT_InterfaceMethodref_info structures.
+ * Abstract super class of CONSTANT_Fieldref_info, CONSTANT_Methodref_info, CONSTANT_InterfaceMethodref_info structures.
  */
 abstract class CLConstantMemberRefInfo extends CLCPInfo {
     /**
@@ -124,14 +133,17 @@ abstract class CLConstantMemberRefInfo extends CLCPInfo {
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantMemberRefInfo) {
-            CLConstantMemberRefInfo c = (CLConstantMemberRefInfo) other;
-            if ((c.tag == tag) && (c.classIndex == classIndex)
-                    && (c.nameAndTypeIndex == nameAndTypeIndex)) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantMemberRefInfo a = this, b = (CLConstantMemberRefInfo) other;
+        return a.tag == b.tag && a.classIndex == b.classIndex && a.nameAndTypeIndex == b.nameAndTypeIndex;
     }
 }
 
@@ -212,13 +224,17 @@ class CLConstantStringInfo extends CLCPInfo {
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantStringInfo) {
-            CLConstantStringInfo c = (CLConstantStringInfo) other;
-            if (c.stringIndex == stringIndex) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantStringInfo a = this, b = (CLConstantStringInfo) other;
+        return a.stringIndex == b.stringIndex;
     }
 }
 
@@ -264,20 +280,24 @@ class CLConstantIntegerInfo extends CLCPInfo {
         super.write(out);
 
         // out is cast to DataOutputStream to resolve the writeInt() ambiguity.
-        ((DataOutputStream) out).writeInt(i);
+        out.writeInt(i);
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantIntegerInfo) {
-            CLConstantIntegerInfo c = (CLConstantIntegerInfo) other;
-            if (c.i == i) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantIntegerInfo a = this, b = (CLConstantIntegerInfo) other;
+        return a.i == b.i;
     }
 }
 
@@ -328,13 +348,17 @@ class CLConstantFloatInfo extends CLCPInfo {
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantFloatInfo) {
-            CLConstantFloatInfo c = (CLConstantFloatInfo) other;
-            if (c.f == f) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantFloatInfo a = this, b = (CLConstantFloatInfo) other;
+        return a.f == b.f;
     }
 }
 
@@ -415,13 +439,17 @@ class CLConstantLongInfo extends CLCPInfo {
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantLongInfo) {
-            CLConstantLongInfo c = (CLConstantLongInfo) other;
-            if (c.l == l) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantLongInfo a = this, b = (CLConstantLongInfo) other;
+        return a.l == b.l;
     }
 }
 
@@ -502,13 +530,17 @@ class CLConstantDoubleInfo extends CLCPInfo {
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantDoubleInfo) {
-            CLConstantDoubleInfo c = (CLConstantDoubleInfo) other;
-            if (c.d == d) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantDoubleInfo a = this, b = (CLConstantDoubleInfo) other;
+        return a.d == b.d;
     }
 }
 
@@ -552,13 +584,17 @@ class CLConstantNameAndTypeInfo extends CLCPInfo {
      */
 
     public boolean equals(Object other) {
-        if (other instanceof CLConstantNameAndTypeInfo) {
-            CLConstantNameAndTypeInfo c = (CLConstantNameAndTypeInfo) other;
-            if ((c.nameIndex == nameIndex) && (c.descriptorIndex == descriptorIndex)) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantNameAndTypeInfo a = this, b = (CLConstantNameAndTypeInfo) other;
+        return a.nameIndex == b.nameIndex && a.descriptorIndex == b.descriptorIndex;
     }
 }
 
@@ -602,12 +638,16 @@ class CLConstantUtf8Info extends CLCPInfo {
      * {@inheritDoc}
      */
     public boolean equals(Object other) {
-        if (other instanceof CLConstantUtf8Info) {
-            CLConstantUtf8Info c = (CLConstantUtf8Info) other;
-            if ((new String(b)).equals(new String(c.b))) {
-                return true;
-            }
+        if (other == null) {
+            return false;
         }
-        return false;
+        if (other == this) {
+            return true;
+        }
+        if (other.getClass() != this.getClass()) {
+            return false;
+        }
+        CLConstantUtf8Info a = this, b = (CLConstantUtf8Info) other;
+        return (new String(a.b)).equals(new String(b.b));
     }
 }

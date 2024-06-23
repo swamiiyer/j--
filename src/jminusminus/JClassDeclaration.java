@@ -4,7 +4,9 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ALOAD_0;
+import static jminusminus.CLConstants.INVOKESPECIAL;
+import static jminusminus.CLConstants.RETURN;
 
 /**
  * A representation of a class declaration.
@@ -59,8 +61,8 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         this.superInterfaces = superInterfaces;
         this.classBlock = classBlock;
         hasExplicitConstructor = false;
-        instanceFieldInitializations = new ArrayList<JFieldDeclaration>();
-        staticFieldInitializations = new ArrayList<JFieldDeclaration>();
+        instanceFieldInitializations = new ArrayList<>();
+        staticFieldInitializations = new ArrayList<>();
     }
 
     /**
@@ -94,12 +96,12 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         // Resolve superclass.
         superType = superType.resolve(this.context);
 
-        // Creating a partial class in memory can result in a java.lang.VerifyError if the
-        // semantics below are violated, so we can't defer these checks to analyze().
+        // Creating a partial class in memory can result in a java.lang.VerifyError if the semantics below are
+        // violated, so we can't defer these checks to analyze().
+
         thisType.checkAccess(line, superType);
         if (superType.isFinal()) {
-            JAST.compilationUnit.reportSemanticError(line, "Cannot extend a final type: %s",
-                    superType.toString());
+            JAST.compilationUnit.reportSemanticError(line, "cannot extend a final type: %s", superType.toString());
         }
 
         // Create the (partial) class.
@@ -113,8 +115,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         // Pre-analyze the members and add them to the partial class.
         for (JMember member : classBlock) {
             member.preAnalyze(this.context, partial);
-            hasExplicitConstructor =
-                    hasExplicitConstructor || member instanceof JConstructorDeclaration;
+            hasExplicitConstructor = hasExplicitConstructor || member instanceof JConstructorDeclaration;
         }
 
         // Add the implicit empty constructor?
@@ -185,7 +186,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
                 methods += "\n" + method;
             }
             JAST.compilationUnit.reportSemanticError(line,
-                    "Class must be abstract since it defines abstract methods: %s", methods);
+                    "class must be abstract since it defines abstract methods: %s", methods);
         }
         return this;
     }
@@ -247,8 +248,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         }
     }
 
-    // Generates code for an implicit empty constructor (necessary only if there is not already
-    // an explicit one).
+    // Generates code for an implicit empty constructor (necessary only if there is not already an explicit one).
     private void codegenPartialImplicitConstructor(CLEmitter partial) {
         ArrayList<String> mods = new ArrayList<String>();
         mods.add("public");
@@ -258,8 +258,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         partial.addNoArgInstruction(RETURN);
     }
 
-    // Generates code for an implicit empty constructor (necessary only if there is not already
-    // an explicit one).
+    // Generates code for an implicit empty constructor (necessary only if there is not already an explicit one).
     private void codegenImplicitConstructor(CLEmitter output) {
         ArrayList<String> mods = new ArrayList<String>();
         mods.add("public");

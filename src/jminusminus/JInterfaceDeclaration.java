@@ -38,8 +38,7 @@ class JInterfaceDeclaration extends JAST implements JTypeDecl {
      * @param superInterfaces super class types.
      * @param interfaceBlock  interface block.
      */
-    public JInterfaceDeclaration(int line, ArrayList<String> mods, String name,
-                                 ArrayList<TypeName> superInterfaces,
+    public JInterfaceDeclaration(int line, ArrayList<String> mods, String name, ArrayList<TypeName> superInterfaces,
                                  ArrayList<JMember> interfaceBlock) {
         super(line);
         this.mods = mods;
@@ -114,7 +113,7 @@ class JInterfaceDeclaration extends JAST implements JTypeDecl {
         JSONElement e = new JSONElement();
         json.addChild("JInterfaceDeclaration:" + line, e);
         if (mods != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String mod : mods) {
                 value.add(String.format("\"%s\"", mod));
             }
@@ -123,7 +122,7 @@ class JInterfaceDeclaration extends JAST implements JTypeDecl {
         e.addAttribute("name", name);
         e.addAttribute("super", superType == null ? "" : superType.toString());
         if (superInterfaces != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (TypeName impl : superInterfaces) {
                 value.add(String.format("\"%s\"", impl.toString()));
             }

@@ -4,7 +4,8 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ALOAD_0;
+import static jminusminus.CLConstants.INVOKESPECIAL;
 
 /**
  * The AST node for a super(...) constructor.
@@ -50,28 +51,22 @@ class JSuperConstruction extends JExpression {
         // Analyze the arguments, collecting their types (in Class form) as argTypes.
         argTypes = new Type[arguments.size()];
         for (int i = 0; i < arguments.size(); i++) {
-            arguments.set(i, (JExpression) arguments.get(i).analyze(context));
+            arguments.set(i, arguments.get(i).analyze(context));
             argTypes[i] = arguments.get(i).type();
         }
 
         if (!properUseOfConstructor) {
-            JAST.compilationUnit.reportSemanticError(line(),
-                    "super" + Type.argTypesAsString(argTypes)
+            JAST.compilationUnit.reportSemanticError(line(), "super" + Type.argTypesAsString(argTypes)
                     + " must be first statement in the constructor's body");
             return this;
         }
 
         // Get the Constructor super(...) refers to.
         Type superClass = ((JTypeDecl) context.classContext.definition()).thisType().superClass();
-        if (superClass == null) {
-            JAST.compilationUnit.reportSemanticError(line,
-                    ((JTypeDecl) context.classContext.definition()).thisType() +
-                            " has no super class");
-        }
-        constructor = superClass.constructorFor(argTypes);
+        constructor = superClass == null ? null : superClass.constructorFor(argTypes);
         if (constructor == null) {
             JAST.compilationUnit.reportSemanticError(line(),
-                    "No such constructor: super" + Type.argTypesAsString(argTypes));
+                    "no such constructor: super" + Type.argTypesAsString(argTypes));
         }
 
         return this;
@@ -85,8 +80,8 @@ class JSuperConstruction extends JExpression {
         for (JExpression argument : arguments) {
             argument.codegen(output);
         }
-        output.addMemberAccessInstruction(INVOKESPECIAL, constructor.declaringType().jvmName(),
-                "<init>", constructor.toDescriptor());
+        output.addMemberAccessInstruction(INVOKESPECIAL, constructor.declaringType().jvmName(), "<init>",
+                constructor.toDescriptor());
     }
 
     /**

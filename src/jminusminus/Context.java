@@ -8,26 +8,24 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A Context encapsulates the environment in which an AST is analyzed. It represents a scope; the
- * scope of a variable is captured by its context. It's the symbol table.
+ * A Context encapsulates the environment in which an AST is analyzed. It represents a scope; the scope of a variable
+ * is captured by its context. It's the symbol table.
  * <p>
- * Because scopes are lexically nested in Java (and so in j--), the environment can be seen as a
- * stack of contexts, each of which is a mapping from names to their definitions (IDefns). A
- * Context keeps track of its (most closely) surrounding context, its surrounding class  context,
- * and its surrounding compilation unit context, and as well as a map from names to definitions
- * in the level of scope that the Context represents. Contexts are created for the compilation
- * unit (a CompilationUnitContext), a class (a ClassContext), each method (a MethodContext), and
- * each block (a LocalContext). If we were to add the for-statement to j--, we would necessarily
- * create a (local) context.
+ * Because scopes are lexically nested in Java (and so in j--), the environment can be seen as a stack of contexts,
+ * each of which is a mapping from names to their definitions (IDefns). A Context keeps track of its (most closely)
+ * surrounding context, its surrounding class  context, and its surrounding compilation unit context, and as well as
+ * a map from names to definitions in the level of scope that the Context represents. Contexts are created for the
+ * compilation unit (a CompilationUnitContext), a class (a ClassContext), each method (a MethodContext), and
+ * each block (a LocalContext). If we were to add the for-statement to j--, we would necessarily create a (local)
+ * context.
  * <p>
- * From the outside, the structure looks like a tree strung over the AST. But from any location
- * on the AST, that is from any point along a particular branch, it looks like a stack of context
- * objects leading back to the root of the AST, that is, back to the JCompilationUnit object at
- * the root.
+ * From the outside, the structure looks like a tree strung over the AST. But from any location on the AST, that is
+ * from any point along a particular branch, it looks like a stack of context objects leading back to the root of the
+ * AST, that is, back to the JCompilationUnit object at the root.
  * <p>
- * Part of this structure is built during pre-analysis; pre-analysis reaches only into the type
- * (for example a class) declaration for typing the members; pre-analysis does not reach into the
- * method bodies. The rest of it is built during analysis.
+ * Part of this structure is built during pre-analysis; pre-analysis reaches only into the type (for example a class)
+ * declaration for typing the members; pre-analysis does not reach into the method bodies. The rest of it is built
+ * during analysis.
  */
 class Context {
     /**
@@ -48,22 +46,20 @@ class Context {
     /**
      * Map of (local variable, formal parameters, type) names to their definitions.
      */
-    protected Map<String, IDefn> entries;
+    protected Map<String, Defn> entries;
 
     /**
      * Constructs a Context.
      *
      * @param surrounding            the surrounding context (scope).
      * @param classContext           the surrounding class context.
-     * @param compilationUnitContext the compilation unit context (for the whole source program or
-     *                               file).
+     * @param compilationUnitContext the compilation unit context (for the whole source program or file).
      */
-    protected Context(Context surrounding, ClassContext classContext,
-                      CompilationUnitContext compilationUnitContext) {
+    protected Context(Context surrounding, ClassContext classContext, CompilationUnitContext compilationUnitContext) {
         this.surroundingContext = surrounding;
         this.classContext = classContext;
         this.compilationUnitContext = compilationUnitContext;
-        this.entries = new HashMap<String, IDefn>();
+        this.entries = new HashMap<>();
     }
 
     /**
@@ -73,7 +69,7 @@ class Context {
      * @param name       the name being declared.
      * @param definition and its definition.
      */
-    public void addEntry(int line, String name, IDefn definition) {
+    public void addEntry(int line, String name, Defn definition) {
         if (entries.containsKey(name)) {
             JAST.compilationUnit.reportSemanticError(line, "redefining name: " + name);
         } else {
@@ -87,10 +83,9 @@ class Context {
      * @param name the name whose definition we're looking for.
      * @return the definition for a name in the current (or surrounding) context, or null.
      */
-    public IDefn lookup(String name) {
-        IDefn iDefn = (IDefn) entries.get(name);
-        return iDefn != null ?
-                iDefn : surroundingContext != null ? surroundingContext.lookup(name) : null;
+    public Defn lookup(String name) {
+        Defn defn = entries.get(name);
+        return defn != null ? defn : surroundingContext != null ? surroundingContext.lookup(name) : null;
     }
 
     /**
@@ -111,10 +106,10 @@ class Context {
      * @param type the type we are declaring.
      */
     public void addType(int line, Type type) {
-        IDefn iDefn = new TypeNameDefn(type);
-        compilationUnitContext.addEntry(line, type.simpleName(), iDefn);
+        Defn defn = new TypeNameDefn(type);
+        compilationUnitContext.addEntry(line, type.simpleName(), defn);
         if (!type.toString().equals(type.simpleName())) {
-            compilationUnitContext.addEntry(line, type.toString(), iDefn);
+            compilationUnitContext.addEntry(line, type.toString(), defn);
         }
     }
 
@@ -146,8 +141,8 @@ class Context {
     }
 
     /**
-     * Returns the surrounding compilation unit context. This is where imported types and other
-     * types defined in the compilation unit are declared.
+     * Returns the surrounding compilation unit context. This is where imported types and other types defined in the
+     * compilation unit are declared.
      *
      * @return the compilation unit context.
      */
@@ -188,8 +183,8 @@ class Context {
 }
 
 /**
- * The compilation unit context is always the outermost context and is where imported types and
- * locally defined types (classes) are declared.
+ * The compilation unit context is always the outermost context and is where imported types and locally defined types
+ * (classes) are declared.
  */
 class CompilationUnitContext extends Context {
     /**
@@ -207,7 +202,7 @@ class CompilationUnitContext extends Context {
         JSONElement e = new JSONElement();
         json.addChild("CompilationUnitContext", e);
         if (entries != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String name : names()) {
                 value.add(String.format("\"%s\"", name));
             }
@@ -217,14 +212,14 @@ class CompilationUnitContext extends Context {
 }
 
 /**
- * Represents the context (scope, environment, symbol table) for a type, for example a class, in
- * j--. It also keeps track of its surrounding context(s) and the type whose context it represents.
+ * Represents the context (scope, environment, symbol table) for a type, for example a class, in j--. It also keeps
+ * track of its surrounding context(s) and the type whose context it represents.
  */
 class ClassContext extends Context {
     /**
      * AST node of the type that this class represents.
      */
-    private JAST definition;
+    private final JAST definition;
 
     /**
      * Constructs a class context.
@@ -257,10 +252,9 @@ class ClassContext extends Context {
 }
 
 /**
- * A local context is a context (scope) in which local variables (including formal parameters)
- * can be declared. Local variables are allocated at fixed offsets from the base of the current
- * method's stack frame; this is done during analysis. The definitions for local variables record
- * these offsets. The offsets are used in code generation.
+ * A local context is a context (scope) in which local variables (including formal parameters) can be declared. Local
+ * variables are allocated at fixed offsets from the base of the current method's stack frame; this is done during
+ * analysis. The definitions for local variables record these offsets. The offsets are used in code generation.
  */
 class LocalContext extends Context {
     /**
@@ -279,8 +273,7 @@ class LocalContext extends Context {
     }
 
     /**
-     * Returns the "next" offset. Not to be used for allocating new offsets (the nextOffset()
-     * method is used for that).
+     * Returns the "next" offset. Not to be used for allocating new offsets (the nextOffset() method is used for that).
      *
      * @return the next available offset.
      */
@@ -304,9 +297,9 @@ class LocalContext extends Context {
         JSONElement e = new JSONElement();
         json.addChild("LocalContext", e);
         if (entries != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String name : names()) {
-                IDefn defn = entries.get(name);
+                Defn defn = entries.get(name);
                 if (defn instanceof LocalVariableDefn) {
                     int offset = ((LocalVariableDefn) defn).offset();
                     value.add(String.format("[\"%s\", \"%s\"]", name, offset));
@@ -318,20 +311,20 @@ class LocalContext extends Context {
 }
 
 /**
- * A method context is where formal parameters are declared. Also, it's where we start computing
- * the offsets for local variables (formal parameters included), which are allocated in the
- * current stack frame (for a method invocation).
+ * A method context is where formal parameters are declared. Also, it's where we start computing the offsets for
+ * local variables (formal parameters included), which are allocated in the current stack frame (for a method
+ * invocation).
  */
 class MethodContext extends LocalContext {
     /**
      * Is this method static?
      */
-    private boolean isStatic;
+    private final boolean isStatic;
 
     /**
      * Return type of this method.
      */
-    private Type methodReturnType;
+    private final Type methodReturnType;
 
     /**
      * Does (non-void) method have at least one return?
@@ -394,9 +387,9 @@ class MethodContext extends LocalContext {
         JSONElement e = new JSONElement();
         json.addChild("MethodContext", e);
         if (entries != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String name : names()) {
-                IDefn defn = entries.get(name);
+                Defn defn = entries.get(name);
                 if (defn instanceof LocalVariableDefn) {
                     int offset = ((LocalVariableDefn) defn).offset();
                     value.add(String.format("[\"%s\", \"%s\"]", name, offset));

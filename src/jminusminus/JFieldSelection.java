@@ -2,11 +2,18 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ARRAYLENGTH;
+import static jminusminus.CLConstants.DUP;
+import static jminusminus.CLConstants.DUP_X1;
+import static jminusminus.CLConstants.GETFIELD;
+import static jminusminus.CLConstants.GETSTATIC;
+import static jminusminus.CLConstants.IFEQ;
+import static jminusminus.CLConstants.IFNE;
+import static jminusminus.CLConstants.PUTFIELD;
+import static jminusminus.CLConstants.PUTSTATIC;
 
 /**
- * The AST node for a field selection operation. It has a target object, a field name, and the
- * field it defines.
+ * The AST node for a field selection operation. It has a target object, a field name, and the field it defines.
  */
 class JFieldSelection extends JExpression implements JLhs {
     /**
@@ -15,10 +22,10 @@ class JFieldSelection extends JExpression implements JLhs {
     protected JExpression target;
 
     // The ambiguous part that is reclassified in analyze().
-    private AmbiguousName ambiguousPart;
+    private final AmbiguousName ambiguousPart;
 
     // The field name.
-    private String fieldName;
+    private final String fieldName;
 
     // The Field representing this field.
     private Field field;
@@ -42,8 +49,7 @@ class JFieldSelection extends JExpression implements JLhs {
      * @param target        the target of the selection.
      * @param fieldName     the field name.
      */
-    public JFieldSelection(int line, AmbiguousName ambiguousPart, JExpression target,
-                           String fieldName) {
+    public JFieldSelection(int line, AmbiguousName ambiguousPart, JExpression target, String fieldName) {
         super(line);
         this.ambiguousPart = ambiguousPart;
         this.target = target;
@@ -62,11 +68,12 @@ class JFieldSelection extends JExpression implements JLhs {
                     target = expr;
                 } else {
                     // Can't even happen syntactically.
-                    JAST.compilationUnit.reportSemanticError(line(), "Badly formed suffix");
+                    JAST.compilationUnit.reportSemanticError(line(), "badly formed suffix");
                 }
             }
         }
-        target = (JExpression) target.analyze(context);
+
+        target = target.analyze(context);
         Type targetType = target.type();
 
         // We use a workaround for the "length" field of arrays.
@@ -76,24 +83,23 @@ class JFieldSelection extends JExpression implements JLhs {
             // Other than that, targetType has to be a reference type.
             if (targetType.isPrimitive()) {
                 JAST.compilationUnit.reportSemanticError(line(),
-                        "Target of a field selection must be a reference type");
+                        "target of a field selection must be a reference type");
                 type = Type.ANY;
                 return this;
             }
             field = targetType.fieldFor(fieldName);
             if (field == null) {
-                JAST.compilationUnit.reportSemanticError(line(),
-                        "Cannot find a field: " + fieldName);
+                JAST.compilationUnit.reportSemanticError(line(), "cannot find a field: " + fieldName);
                 type = Type.ANY;
             } else {
-                context.definingType().checkAccess(line, (Member) field);
+                context.definingType().checkAccess(line, field);
                 type = field.type();
 
                 // Non-static field cannot be referenced from a static context.
                 if (!field.isStatic()) {
                     if (target instanceof JVariable &&
                             ((JVariable) target).iDefn() instanceof TypeNameDefn) {
-                        JAST.compilationUnit.reportSemanticError(line(), "Non-static field " +
+                        JAST.compilationUnit.reportSemanticError(line(), "non-static field " +
                                 fieldName + " cannot be referenced from a static context");
                     }
                 }
@@ -108,7 +114,7 @@ class JFieldSelection extends JExpression implements JLhs {
     public JExpression analyzeLhs(Context context) {
         JExpression result = analyze(context);
         if (field.isFinal()) {
-            JAST.compilationUnit.reportSemanticError(line, "The field " + fieldName + " in type " +
+            JAST.compilationUnit.reportSemanticError(line, "the field " + fieldName + " in type " +
                     target.type.toString() + " is final");
         }
         return result;
@@ -125,8 +131,7 @@ class JFieldSelection extends JExpression implements JLhs {
             output.addNoArgInstruction(ARRAYLENGTH);
         } else {
             int mnemonic = field.isStatic() ? GETSTATIC : GETFIELD;
-            output.addMemberAccessInstruction(mnemonic, target.type().jvmName(), fieldName,
-                    type.toDescriptor());
+            output.addMemberAccessInstruction(mnemonic, target.type().jvmName(), fieldName, type.toDescriptor());
         }
     }
 
@@ -135,11 +140,7 @@ class JFieldSelection extends JExpression implements JLhs {
      */
     public void codegen(CLEmitter output, String targetLabel, boolean onTrue) {
         codegen(output);
-        if (onTrue) {
-            output.addBranchInstruction(IFNE, targetLabel);
-        } else {
-            output.addBranchInstruction(IFEQ, targetLabel);
-        }
+        output.addBranchInstruction(onTrue ? IFNE : IFEQ, targetLabel);
     }
 
     /**
@@ -157,12 +158,12 @@ class JFieldSelection extends JExpression implements JLhs {
      */
     public void codegenLoadLhsRvalue(CLEmitter output) {
         if (field.isStatic()) {
-            output.addMemberAccessInstruction(GETSTATIC, target.type()
-                    .jvmName(), fieldName, field.type().toDescriptor());
+            output.addMemberAccessInstruction(GETSTATIC, target.type().jvmName(), fieldName,
+                    field.type().toDescriptor());
         } else {
             output.addNoArgInstruction(type == Type.STRING ? DUP_X1 : DUP);
-            output.addMemberAccessInstruction(GETFIELD,
-                    target.type().jvmName(), fieldName, field.type().toDescriptor());
+            output.addMemberAccessInstruction(GETFIELD, target.type().jvmName(), fieldName,
+                    field.type().toDescriptor());
         }
     }
 
@@ -170,11 +171,7 @@ class JFieldSelection extends JExpression implements JLhs {
      * {@inheritDoc}
      */
     public void codegenDuplicateRvalue(CLEmitter output) {
-        if (field.isStatic()) {
-            output.addNoArgInstruction(DUP);
-        } else {
-            output.addNoArgInstruction(DUP_X1);
-        }
+        output.addNoArgInstruction(field.isStatic() ? DUP : DUP_X1);
     }
 
     /**
@@ -182,13 +179,8 @@ class JFieldSelection extends JExpression implements JLhs {
      */
     public void codegenStore(CLEmitter output) {
         String descriptor = field.type().toDescriptor();
-        if (field.isStatic()) {
-            output.addMemberAccessInstruction(PUTSTATIC, target.type().jvmName(), fieldName,
-                    descriptor);
-        } else {
-            output.addMemberAccessInstruction(PUTFIELD, target.type().jvmName(), fieldName,
-                    descriptor);
-        }
+        output.addMemberAccessInstruction(field.isStatic() ? PUTSTATIC : PUTFIELD, target.type().jvmName(), fieldName,
+                descriptor);
     }
 
     /**
@@ -196,7 +188,7 @@ class JFieldSelection extends JExpression implements JLhs {
      */
     public void toJSON(JSONElement json) {
         JSONElement e = new JSONElement();
-        json.addChild("JFieldSelection:" +  line, e);
+        json.addChild("JFieldSelection:" + line, e);
         e.addAttribute("ambiguousPart", ambiguousPart == null ? "null" : ambiguousPart.toString());
         e.addAttribute("name", fieldName);
         if (target != null) {

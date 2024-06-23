@@ -10,23 +10,22 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
- * A class for representing j-- types. All types are represented underneath (in the classRep
- * field) by Java objects of type Class. These objects represent types in Java, so this should
- * ease our interfacing with existing Java classes.
+ * A class for representing j-- types. All types are represented underneath (in the classRep field) by Java objects
+ * of type Class. These objects represent types in Java, so this should ease our interfacing with existing Java classes.
  * <p>
- * Class types (reference types that are represented by the identifiers introduced in class
- * declarations) are represented using TypeName. So for now, every TypeName represents a class.
- * In the future, TypeName could be extended to represent interfaces or enumerations.
+ * Class types (reference types that are represented by the identifiers introduced in class declarations) are
+ * represented using TypeName. So for now, every TypeName represents a class. In the future, TypeName could be
+ * extended to represent interfaces or enumerations.
  * <p>
- * IdentifierTypes must be "resolved" at some point, so that all Types having the same name refer
- * to the same Type object. The resolve() method does this.
+ * IdentifierTypes must be "resolved" at some point, so that all Types having the same name refer to the same Type
+ * object. The resolve() method does this.
  */
 class Type {
     // The Type's internal (Java) representation.
     private Class<?> classRep;
 
     // Maps type names to their Type representations.
-    private static Hashtable<String, Type> types = new Hashtable<String, Type>();
+    private final static Hashtable<String, Type> types = new Hashtable<>();
 
     /**
      * The int type.
@@ -116,8 +115,8 @@ class Type {
     }
 
     /**
-     * Constructs and returns a representation for a type from its (Java) class representation,
-     * making sure there is a unique representation for each unique type.
+     * Constructs and returns a representation for a type from its (Java) class representation, making sure there is
+     * a unique representation for each unique type.
      *
      * @param classRep the Java class representation.
      * @return a type representation of classRep.
@@ -181,8 +180,7 @@ class Type {
      * @return this type's super type, or null.
      */
     public Type superClass() {
-        return classRep == null || classRep.getSuperclass() == null ? null :
-                typeFor(classRep.getSuperclass());
+        return classRep == null || classRep.getSuperclass() == null ? null : typeFor(classRep.getSuperclass());
     }
 
     /**
@@ -245,22 +243,20 @@ class Type {
      * <p>
      * It has abstract methods if:
      * <ol>
-     *   <li>Any method declared in the class is abstract or
+     *   <li>any method declared in the class is abstract or
      *   <li>its superclass has an abstract method which is not overridden here.
      * </ol>
      *
      * @return a list of this class' abstract methods.
      */
     public ArrayList<Method> abstractMethods() {
-        ArrayList<Method> inheritedAbstractMethods = superClass() == null ? new ArrayList<Method>()
-                : superClass().abstractMethods();
-        ArrayList<Method> abstractMethods = new ArrayList<Method>();
+        ArrayList<Method> inheritedAbstractMethods = superClass() == null ? new ArrayList<>() :
+                superClass().abstractMethods();
         ArrayList<Method> declaredConcreteMethods = declaredConcreteMethods();
         ArrayList<Method> declaredAbstractMethods = declaredAbstractMethods();
-        abstractMethods.addAll(declaredAbstractMethods);
+        ArrayList<Method> abstractMethods = new ArrayList<>(declaredAbstractMethods);
         for (Method method : inheritedAbstractMethods) {
-            if (!declaredConcreteMethods.contains(method) &&
-                    !declaredAbstractMethods.contains(method)) {
+            if (!declaredConcreteMethods.contains(method) && !declaredAbstractMethods.contains(method)) {
                 abstractMethods.add(method);
             }
         }
@@ -273,7 +269,7 @@ class Type {
      * @return a list of this class' declared abstract methods.
      */
     private ArrayList<Method> declaredAbstractMethods() {
-        ArrayList<Method> declaredAbstractMethods = new ArrayList<Method>();
+        ArrayList<Method> declaredAbstractMethods = new ArrayList<>();
         for (java.lang.reflect.Method method : classRep.getDeclaredMethods()) {
             if (Modifier.isAbstract(method.getModifiers())) {
                 declaredAbstractMethods.add(new Method(method));
@@ -288,7 +284,7 @@ class Type {
      * @return a list of this class' declared concrete methods.
      */
     private ArrayList<Method> declaredConcreteMethods() {
-        ArrayList<Method> declaredConcreteMethods = new ArrayList<Method>();
+        ArrayList<Method> declaredConcreteMethods = new ArrayList<>();
         for (java.lang.reflect.Method method : classRep.getDeclaredMethods()) {
             if (!Modifier.isAbstract(method.getModifiers())) {
                 declaredConcreteMethods.add(new Method(method));
@@ -298,8 +294,7 @@ class Type {
     }
 
     /**
-     * An assertion that this type matches one of the specified types. If there is no match, an
-     * error is reported.
+     * An assertion that this type matches one of the specified types. If there is no match, an error is reported.
      *
      * @param line          the line near which the mismatch occurs.
      * @param expectedTypes expected types.
@@ -313,22 +308,19 @@ class Type {
                 return;
             }
         }
-        JAST.compilationUnit.reportSemanticError(line,
-                "Type %s doesn't match any of the expected types %s", this,
+        JAST.compilationUnit.reportSemanticError(line, "type %s doesn't match any of the expected types %s", this,
                 Arrays.toString(expectedTypes));
     }
 
     /**
-     * An assertion that this type matches the specified type. If there is no match, an error is
-     * reported.
+     * An assertion that this type matches the specified type. If there is no match, an error is reported.
      *
      * @param line         the line near which the mismatch occurs.
      * @param expectedType type with which to match.
      */
     public void mustMatchExpected(int line, Type expectedType) {
         if (!matchesExpected(expectedType)) {
-            JAST.compilationUnit.reportSemanticError(line, "Type %s doesn't match type %s", this,
-                    expectedType);
+            JAST.compilationUnit.reportSemanticError(line, "type %s doesn't match type %s", this, expectedType);
         }
     }
 
@@ -395,8 +387,7 @@ class Type {
      * @return the JVM representation of this type's name.
      */
     public String jvmName() {
-        return this.isArray() || this.isPrimitive() ?
-                this.toDescriptor() : classRep.getName().replace('.', '/');
+        return this.isArray() || this.isPrimitive() ? this.toDescriptor() : classRep.getName().replace('.', '/');
     }
 
     /**
@@ -410,8 +401,8 @@ class Type {
     }
 
     /**
-     * Returns a string representation for a type being appended to a StringBuffer (for the + and
-     * += operations over strings).
+     * Returns a string representation for a type being appended to a StringBuffer (for the + and += operations over
+     * strings).
      *
      * @return a string representation for a type being appended to a StringBuffer.
      */
@@ -437,8 +428,7 @@ class Type {
         while (cls != null) {
             java.lang.reflect.Method[] methods = cls.getDeclaredMethods();
             for (java.lang.reflect.Method method : methods) {
-                if (method.getName().equals(name) && Type.argTypesMatch(classes,
-                        method.getParameterTypes())) {
+                if (method.getName().equals(name) && Type.argTypesMatch(classes, method.getParameterTypes())) {
                     return new Method(method);
                 }
             }
@@ -521,6 +511,7 @@ class Type {
         if (!checkAccess(line, classRep, member.declaringType().classRep)) {
             return false;
         }
+
         // The member must be either public, protected, or private.
         if (member.isPublic()) {
             return true;
@@ -531,24 +522,21 @@ class Type {
             return true;
         }
         if (member.isProtected()) {
-            if (classRep.getPackage().getName().equals(
-                    member.declaringType().classRep.getPackage().getName())
-                    || typeFor(member.getClass().getDeclaringClass())
-                    .isJavaAssignableFrom(this)) {
+            if (classRep.getPackage().getName().equals(member.declaringType().classRep.getPackage().getName())
+                    || typeFor(member.getClass().getDeclaringClass()).isJavaAssignableFrom(this)) {
                 return true;
             } else {
                 JAST.compilationUnit.reportSemanticError(line,
-                        "The protected member, " + member.name() + ", is not accessible.");
+                        "the protected member, " + member.name() + ", is not accessible.");
                 return false;
             }
         }
         if (member.isPrivate()) {
-            if (descriptorFor(classRep).equals(
-                    descriptorFor(member.member().getDeclaringClass()))) {
+            if (descriptorFor(classRep).equals(descriptorFor(member.member().getDeclaringClass()))) {
                 return true;
             } else {
                 JAST.compilationUnit.reportSemanticError(line,
-                        "The private member, " + member.name() + ", is not accessible.");
+                        "the private member, " + member.name() + ", is not accessible.");
                 return false;
             }
         }
@@ -557,8 +545,8 @@ class Type {
         if (packageName().equals(member.declaringType().packageName())) {
             return true;
         } else {
-            JAST.compilationUnit.reportSemanticError(line, "The member, " + member.name() +
-                    ", is not accessible because it's in a different package.");
+            JAST.compilationUnit.reportSemanticError(line,
+                    "the member, " + member.name() + ", is not accessible because it's in a different package.");
             return false;
         }
     }
@@ -581,14 +569,12 @@ class Type {
     }
 
     /**
-     * Returns true if the referenced type is accessible from the referencing type, and false
-     * otherwise.
+     * Returns true if the referenced type is accessible from the referencing type, and false otherwise.
      *
      * @param line            the line in which the access occurs.
      * @param referencingType the type attempting the access.
      * @param type            the type that we want to access.
-     * @return true if the referenced type is accessible from the referencing type, and false
-     * otherwise.
+     * @return true if the referenced type is accessible from the referencing type, and false otherwise.
      */
     public static boolean checkAccess(int line, Class referencingType, Class type) {
         java.lang.Package p1 = referencingType.getPackage();
@@ -597,8 +583,9 @@ class Type {
                 (p1 == null ? "" : p1.getName()).equals((p2 == null ? "" : p2.getName()))) {
             return true;
         } else {
-            JAST.compilationUnit.reportSemanticError(line, "The type, " + type.getCanonicalName() +
-                    ", is not accessible from " + referencingType.getCanonicalName());
+            JAST.compilationUnit.reportSemanticError(line,
+                    "the type, " + type.getCanonicalName() + ", is not accessible from " +
+                            referencingType.getCanonicalName());
             return false;
         }
     }
@@ -632,8 +619,8 @@ class Type {
         return signature;
     }
 
-    // Constructs a representation for a type from its Java (Class) representation. Use typeFor()
-    // that maps types having like classReps to like Types.
+    // Constructs a representation for a type from its Java (Class) representation. Use typeFor() that maps types
+    // having like classReps to like Types.
     private Type(Class<?> classRep) {
         this.classRep = classRep;
     }
@@ -652,7 +639,8 @@ class Type {
 
     // Returns the Java (and so j--) denotation for the specified type.
     private static String toJava(Class classRep) {
-        return classRep.isArray() ? toJava(classRep.getComponentType()) + "[]" : classRep.getName();
+        return classRep == null ? "" : (classRep.isArray() ? toJava(classRep.getComponentType()) + "[]" :
+                classRep.getName());
     }
 }
 
@@ -661,10 +649,10 @@ class Type {
  */
 class TypeName extends Type {
     // The line in which the identifier occurs in the source file.
-    private int line;
+    private final int line;
 
     // The identifier's name.
-    private String name;
+    private final String name;
 
     /**
      * Constructs a TypeName.
@@ -734,9 +722,8 @@ class TypeName extends Type {
 }
 
 /**
- * A representation of an array type. It is built by the Parser to stand in for a Type until the
- * analyze() phase, at which point it is resolved to an actual Type object (having a Class that
- * identifies it).
+ * A representation of an array type. It is built by the Parser to stand in for a Type until the analyze() phase, at
+ * which point it is resolved to an actual Type object (having a Class that identifies it).
  */
 class ArrayTypeName extends Type {
     // The array's base or component type.

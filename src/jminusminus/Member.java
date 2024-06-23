@@ -3,8 +3,7 @@
 package jminusminus;
 
 /**
- * This abstract base class provides a wrapper for class members (ie, fields, methods, and
- * constructors).
+ * This abstract base class provides a wrapper for class members (ie, fields, methods, and constructors).
  */
 abstract class Member {
     /**
@@ -99,7 +98,7 @@ abstract class Member {
  */
 class Constructor extends Member {
     // Internal representation of this constructor.
-    private java.lang.reflect.Constructor constructor;
+    private final java.lang.reflect.Constructor constructor;
 
     /**
      * Constructs a constructor given its internal representation.
@@ -135,7 +134,7 @@ class Constructor extends Member {
  */
 class Field extends Member {
     // Internal representation of this field.
-    private java.lang.reflect.Field field;
+    private final java.lang.reflect.Field field;
 
     /**
      * Constructs a field given its internal representation.
@@ -175,7 +174,7 @@ class Field extends Member {
  */
 class Method extends Member {
     // Internal representation of this method.
-    private java.lang.reflect.Method method;
+    private final java.lang.reflect.Method method;
 
     /**
      * Constructs a method given its internal representation.

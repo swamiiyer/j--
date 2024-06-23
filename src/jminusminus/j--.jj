@@ -322,7 +322,7 @@ private ArrayList<String> modifiers():
             {
                 mods.add("abstract");
                 if (scannedABSTRACT) {
-                    reportParserError("Repeated modifier: abstract");
+                    reportParserError("repeated modifier: abstract");
                 }
                 scannedABSTRACT = true;
             } |
@@ -330,10 +330,10 @@ private ArrayList<String> modifiers():
             {
                 mods.add("private");
                 if (scannedPRIVATE) {
-                    reportParserError("Repeated modifier: private");
+                    reportParserError("repeated modifier: private");
                 }
                 if (scannedPUBLIC || scannedPROTECTED) {
-                    reportParserError("Access conflict in modifiers");
+                    reportParserError("access conflict in modifiers");
                 }
                 scannedPRIVATE = true;
             } |
@@ -341,10 +341,10 @@ private ArrayList<String> modifiers():
             {
                 mods.add("protected");
                 if (scannedPROTECTED) {
-                    reportParserError("Repeated modifier: protected");
+                    reportParserError("repeated modifier: protected");
                 }
                 if (scannedPUBLIC || scannedPRIVATE) {
-                    reportParserError("Access conflict in modifiers");
+                    reportParserError("access conflict in modifiers");
                 }
                 scannedPROTECTED = true;
             } |
@@ -352,10 +352,10 @@ private ArrayList<String> modifiers():
             {
                 mods.add("public");
                 if (scannedPUBLIC) {
-                    reportParserError("Repeated modifier: public");
+                    reportParserError("repeated modifier: public");
                 }
                 if (scannedPROTECTED || scannedPRIVATE) {
-                    reportParserError("Access conflict in modifiers");
+                    reportParserError("access conflict in modifiers");
                 }
                 scannedPUBLIC = true;
             } |
@@ -363,7 +363,7 @@ private ArrayList<String> modifiers():
             {
                 mods.add("static");
                 if (scannedSTATIC) {
-                    reportParserError("Repeated modifier: static");
+                    reportParserError("repeated modifier: static");
                 }
                 scannedSTATIC = true;
             }
@@ -940,7 +940,7 @@ private Type basicType():
     }
     {
         if (type == Type.ANY) {
-            reportParserError("Type sought where %s found", token.image);
+            reportParserError("type sought where %s found", token.image);
         }
         return type;
     }
@@ -1010,7 +1010,7 @@ private JStatement statementExpression():
                 // So as not to save on stack.
                 expr.isStatementExpression = true;
             } else {
-                reportParserError("Invalid statement expression; it does not have a side-effect");
+                reportParserError("invalid statement expression; it does not have a side-effect");
             }
         }
     } catch (ParseException e) {

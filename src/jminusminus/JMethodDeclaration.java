@@ -4,7 +4,11 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.ACONST_NULL;
+import static jminusminus.CLConstants.ARETURN;
+import static jminusminus.CLConstants.ICONST_0;
+import static jminusminus.CLConstants.IRETURN;
+import static jminusminus.CLConstants.RETURN;
 
 /**
  * The AST node for a method declaration.
@@ -77,8 +81,7 @@ class JMethodDeclaration extends JAST implements JMember {
      * @param body       method body.
      */
     public JMethodDeclaration(int line, ArrayList<String> mods, String name, Type returnType,
-                              ArrayList<JFormalParameter> params,
-                              ArrayList<TypeName> exceptions, JBlock body) {
+                              ArrayList<JFormalParameter> params, ArrayList<TypeName> exceptions, JBlock body) {
         super(line);
         this.mods = mods;
         this.name = name;
@@ -103,12 +106,11 @@ class JMethodDeclaration extends JAST implements JMember {
         // Resolve return type.
         returnType = returnType.resolve(context);
 
-        // Check proper local use of abstract
+        // Check proper local use of abstract.
         if (isAbstract && body != null) {
             JAST.compilationUnit.reportSemanticError(line(), "abstract method cannot have a body");
         } else if (body == null && !isAbstract) {
-            JAST.compilationUnit.reportSemanticError(line(),
-                    "Method without body must be abstract");
+            JAST.compilationUnit.reportSemanticError(line(), "method without body must be abstract");
         } else if (isAbstract && isPrivate) {
             JAST.compilationUnit.reportSemanticError(line(), "private method cannot be abstract");
         } else if (isAbstract && isStatic) {
@@ -138,8 +140,7 @@ class JMethodDeclaration extends JAST implements JMember {
             this.context.nextOffset();
         }
 
-        // Declare the parameters. We consider a formal parameter to be always initialized, via a
-        // method call.
+        // Declare the parameters. We consider a formal parameter to be always initialized, via a method call.
         for (JFormalParameter param : params) {
             LocalVariableDefn defn = new LocalVariableDefn(param.type(), this.context.nextOffset());
             defn.initialize();
@@ -149,8 +150,7 @@ class JMethodDeclaration extends JAST implements JMember {
         if (body != null) {
             body = body.analyze(this.context);
             if (returnType != Type.VOID && !methodContext.methodHasReturn()) {
-                JAST.compilationUnit.reportSemanticError(line(),
-                        "Non-void method must have a return statement");
+                JAST.compilationUnit.reportSemanticError(line(), "non-void method must have a return statement");
             }
         }
         return this;
@@ -163,8 +163,7 @@ class JMethodDeclaration extends JAST implements JMember {
         partial.addMethod(mods, name, descriptor, null, false);
         if (returnType == Type.VOID) {
             partial.addNoArgInstruction(RETURN);
-        } else if (returnType == Type.INT || returnType == Type.BOOLEAN ||
-                returnType == Type.CHAR) {
+        } else if (returnType == Type.INT || returnType == Type.BOOLEAN || returnType == Type.CHAR) {
             partial.addNoArgInstruction(ICONST_0);
             partial.addNoArgInstruction(IRETURN);
         } else {
@@ -193,7 +192,7 @@ class JMethodDeclaration extends JAST implements JMember {
         JSONElement e = new JSONElement();
         json.addChild("JMethodDeclaration:" + line, e);
         if (mods != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String mod : mods) {
                 value.add(String.format("\"%s\"", mod));
             }
@@ -202,7 +201,7 @@ class JMethodDeclaration extends JAST implements JMember {
         e.addAttribute("returnType", returnType.toString());
         e.addAttribute("name", name);
         if (params != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (JFormalParameter param : params) {
                 value.add(String.format("[\"%s\", \"%s\"]", param.name(),
                         param.type() == null ? "" : param.type().toString()));
@@ -210,7 +209,7 @@ class JMethodDeclaration extends JAST implements JMember {
             e.addAttribute("parameters", value);
         }
         if (exceptions != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (TypeName exception : exceptions) {
                 value.add(String.format("\"%s\"", exception.toString()));
             }

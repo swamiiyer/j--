@@ -2,7 +2,7 @@
 
 package jminusminus;
 
-import static jminusminus.CLConstants.*;
+import static jminusminus.CLConstants.GOTO;
 
 /**
  * The AST node for an if-statement.
@@ -36,7 +36,7 @@ class JIfStatement extends JStatement {
      * {@inheritDoc}
      */
     public JStatement analyze(Context context) {
-        condition = (JExpression) condition.analyze(context);
+        condition = condition.analyze(context);
         condition.type().mustMatchExpected(line(), Type.BOOLEAN);
         thenPart = (JStatement) thenPart.analyze(context);
         if (elsePart != null) {

@@ -3,44 +3,269 @@
 package jminusminus;
 
 /**
- * An enum of token kinds. Each entry in this enum represents the kind of a token along with its
- * image (string representation).
+ * An enum of token kinds. Each entry in this enum represents the kind of a token along with its image (string
+ * representation).
  */
 enum TokenKind {
-    // End of file.
-    EOF(""),
+    /**
+     * Reserved word, "abstract".
+     */
+    ABSTRACT("abstract"),
 
-    // Reserved words.
-    ABSTRACT("abstract"), BOOLEAN("boolean"), CHAR("char"), CLASS("class"), ELSE("else"),
-    EXTENDS("extends"), IF("if"), IMPORT("import"), INSTANCEOF("instanceof"), INT("int"),
-    NEW("new"), PACKAGE("package"), PRIVATE("private"), PROTECTED("protected"),
-    PUBLIC("public"), RETURN("return"), STATIC("static"), SUPER("super"), THIS("this"),
-    VOID("void"), WHILE("while"),
+    /**
+     * Reserved word, "boolean".
+     */
+    BOOLEAN("boolean"),
 
-    // Operators.
-    ASSIGN("="), DEC("--"), EQUAL("=="), GT(">"), INC("++"), LAND("&&"), LE("<="), LNOT("!"),
-    MINUS("-"), PLUS("+"), PLUS_ASSIGN("+="), STAR("*"),
+    /**
+     * Reserved word, "char".
+     */
+    CHAR("char"),
 
-    // Separators.
-    COMMA(","), DOT("."), LBRACK("["), LCURLY("{"), LPAREN("("), RBRACK("]"), RCURLY("}"),
-    RPAREN(")"), SEMI(";"),
+    /**
+     * Reserved word, "class".
+     */
+    CLASS("class"),
 
-    // Identifiers.
+    /**
+     * Reserved word, "else".
+     */
+    ELSE("else"),
+
+    /**
+     * Reserved word, "extends".
+     */
+    EXTENDS("extends"),
+
+    /**
+     * Reserved word, "false".
+     */
+    FALSE("false"),
+
+    /**
+     * Reserved word, "if".
+     */
+    IF("if"),
+
+    /**
+     * Reserved word, "import".
+     */
+    IMPORT("import"),
+
+    /**
+     * Reserved word, "instanceof".
+     */
+    INSTANCEOF("instanceof"),
+
+    /**
+     * Reserved word, "int".
+     */
+    INT("int"),
+
+    /**
+     * Reserved word, "new".
+     */
+    NEW("new"),
+
+    /**
+     * Reserved word, "null".
+     */
+    NULL("null"),
+
+    /**
+     * Reserved word, "package".
+     */
+    PACKAGE("package"),
+
+    /**
+     * Reserved word, "private".
+     */
+    PRIVATE("private"),
+
+    /**
+     * Reserved word, "protected".
+     */
+    PROTECTED("protected"),
+
+    /**
+     * Reserved word, "public".
+     */
+    PUBLIC("public"),
+
+    /**
+     * Reserved word, "return".
+     */
+    RETURN("return"),
+
+    /**
+     * Reserved word, "static".
+     */
+    STATIC("static"),
+
+    /**
+     * Reserved word, "super".
+     */
+    SUPER("super"),
+
+    /**
+     * Reserved word, "this".
+     */
+    THIS("this"),
+
+    /**
+     * Reserved word, "true".
+     */
+    TRUE("true"),
+
+    /**
+     * Reserved word, "void".
+     */
+    VOID("void"),
+
+    /**
+     * Reserved word, "while".
+     */
+    WHILE("while"),
+
+    /**
+     * Operator, "=".
+     */
+    ASSIGN("="),
+
+    /**
+     * Operator, "--".
+     */
+    DEC("--"),
+
+    /**
+     * Operator, "==".
+     */
+    EQUAL("=="),
+
+    /**
+     * Operator, ">".
+     */
+    GT(">"),
+
+    /**
+     * Operator, "++".
+     */
+    INC("++"),
+
+    /**
+     * Operator, "&&".
+     */
+    LAND("&&"),
+
+    /**
+     * Operator, "<=".
+     */
+    LE("<="),
+
+    /**
+     * Operator, "!".
+     */
+    LNOT("!"),
+
+    /**
+     * Operator, "-".
+     */
+    MINUS("-"),
+
+    /**
+     * Operator, "+".
+     */
+    PLUS("+"),
+
+    /**
+     * Operator, "+=".
+     */
+    PLUS_ASSIGN("+="),
+
+    /**
+     * Operator, "*".
+     */
+    STAR("*"),
+
+    /**
+     * Separator, ",".
+     */
+    COMMA(","),
+
+    /**
+     * Separator, ".".
+     */
+    DOT("."),
+
+    /**
+     * Separator, "[".
+     */
+    LBRACK("["),
+
+    /**
+     * Separator, "{}".
+     */
+    LCURLY("{"),
+
+    /**
+     * Separator, "(".
+     */
+    LPAREN("("),
+
+    /**
+     * Separator, "]".
+     */
+    RBRACK("]"),
+
+    /**
+     * Separator, "}".
+     */
+    RCURLY("}"),
+
+    /**
+     * Separator, ")".
+     */
+    RPAREN(")"),
+
+    /**
+     * Separator, ";".
+     */
+    SEMI(";"),
+
+    /**
+     * Identifier.
+     */
     IDENTIFIER("<IDENTIFIER>"),
 
-    // Literals.
-    CHAR_LITERAL("<CHAR_LITERAL>"), FALSE("false"), INT_LITERAL("<INT_LITERAL>"), NULL("null"),
-    STRING_LITERAL("<STRING_LITERAL>"), TRUE("true");
+    /**
+     * Character literal.
+     */
+    CHAR_LITERAL("<CHAR_LITERAL>"),
+
+    /**
+     * Integer literal.
+     */
+    INT_LITERAL("<INT_LITERAL>"),
+
+    /**
+     * String literal.
+     */
+    STRING_LITERAL("<STRING_LITERAL>"),
+
+    /**
+     * End of file character.
+     */
+    EOF("<end of file>");
 
     // The token kind's string representation.
-    private String image;
+    private final String image;
 
     /**
      * Constructs an instance of TokenKind given its string representation.
      *
      * @param image string representation of the token kind.
      */
-    private TokenKind(String image) {
+    TokenKind(String image) {
         this.image = image;
     }
 
@@ -70,25 +295,22 @@ enum TokenKind {
 }
 
 /**
- * A representation of tokens returned by the Scanner method getNextToken(). A token has a kind
- * identifying what kind of token it is, an image for providing any semantic text, and the line in
- * which it occurred in the source file.
+ * A representation of tokens returned by the Scanner method getNextToken(). A token has a kind identifying what kind
+ * of token it is, an image for providing any semantic text, and the line in which it occurred in the source file.
  */
-public class TokenInfo {
+class TokenInfo {
     // Token kind.
-    private TokenKind kind;
+    private final TokenKind kind;
 
-    // Semantic text (if any). For example, the identifier name when the token kind is IDENTIFIER
-    // . For tokens without a semantic text, it is simply its string representation. For example,
-    // "+=" when the token kind is PLUS_ASSIGN.
-    private String image;
+    // Semantic text (if any). For example, the identifier name when the token kind is IDENTIFIER. For tokens without
+    // a semantic text, it is simply its string representation. For example, "+=" when the token kind is PLUS_ASSIGN.
+    private final String image;
 
     // Line in which the token occurs in the source file.
-    private int line;
+    private final int line;
 
     /**
-     * Constructs a TokenInfo object given its kind, the semantic text forming the token, and its
-     * line number.
+     * Constructs a TokenInfo object given its kind, the semantic text forming the token, and its line number.
      *
      * @param kind  the token's kind.
      * @param image the semantic text forming the token.
@@ -101,8 +323,8 @@ public class TokenInfo {
     }
 
     /**
-     * Constructs a TokenInfo object given its kind and its line number. Its image is simply the
-     * token kind's string representation.
+     * Constructs a TokenInfo object given its kind and its line number. Its image is simply the token kind's string
+     * representation.
      *
      * @param kind the token's identifying number.
      * @param line the line in which the token occurs in the source file.

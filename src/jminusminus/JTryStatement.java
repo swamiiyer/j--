@@ -4,8 +4,6 @@ package jminusminus;
 
 import java.util.ArrayList;
 
-import static jminusminus.CLConstants.*;
-
 /**
  * The AST node for a try-catch-finally statement.
  */
