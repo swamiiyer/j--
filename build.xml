@@ -43,9 +43,7 @@ An Ant build configuration file for the jminusminus compiler.
         </javac>
     </target>
 
-    <!--
-       jar: Bundles jminusminus classes into a jar file.
-    -->
+    <!-- jar: Bundles jminusminus classes into a jar file. -->
     <target name="jar" depends="compile">
         <echo message="Bundling class files into jar files..."/>
         <jar destfile="${LIB_DIR}/j--.jar" basedir="${CLASS_DIR}" includes="jminusminus/**"/>
@@ -58,7 +56,7 @@ An Ant build configuration file for the jminusminus compiler.
         <javadoc overview="${SRC_DIR}/overview.html" package="Yes" sourcepath="${SRC_DIR}"
                  destdir="${JAVADOC_DIR}" packagenames="jminusminus.*"
                  windowtitle="${APP_FULL_NAME}" doctitle="${APP_FULL_NAME}">
-            <link href="https://docs.oracle.com/en/java/javase/11/docs/api/" />
+            <link href="https://docs.oracle.com/en/java/javase/21/docs/api/" />
         </javadoc>
     </target>
 
@@ -77,8 +75,7 @@ An Ant build configuration file for the jminusminus compiler.
     </target>
 
     <!-- 
-       package: Makes a distributable package for the compiler which includes the sources,
-       binaries, and documentation.
+       package: Makes a distributable package for the compiler which includes the sources, binaries, and documentation.
     -->
     <target name="package" depends="jar,javadoc,j2h">
         <echo message="Making a distributable j--.zip..."/>
@@ -100,7 +97,6 @@ An Ant build configuration file for the jminusminus compiler.
         <delete file="${SRC_DIR}/jminusminus/SimpleCharStream.java" />
         <delete>
             <fileset dir="${basedir}" includes="**/*.class"/>
-            <fileset dir="${basedir}" includes="**/*.s" excludes="src/jminusminus/SPIM.s"/>
         </delete>
         <delete file="j--.zip" />
         <delete file="${LIB_DIR}/j--.jar" />
