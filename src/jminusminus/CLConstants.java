@@ -5,7 +5,7 @@ package jminusminus;
 /**
  * This class defines constants related to the JVM bytecode.
  */
-class CLConstants {
+public class CLConstants {
     /**
      * Magic number (0xCAFEBABE) identifying the class file format.
      */
