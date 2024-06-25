@@ -59,26 +59,26 @@ class JArrayInitializer extends JExpression {
     public void codegen(CLEmitter output) {
         Type componentType = type.componentType();
 
-        // Code to push array length.
+        // Push array length.
         (new JLiteralInt(line, String.valueOf(initials.size()))).codegen(output);
 
-        // Code to create the (empty) array.
+        // Create the (empty) array.
         output.addArrayInstruction(componentType.isReference() ? ANEWARRAY : NEWARRAY, componentType.jvmName());
 
-        // Code to load initial values and store them as elements in the newly created array.
+        // Load initial values and store them as elements in the newly created array.
         for (int i = 0; i < initials.size(); i++) {
             JExpression initial = initials.get(i);
 
             // Duplicate the array for each element store.
             output.addNoArgInstruction(DUP);
 
-            // Code to push index for store.
+            // Push index for store.
             (new JLiteralInt(line, String.valueOf(i))).codegen(output);
 
-            // Code to compute the initial value.
+            // Compute the initial value.
             initial.codegen(output);
 
-            // Code to store the initial value in the array.
+            // Store the initial value in the array.
             if (componentType == Type.INT) {
                 output.addNoArgInstruction(IASTORE);
             } else if (componentType == Type.BOOLEAN) {

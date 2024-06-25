@@ -26,7 +26,7 @@ abstract class JAssignment extends JBinaryExpression {
  */
 class JAssignOp extends JAssignment {
     /**
-     * Constructs the AST node for an assignment (=) operation..
+     * Constructs the AST node for an assignment (=) operation.
      *
      * @param line line in which the assignment operation occurs in the source file.
      * @param lhs  lhs operand.
@@ -91,7 +91,7 @@ class JPlusAssignOp extends JAssignment {
      */
     public JExpression analyze(Context context) {
         if (!(lhs instanceof JLhs)) {
-            JAST.compilationUnit.reportSemanticError(line(), "Illegal lhs for assignment");
+            JAST.compilationUnit.reportSemanticError(line(), "illegal lhs for assignment");
             return this;
         } else {
             lhs = ((JLhs) lhs).analyzeLhs(context);

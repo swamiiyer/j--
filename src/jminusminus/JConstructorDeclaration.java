@@ -59,15 +59,11 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
      * {@inheritDoc}
      */
     public JAST analyze(Context context) {
-        // Record the defining class declaration.
         definingClass = (JClassDeclaration) (context.classContext().definition());
-
         this.context = new MethodContext(context, isStatic, returnType);
 
-        if (!isStatic) {
-            // Offset 0 is used to address "this".
-            this.context.nextOffset();
-        }
+        // Offset 0 is used to address "this".
+        this.context.nextOffset();
 
         // Declare the parameters. We consider a formal parameter to be always initialized, via a method call.
         for (JFormalParameter param : params) {
@@ -104,15 +100,10 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
             output.addNoArgInstruction(ALOAD_0);
             output.addMemberAccessInstruction(INVOKESPECIAL, definingClass.superType().jvmName(), "<init>", "()V");
         }
-
-        // Field initializations.
         for (JFieldDeclaration field : definingClass.instanceFieldInitializations()) {
             field.codegenInitializations(output);
         }
-
-        // And then the body.
         body.codegen(output);
-
         output.addNoArgInstruction(RETURN);
     }
 

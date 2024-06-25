@@ -24,7 +24,7 @@ interface JLhs {
     void codegenLoadLhsLvalue(CLEmitter output);
 
     /**
-     * Generates code to load an Rvalue of the lhs, as in a += x.
+     * Generates code to load a Rvalue of the lhs, as in a += x.
      *
      * @param output the code emitter.
      */

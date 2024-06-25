@@ -19,9 +19,6 @@ class JNewOp extends JExpression {
     // The arguments to the constructor.
     private final ArrayList<JExpression> arguments;
 
-    // Types of the arguments.
-    private Type[] argTypes;
-
     /**
      * Constructs an AST node for a new expression.
      *
@@ -43,7 +40,7 @@ class JNewOp extends JExpression {
         type = type.resolve(context);
 
         // Analyze the arguments, collecting their types (in Class form) as argTypes.
-        argTypes = new Type[arguments.size()];
+        Type[] argTypes = new Type[arguments.size()];
         for (int i = 0; i < arguments.size(); i++) {
             arguments.set(i, arguments.get(i).analyze(context));
             argTypes[i] = arguments.get(i).type();
@@ -56,11 +53,11 @@ class JNewOp extends JExpression {
 
         // Then get the proper constructor, given the arguments.
         constructor = type.constructorFor(argTypes);
-
         if (constructor == null) {
             JAST.compilationUnit.reportSemanticError(line(),
                     "cannot find constructor: " + Type.signatureFor(type.toString(), argTypes));
         }
+
         return this;
     }
 

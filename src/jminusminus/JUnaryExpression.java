@@ -24,7 +24,7 @@ abstract class JUnaryExpression extends JExpression {
     protected JExpression operand;
 
     /**
-     * Constructs an AST node for an unary expression.
+     * Constructs an AST node for a unary expression.
      *
      * @param line     line in which the unary expression occurs in the source file.
      * @param operator the unary operator.

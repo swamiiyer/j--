@@ -13,10 +13,10 @@ import static jminusminus.CLConstants.RETURN;
  */
 class JClassDeclaration extends JAST implements JTypeDecl {
     // Class modifiers.
-    private ArrayList<String> mods;
+    private final ArrayList<String> mods;
 
     // Class name.
-    private String name;
+    private final String name;
 
     // This class type.
     private Type thisType;
@@ -25,10 +25,10 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     private Type superType;
 
     // Implemented interfaces.
-    private ArrayList<TypeName> superInterfaces;
+    private final ArrayList<TypeName> superInterfaces;
 
     // Class block.
-    private ArrayList<JMember> classBlock;
+    private final ArrayList<JMember> classBlock;
 
     // Context for this class.
     private ClassContext context;
@@ -37,10 +37,10 @@ class JClassDeclaration extends JAST implements JTypeDecl {
     private boolean hasExplicitConstructor;
 
     // Instance fields of this class.
-    private ArrayList<JFieldDeclaration> instanceFieldInitializations;
+    private final ArrayList<JFieldDeclaration> instanceFieldInitializations;
 
     // Static (class) fields of this class.
-    private ArrayList<JFieldDeclaration> staticFieldInitializations;
+    private final ArrayList<JFieldDeclaration> staticFieldInitializations;
 
     /**
      * Constructs an AST node for a class declaration.
@@ -78,7 +78,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
      * {@inheritDoc}
      */
     public void declareThisType(Context context) {
-        String qualifiedName = JAST.compilationUnit.packageName() == "" ?
+        String qualifiedName = JAST.compilationUnit.packageName().isEmpty() ?
                 name : JAST.compilationUnit.packageName() + "/" + name;
         CLEmitter partial = new CLEmitter(false);
         partial.addClass(mods, qualifiedName, Type.OBJECT.jvmName(), null, false);
@@ -108,7 +108,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         CLEmitter partial = new CLEmitter(false);
 
         // Add the class header to the partial class
-        String qualifiedName = JAST.compilationUnit.packageName() == "" ?
+        String qualifiedName = JAST.compilationUnit.packageName().isEmpty() ?
                 name : JAST.compilationUnit.packageName() + "/" + name;
         partial.addClass(mods, qualifiedName, superType.jvmName(), null, false);
 
@@ -180,7 +180,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         }
 
         // Finally, ensure that a non-abstract class has no abstract methods.
-        if (!thisType.isAbstract() && thisType.abstractMethods().size() > 0) {
+        if (!thisType.isAbstract() && !thisType.abstractMethods().isEmpty()) {
             String methods = "";
             for (Method method : thisType.abstractMethods()) {
                 methods += "\n" + method;
@@ -196,7 +196,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
      */
     public void codegen(CLEmitter output) {
         // The class header.
-        String qualifiedName = JAST.compilationUnit.packageName() == "" ?
+        String qualifiedName = JAST.compilationUnit.packageName().isEmpty() ?
                 name : JAST.compilationUnit.packageName() + "/" + name;
         output.addClass(mods, qualifiedName, superType.jvmName(), null, false);
 
@@ -210,8 +210,8 @@ class JClassDeclaration extends JAST implements JTypeDecl {
             ((JAST) member).codegen(output);
         }
 
-        // Generate a class initialization method?
-        if (staticFieldInitializations.size() > 0) {
+        // Generate a class initialization method.
+        if (!staticFieldInitializations.isEmpty()) {
             codegenClassInit(output);
         }
     }
@@ -223,7 +223,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         JSONElement e = new JSONElement();
         json.addChild("JClassDeclaration:" + line, e);
         if (mods != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (String mod : mods) {
                 value.add(String.format("\"%s\"", mod));
             }
@@ -232,7 +232,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
         e.addAttribute("name", name);
         e.addAttribute("super", superType == null ? "" : superType.toString());
         if (superInterfaces != null) {
-            ArrayList<String> value = new ArrayList<String>();
+            ArrayList<String> value = new ArrayList<>();
             for (TypeName impl : superInterfaces) {
                 value.add(String.format("\"%s\"", impl.toString()));
             }
@@ -250,7 +250,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
 
     // Generates code for an implicit empty constructor (necessary only if there is not already an explicit one).
     private void codegenPartialImplicitConstructor(CLEmitter partial) {
-        ArrayList<String> mods = new ArrayList<String>();
+        ArrayList<String> mods = new ArrayList<>();
         mods.add("public");
         partial.addMethod(mods, "<init>", "()V", null, false);
         partial.addNoArgInstruction(ALOAD_0);
@@ -260,7 +260,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
 
     // Generates code for an implicit empty constructor (necessary only if there is not already an explicit one).
     private void codegenImplicitConstructor(CLEmitter output) {
-        ArrayList<String> mods = new ArrayList<String>();
+        ArrayList<String> mods = new ArrayList<>();
         mods.add("public");
         output.addMethod(mods, "<init>", "()V", null, false);
         output.addNoArgInstruction(ALOAD_0);
@@ -276,7 +276,7 @@ class JClassDeclaration extends JAST implements JTypeDecl {
 
     // Generates code for class initialization (in j-- this means static field initializations.
     private void codegenClassInit(CLEmitter output) {
-        ArrayList<String> mods = new ArrayList<String>();
+        ArrayList<String> mods = new ArrayList<>();
         mods.add("public");
         mods.add("static");
         output.addMethod(mods, "<clinit>", "()V", null, false);

@@ -4,8 +4,8 @@ package jminusminus;
 
 /**
  * The AST node for an expression. The syntax says all expressions are statements, but a semantic check throws some
- * (those without a side-effect) out. Every expression has a type and a flag indicating whether or not it's a
- * statement-expression.
+ * (those without a side effect) out. Every expression has a type and a flag indicating whether it's a
+ * statement-expression or not.
  */
 abstract class JExpression extends JStatement {
     /**
@@ -14,7 +14,7 @@ abstract class JExpression extends JStatement {
     protected Type type;
 
     /**
-     * Whether or not this expression is a statement.
+     * Whether this expression is a statement or not.
      */
     protected boolean isStatementExpression;
 
@@ -25,7 +25,7 @@ abstract class JExpression extends JStatement {
      */
     protected JExpression(int line) {
         super(line);
-        isStatementExpression = false; // by default
+        isStatementExpression = false;
     }
 
     /**
@@ -35,15 +35,6 @@ abstract class JExpression extends JStatement {
      */
     public Type type() {
         return type;
-    }
-
-    /**
-     * Returns true if this expression is being used as a statement, and false otherwise.
-     *
-     * @return true if this expression is being used as a statement, and false otherwise.
-     */
-    public boolean isStatementExpression() {
-        return isStatementExpression;
     }
 
     /**

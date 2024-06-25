@@ -46,7 +46,7 @@ class JNewArrayOp extends JExpression {
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
-        // Code to push diemension exprs on to the stack.
+        // Code to push dimension exprs on to the stack.
         for (JExpression dimExpr : dimExprs) {
             dimExpr.codegen(output);
         }

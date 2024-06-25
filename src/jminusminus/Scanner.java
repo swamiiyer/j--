@@ -204,7 +204,7 @@ class Scanner {
                     nextCh();
                     return new TokenInfo(CHAR_LITERAL, buffer.toString(), line);
                 } else {
-                    // Expected a ' ; report error and try to recover.
+                    // Expected a '; report error and try to recover.
                     reportScannerError(ch + " found by scanner where closing ' was expected");
                     while (ch != '\'' && ch != ';' && ch != '\n') {
                         nextCh();
@@ -229,7 +229,7 @@ class Scanner {
                 } else if (ch == EOFCH) {
                     reportScannerError("unexpected end of file found in string");
                 } else {
-                    // Scan the closing "
+                    // Scan the closing ".
                     nextCh();
                     buffer.append("\"");
                 }

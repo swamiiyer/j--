@@ -44,13 +44,12 @@ class JFormalParameter extends JAST {
     }
 
     /**
-     * Sets the parameter's type to the specified type, and returns the new type.
+     * Sets the parameter's type to the specified type.
      *
-     * @param newType the new type.
-     * @return return the new type.
+     * @param type the new type.
      */
-    public Type setType(Type newType) {
-        return type = newType;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     /**

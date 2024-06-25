@@ -41,10 +41,10 @@ class JStringConcatenationOp extends JBinaryExpression {
         output.addNoArgInstruction(DUP);
         output.addMemberAccessInstruction(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V");
 
-        // Lhs and Rhs.
+        // Append lhs and rhs.
         nestedCodegen(output);
 
-        // Finally, make into a String.
+        // Finally, get the appended String.
         output.addMemberAccessInstruction(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;");
     }
 
@@ -53,7 +53,7 @@ class JStringConcatenationOp extends JBinaryExpression {
     private void nestedCodegen(CLEmitter output) {
         // Lhs.
         if (lhs instanceof JStringConcatenationOp) {
-            // This appends lhs
+            // This appends lhs.
             ((JStringConcatenationOp) lhs).nestedCodegen(output);
         } else {
             lhs.codegen(output);
