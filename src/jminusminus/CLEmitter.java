@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -45,13 +46,19 @@ public class CLEmitter {
     // Direct super interfaces of the class.
     private ArrayList<Integer> interfaces;
 
-    // Fields in the class.
+    // Names of fields in the class.
+    private HashSet<String> fieldNames;
+
+    // Fields in the class, as CLFieldInfo objects.
     private ArrayList<CLFieldInfo> fields;
 
     // Attributes of the field last added.
     private ArrayList<CLAttributeInfo> fAttributes;
 
-    // Methods in the class.
+    // Signatures of methods in the class.
+    private HashSet<String> methodSignatures;
+
+    // Methods in the class, CLMethodInfo objects.
     private ArrayList<CLMethodInfo> methods;
 
     // Attributes of the method last added.
@@ -114,8 +121,8 @@ public class CLEmitter {
     private static ByteClassLoader byteClassLoader;
 
     /**
-     * Constructs a CLEmitter instance given a boolean on whether or not the class file will be written to the file
-     * system.
+     * Constructs a CLEmitter instance given a boolean on whether the class file will be written to the file
+     * system or not.
      *
      * @param toFile if true the in-memory representation of the class file will be written to the file system.
      *               Otherwise, it won't be saved as a file.
@@ -161,7 +168,9 @@ public class CLEmitter {
         clFile = new CLFile();
         constantPool = new CLConstantPool();
         interfaces = new ArrayList<>();
+        fieldNames = new HashSet<>();
         fields = new ArrayList<>();
+        methodSignatures = new HashSet<>();
         methods = new ArrayList<>();
         attributes = new ArrayList<>();
         innerClasses = new ArrayList<>();
@@ -214,6 +223,25 @@ public class CLEmitter {
         CLInnerClassInfo innerClassInfo = new CLInnerClassInfo(constantPool.constantClassInfo(innerClass),
                 constantPool.constantClassInfo(outerClass), constantPool.constantUtf8Info(innerName), flags);
         innerClasses.add(innerClassInfo);
+    }
+
+    /**
+     * Returns true if the given name exists in the set of field names, and false otherwise.
+     *
+     * @param name the name to check.
+     * @return true if the given name exists in the set of field names, and false otherwise.
+     */
+    public boolean containsFieldName(String name) {
+        return fieldNames.contains(name);
+    }
+
+    /**
+     * Adds the given field name to the set of field names.
+     *
+     * @param name field name.
+     */
+    public void addFieldName(String name) {
+        fieldNames.add(name);
     }
 
     /**
@@ -290,6 +318,25 @@ public class CLEmitter {
      */
     public void addField(ArrayList<String> accessFlags, String name, boolean isSynthetic, String s) {
         addFieldInfo(accessFlags, name, "Ljava/lang/String;", isSynthetic, constantPool.constantStringInfo(s));
+    }
+
+    /**
+     * Returns true if the given signature exists in the set of method signatures, and false otherwise.
+     *
+     * @param signature the signature to check.
+     * @return true if the given signature exists in the set of method signatures, and false otherwise.
+     */
+    public boolean containsMethodSignature(String signature) {
+        return methodSignatures.contains(signature);
+    }
+
+    /**
+     * Adds the given method signature to the set of method signatures.
+     *
+     * @param signature method signature.
+     */
+    public void addMethodSignature(String signature) {
+        methodSignatures.add(signature);
     }
 
     /**
@@ -1105,6 +1152,7 @@ public class CLEmitter {
         if (c != -1) {
             addFieldAttribute(constantValueAttribute(c));
         }
+        fieldNames.add(name);
         fields.add(new CLFieldInfo(flags, nameIndex, descriptorIndex, fAttributes.size(), fAttributes));
     }
 
