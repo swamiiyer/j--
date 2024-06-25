@@ -49,7 +49,12 @@ class JFieldDeclaration extends JAST implements JMember {
         }
         for (JVariableDeclarator decl : decls) {
             decl.setType(decl.type().resolve(context));
-            partial.addField(mods, decl.name(), decl.type().toDescriptor(), false);
+            if (partial.containsFieldName(decl.name())) {
+                JAST.compilationUnit.reportSemanticError(line(), "redefining field " + decl.name());
+            } else {
+                partial.addField(mods, decl.name(), decl.type().toDescriptor(), false);
+                partial.addFieldName(decl.name());
+            }
         }
     }
 

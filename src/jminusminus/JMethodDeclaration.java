@@ -55,6 +55,11 @@ class JMethodDeclaration extends JAST implements JMember {
     protected String descriptor;
 
     /**
+     * Method signature (also computed in preAnalyze()).
+     */
+    protected String signature;
+
+    /**
      * Is this method abstract?
      */
     protected boolean isAbstract;
@@ -98,13 +103,18 @@ class JMethodDeclaration extends JAST implements JMember {
      * {@inheritDoc}
      */
     public void preAnalyze(Context context, CLEmitter partial) {
-        // Resolve types of the formal parameters.
-        for (JFormalParameter param : params) {
+        // Resolve types of the formal parameters, the return type, and compute method descriptor/signature.
+        descriptor = "(";
+        Type[] argTypes = new Type[params.size()];
+        for (int i = 0; i < params.size(); i++) {
+            JFormalParameter param = params.get(i);
             param.setType(param.type().resolve(context));
+            descriptor += param.type().toDescriptor();
+            argTypes[i] = param.type();
         }
-
-        // Resolve return type.
         returnType = returnType.resolve(context);
+        descriptor += ")" + returnType.toDescriptor();
+        signature = Type.signatureFor(name, argTypes);
 
         // Check proper local use of abstract.
         if (isAbstract && body != null) {
@@ -116,13 +126,6 @@ class JMethodDeclaration extends JAST implements JMember {
         } else if (isAbstract && isStatic) {
             JAST.compilationUnit.reportSemanticError(line(), "static method cannot be abstract");
         }
-
-        // Compute descriptor.
-        descriptor = "(";
-        for (JFormalParameter param : params) {
-            descriptor += param.type().toDescriptor();
-        }
-        descriptor += ")" + returnType.toDescriptor();
 
         // Generate the method with an empty body (for now).
         partialCodegen(context, partial);
@@ -160,7 +163,12 @@ class JMethodDeclaration extends JAST implements JMember {
      * {@inheritDoc}
      */
     public void partialCodegen(Context context, CLEmitter partial) {
+        if (partial.containsMethodSignature(signature)) {
+            JAST.compilationUnit.reportSemanticError(line(), "redefining method " + signature);
+            return;
+        }
         partial.addMethod(mods, name, descriptor, null, false);
+        partial.addMethodSignature(signature);
         if (returnType == Type.VOID) {
             partial.addNoArgInstruction(RETURN);
         } else if (returnType == Type.INT || returnType == Type.BOOLEAN || returnType == Type.CHAR) {

@@ -82,7 +82,12 @@ class JConstructorDeclaration extends JMethodDeclaration implements JMember {
      * {@inheritDoc}
      */
     public void partialCodegen(Context context, CLEmitter partial) {
+        if (partial.containsMethodSignature(signature)) {
+            JAST.compilationUnit.reportSemanticError(line(), "redefining constructor " + signature);
+            return;
+        }
         partial.addMethod(mods, "<init>", descriptor, null, false);
+        partial.addMethodSignature(signature);
         if (!invokesConstructor) {
             partial.addNoArgInstruction(ALOAD_0);
             partial.addMemberAccessInstruction(INVOKESPECIAL,
