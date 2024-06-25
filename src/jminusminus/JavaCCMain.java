@@ -139,10 +139,10 @@ public class JavaCCMain {
         }
 
         // Generate JVM code.
-        CLEmitter clEmitter = new CLEmitter(!spimOutput);
-        clEmitter.destinationDir(outputDir);
-        ast.codegen(clEmitter);
-        errorHasOccurred |= clEmitter.errorHasOccurred();
+        CLEmitter jvmCode = new CLEmitter(!spimOutput);
+        jvmCode.destinationDir(outputDir);
+        ast.codegen(jvmCode);
+        errorHasOccurred |= jvmCode.errorHasOccurred();
         if (errorHasOccurred) {
             return;
         }

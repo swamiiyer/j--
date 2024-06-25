@@ -114,10 +114,10 @@ public class Main {
         }
 
         // Generate JVM code.
-        CLEmitter clEmitter = new CLEmitter(true);
-        clEmitter.destinationDir(outputDir);
-        ast.codegen(clEmitter);
-        if (clEmitter.errorHasOccurred()) {
+        CLEmitter jvmCode = new CLEmitter(true);
+        jvmCode.destinationDir(outputDir);
+        ast.codegen(jvmCode);
+        if (jvmCode.errorHasOccurred()) {
             System.err.println("Error: compilation failed!");
         }
     }
