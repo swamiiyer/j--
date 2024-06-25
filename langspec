@@ -234,6 +234,7 @@ JConstructorDeclaration:
 
 JFieldDeclaration:
 - A field must not be abstract
+- Name must not exist already
 
 JFieldSelection:
 - The target must be a reference type
@@ -259,6 +260,7 @@ JMethodDeclaration:
 - A method without body must be abstract
 - A private method cannot be abstract
 - A static method cannot be abstract
+- Signature must not exist already
 - A non-void method must have a return statement
 
 JNewArrayOp:
