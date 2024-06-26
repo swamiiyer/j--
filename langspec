@@ -202,12 +202,10 @@ JAssignment:
   - lhs must be an integer (addition) or a string (concatenation)
 
 JBinaryExpression:
-- JMultiplyOp
+- JMultiplyOp, JSubtractOp
   - lhs and rhs must be integers
 - JPlusOp
   - lhs and rhs must be integers (addition) or one of them must be a string (concatenation)
-- JSubtractOp
-  - lhs and rhs must be integers
 
 JBooleanBinaryExpression:
 - JEqualOp:
@@ -231,6 +229,7 @@ JCompilationUnit:
 
 JConstructorDeclaration:
 - A constructor must not be static or abstract
+- Signature must not exist already
 
 JFieldDeclaration:
 - A field must not be abstract
