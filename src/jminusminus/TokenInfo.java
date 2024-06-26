@@ -153,12 +153,12 @@ enum TokenKind {
     INC("++"),
 
     /**
-     * Operator, "&&".
+     * Operator, "&amp;&amp;".
      */
     LAND("&&"),
 
     /**
-     * Operator, "<=".
+     * Operator, "&lt;=".
      */
     LE("<="),
 

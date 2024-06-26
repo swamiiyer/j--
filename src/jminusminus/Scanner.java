@@ -14,7 +14,9 @@ import static jminusminus.TokenKind.*;
  * A lexical analyzer for j--, that has no backtracking mechanism.
  */
 class Scanner {
-    // End of file character.
+    /**
+     * End of file character.
+     */
     public final static char EOFCH = CharReader.EOFCH;
 
     // Keywords in j--.
@@ -368,7 +370,9 @@ class Scanner {
  * also keeps track of line numbers.
  */
 class CharReader {
-    // Representation of the end of file as a character.
+    /**
+     * Representation of the end of file as a character.
+     */
     public final static char EOFCH = (char) -1;
 
     // The underlying reader records line numbers.

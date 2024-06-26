@@ -6,47 +6,45 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
- * Driver class for j-- compiler using JavaCC front-end. This is the main entry point for the
- * compiler. The compiler proceeds as follows:
+ * Driver class for j-- compiler using JavaCC front-end. This is the main entry point for the compiler. The compiler
+ * proceeds as follows:
  * <ol>
  *   <li>It reads arguments that affects its behavior.</li>
  *
  *   <li>It builds a scanner.</li>
  *
- *   <li>It builds a parser (using the scanner) and parses the input for producing an abstact
- *   syntax tree (AST).</li>
+ *   <li>It builds a parser (using the scanner) and parses the input for producing an abstact syntax tree (AST).</li>
  *
- *   <li>It sends the preAnalyze() message to that AST, which recursively descends the tree
- *   so far as the member headers for declaring types and members in the symbol table
- *   (represented as a string of contexts).</li>
+ *   <li>It sends the preAnalyze() message to that AST, which recursively descends the tree so far as the member
+ *   headers for declaring types and members in the symbol table (represented as a string of contexts).</li>
  *
- *   <li>It sends the analyze() message to that AST for declaring local variables, and
- *   checking and assigning types to expressions. Analysis also sometimes rewrites some of the
- *   abstract syntax tree for clarifying the semantics. Analysis does all of this by recursively
- *   descending the AST down to its leaves.</li>
+ *   <li>It sends the analyze() message to that AST for declaring local variables, and checking and assigning types
+ *   to expressions. Analysis also sometimes rewrites some of the abstract syntax tree for clarifying the semantics.
+ *   Analysis does all of this by recursively descending the AST down to its leaves.</li>
  *
- *   <li>Finally, it sends a codegen() message to the AST for generating code. Again,
- *   codegen() recursively descends the tree, down to its leaves, generating JVM code for
- *   producing a .class or .s (SPIM) file for each defined type (class).</li>
+ *   <li>Finally, it sends a codegen() message to the AST for generating code. Again, codegen() recursively descends
+ *   the tree, down to its leaves, generating JVM code for producing a .class for each defined type (class).</li>
  * </ol>
  */
 public class JavaCCMain {
-    // Whether an error occurred during compilation.
-    private static boolean errorHasOccurred;
+    /**
+     * Constructs a JavaCCMain object.
+     */
+    public JavaCCMain() {
+        // Nothing here.
+    }
 
     /**
      * Entry point.
      *
      * @param args the command-line arguments.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         String caller = "java jminusminus.JavaCCMain";
         String sourceFile = "";
         String debugOption = "";
         String outputDir = ".";
         boolean spimOutput = false;
-        String registerAllocation = "";
-        errorHasOccurred = false;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("javaccj--")) {
                 caller = "javaccj--";
@@ -62,15 +60,14 @@ public class JavaCCMain {
                 return;
             }
         }
-        if (sourceFile.equals("")) {
+        if (sourceFile.isEmpty()) {
             printUsage(caller);
             return;
         }
 
         JavaCCParserTokenManager javaCCScanner = null;
         try {
-            javaCCScanner = new JavaCCParserTokenManager(new
-                    SimpleCharStream(new FileInputStream(sourceFile), 1, 1));
+            javaCCScanner = new JavaCCParserTokenManager(new SimpleCharStream(new FileInputStream(sourceFile), 1, 1));
         } catch (FileNotFoundException e) {
             System.err.println("Error: file " + sourceFile + " not found.");
         }
@@ -81,9 +78,8 @@ public class JavaCCMain {
             do {
                 token = javaCCScanner.getNextToken();
                 if (token.kind == JavaCCParserConstants.ERROR) {
-                    System.err.printf("%s:%d: Unidentified input token: '%s'\n", sourceFile,
-                            token.beginLine, token.image);
-                    errorHasOccurred |= true;
+                    System.err.printf("%s:%d: Unidentified input token: '%s'\n", sourceFile, token.beginLine,
+                            token.image);
                 } else {
                     System.out.printf("%d\t : %s = %s\n", token.beginLine,
                             JavaCCParserConstants.tokenImage[token.kind], token.image);
@@ -92,49 +88,47 @@ public class JavaCCMain {
             return;
         }
 
-        // Parse input.
         JCompilationUnit ast = null;
-        JavaCCParser javaCCParser = new JavaCCParser(javaCCScanner);
-        javaCCParser.fileName(sourceFile);
+        JavaCCParser parser = new JavaCCParser(javaCCScanner);
+        parser.fileName(sourceFile);
         try {
-            ast = javaCCParser.compilationUnit();
-            errorHasOccurred |= javaCCParser.errorHasOccurred();
+            ast = parser.compilationUnit();
         } catch (ParseException e) {
             System.err.println(e.getMessage());
         }
         if (debugOption.equals("-p")) {
+            // Just parse input and print AST to STDOUT.
             JSONElement json = new JSONElement();
             ast.toJSON(json);
-            System.out.println(json.toString());
+            System.out.println(json);
             return;
         }
-        if (errorHasOccurred) {
+        if (parser.errorHasOccurred()) {
             return;
         }
 
-        // Do pre-analysis.
         ast.preAnalyze();
-        errorHasOccurred |= JAST.compilationUnit.errorHasOccurred();
         if (debugOption.equals("-pa")) {
+            // Just pre-analyze input and print AST to STDOUT.
             JSONElement json = new JSONElement();
             ast.toJSON(json);
-            System.out.println(json.toString());
+            System.out.println(json);
             return;
         }
-        if (errorHasOccurred) {
+        if (JAST.compilationUnit.errorHasOccurred()) {
             return;
         }
 
         // Do analysis.
         ast.analyze(null);
-        errorHasOccurred |= JAST.compilationUnit.errorHasOccurred();
         if (debugOption.equals("-a")) {
+            // Just analyze input and print AST to STDOUT.
             JSONElement json = new JSONElement();
             ast.toJSON(json);
-            System.out.println(json.toString());
+            System.out.println(json);
             return;
         }
-        if (errorHasOccurred) {
+        if (JAST.compilationUnit.errorHasOccurred()) {
             return;
         }
 
@@ -142,9 +136,8 @@ public class JavaCCMain {
         CLEmitter jvmCode = new CLEmitter(!spimOutput);
         jvmCode.destinationDir(outputDir);
         ast.codegen(jvmCode);
-        errorHasOccurred |= jvmCode.errorHasOccurred();
-        if (errorHasOccurred) {
-            return;
+        if (jvmCode.errorHasOccurred()) {
+            System.err.println("Error: compilation failed!");
         }
     }
 

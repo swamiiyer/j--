@@ -153,6 +153,13 @@ interface Converter {
  */
 class Identity implements Converter {
     /**
+     * Constructs an Identity converter.
+     */
+    public Identity() {
+        // Noting here.
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void codegen(CLEmitter output) {
@@ -252,6 +259,13 @@ class UnBoxing implements Converter {
  * An int to char converter.
  */
 class I2C implements Converter {
+    /**
+     * Constructs an I2C converter.
+     */
+    public I2C() {
+        // Noting here.
+    }
+
     /**
      * {@inheritDoc}
      */

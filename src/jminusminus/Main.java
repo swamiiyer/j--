@@ -29,6 +29,13 @@ import static jminusminus.TokenKind.EOF;
  */
 public class Main {
     /**
+     * Constructs a Main object.
+     */
+    public Main() {
+        // Nothing here.
+    }
+
+    /**
      * Entry point.
      *
      * @param args the command-line arguments.

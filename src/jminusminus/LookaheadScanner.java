@@ -24,7 +24,7 @@ class LookaheadScanner {
     private final Stack<Vector<TokenInfo>> queueStack;
 
     // Whether we are looking ahead.
-    public boolean isLookingAhead;
+    private boolean isLookingAhead;
 
     // Previous token.
     private TokenInfo previousToken;
