@@ -174,9 +174,10 @@ TOKEN: {
 
 // Literals
 TOKEN: {
-  <INT_LITERAL: <DIGIT> ( <DIGIT> )*>
+  <INT_LITERAL: <DIGITS>>
 | <CHAR_LITERAL: "'" ( <ESC> | ~[ "'", "\\" ] ) "'">
 | <STRING_LITERAL: "\"" ( <ESC> | ~[ "\"", "\\" ] )* "\"">
+| <#DIGITS: <DIGIT> ( <DIGIT> )* >
 | <#ESC: "\\" [ "n", "t", "b", "r", "f", "\\", "'", "\"" ]>
 }
 
