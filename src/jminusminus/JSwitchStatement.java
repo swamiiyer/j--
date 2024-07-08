@@ -12,19 +12,19 @@ class JSwitchStatement extends JStatement {
     private JExpression condition;
 
     // List of switch-statement groups.
-    private ArrayList<SwitchStatementGroup> stmtGroup;
+    private ArrayList<SwitchStatementGroup> switchStmtGroups;
 
     /**
      * Constructs an AST node for a switch-statement.
      *
      * @param line      line in which the switch-statement occurs in the source file.
      * @param condition test expression.
-     * @param stmtGroup list of statement groups.
+     * @param switchStmtGroups list of statement groups.
      */
-    public JSwitchStatement(int line, JExpression condition, ArrayList<SwitchStatementGroup> stmtGroup) {
+    public JSwitchStatement(int line, JExpression condition, ArrayList<SwitchStatementGroup> switchStmtGroups) {
         super(line);
         this.condition = condition;
-        this.stmtGroup = stmtGroup;
+        this.switchStmtGroups = switchStmtGroups;
     }
 
     /**
@@ -51,7 +51,7 @@ class JSwitchStatement extends JStatement {
         JSONElement e1 = new JSONElement();
         e.addChild("Condition", e1);
         condition.toJSON(e1);
-        for (SwitchStatementGroup group : stmtGroup) {
+        for (SwitchStatementGroup group : switchStmtGroups) {
             group.toJSON(e);
         }
     }
