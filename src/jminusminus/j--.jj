@@ -207,9 +207,9 @@ public JCompilationUnit compilationUnit():
     int line = 0;
     TypeName packageName = null;
     TypeName anImport = null;
-    ArrayList<TypeName> imports = new ArrayList<TypeName>();
+    ArrayList<TypeName> imports = new ArrayList<>();
     JAST aTypeDeclaration = null;
-    ArrayList<JAST> typeDeclarations = new ArrayList<JAST>();
+    ArrayList<JAST> typeDeclarations = new ArrayList<>();
 }
 {
     try {
@@ -286,16 +286,16 @@ private TypeName qualifiedIdentifier():
 private JAST typeDeclaration():
 {
     ArrayList<String> mods = null;
-    JAST classDeclaration = null;
+    JAST typeDeclaration = null;
 }
 {
     try {
         mods = modifiers()
-        classDeclaration = classDeclaration(mods)
+        typeDeclaration = classDeclaration(mods)
     } catch (ParseException e) {
         recoverFromError(new int[] { SEMI, EOF }, e);
     }
-    { return classDeclaration; }
+    { return typeDeclaration; }
 }
 
 /**
@@ -309,12 +309,12 @@ private JAST typeDeclaration():
  */
 private ArrayList<String> modifiers():
 {
-    ArrayList<String> mods = new ArrayList<String>();
-    boolean scannedPUBLIC    = false;
+    ArrayList<String> mods = new ArrayList<>();
+    boolean scannedPUBLIC = false;
     boolean scannedPROTECTED = false;
-    boolean scannedPRIVATE   = false;
-    boolean scannedSTATIC    = false;
-    boolean scannedABSTRACT  = false;
+    boolean scannedPRIVATE = false;
+    boolean scannedSTATIC = false;
+    boolean scannedABSTRACT = false;
 }
 {
     try {
@@ -421,8 +421,8 @@ private JClassDeclaration classDeclaration(ArrayList<String> mods):
 private ArrayList<JMember> classBody():
 {
     ArrayList<String> mods = null;
-    JMember aMember        = null;
-    ArrayList<JMember> members = new ArrayList<JMember>();
+    JMember aMember = null;
+    ArrayList<JMember> members = new ArrayList<>();
 }
 {
     try {
@@ -464,40 +464,34 @@ private JMember memberDecl(ArrayList<String> mods):
 {
     try {
         LOOKAHEAD(<IDENTIFIER> <LPAREN>)
-        (
-            <IDENTIFIER>
-            {
-                line = token.beginLine;
-                name = token.image;
-            }
-            params = formalParameters()
-            body = block()
-            { memberDecl = new JConstructorDeclaration(line, mods, name, params, null, body); }
-        ) |
+        <IDENTIFIER>
+        {
+            line = token.beginLine;
+            name = token.image;
+        }
+        params = formalParameters()
+        body = block()
+        { memberDecl = new JConstructorDeclaration(line, mods, name, params, null, body); } |
         LOOKAHEAD((<VOID> | type()) <IDENTIFIER> <LPAREN>)
         (
-            (
-                <VOID>
-                { type = Type.VOID; } |
-                type = type()
-            )
-            { line = token.beginLine; }
-            <IDENTIFIER>
-            { name = token.image; }
-            params = formalParameters() 
-            (
-                body = block() |
-                <SEMI>
-            )
-            { memberDecl = new JMethodDeclaration(line, mods, name, type, params, null, body); }
-        ) |
-        (
+            <VOID>
+            { type = Type.VOID; } |
             type = type()
-            { line = token.beginLine; }
-            variableDeclarators = variableDeclarators(type)
-            { memberDecl = new JFieldDeclaration(line, mods, variableDeclarators); }
+        )
+        { line = token.beginLine; }
+        <IDENTIFIER>
+        { name = token.image; }
+        params = formalParameters()
+        (
+            body = block() |
             <SEMI>
         )
+        { memberDecl = new JMethodDeclaration(line, mods, name, type, params, null, body); } |
+        type = type()
+        { line = token.beginLine; }
+        variableDeclarators = variableDeclarators(type)
+        { memberDecl = new JFieldDeclaration(line, mods, variableDeclarators); }
+        <SEMI>
     } catch (ParseException e) {
         recoverFromError(new int[] { SEMI, EOF }, e);
     }
@@ -517,7 +511,7 @@ private JBlock block():
 {
     int line = 0;
     JStatement aStatement = null;
-    ArrayList<JStatement> statements = new ArrayList<JStatement>();
+    ArrayList<JStatement> statements = new ArrayList<>();
 }
 {
     try {
@@ -576,19 +570,18 @@ private JStatement blockStatement():
 private JStatement statement():
 {
     int line = 0;
+    JExpression expr      = null;
     JStatement statement  = null;
-    JExpression test      = null;
     JStatement consequent = null;
     JStatement alternate  = null;
     JStatement body       = null;
-    JExpression expr      = null;
 }
 {
     try {
         statement = block() |
         <IF>
         { line = token.beginLine; }
-        test = parExpression()
+        expr = parExpression()
         consequent = statement()
         // Even without the lookahead below, which is added to suppress JavaCC warnings, dangling
         // if-else problem is resolved by binding the alternate to the closest consequent.
@@ -597,7 +590,7 @@ private JStatement statement():
             <ELSE>
             alternate = statement()
         ]
-        { statement = new JIfStatement(line, test, consequent, alternate); } |
+        { statement = new JIfStatement(line, expr, consequent, alternate); } |
         <RETURN>
         { line = token.beginLine; }
         [
@@ -612,9 +605,9 @@ private JStatement statement():
         } |
         <WHILE>
         { line = token.beginLine; }
-        test = parExpression()
+        expr = parExpression()
         body = statement()
-        { statement = new JWhileStatement(line, test, body); } |
+        { statement = new JWhileStatement(line, expr, body); } |
         // Must be a statementExpression.
         statement = statementExpression()
         <SEMI>
@@ -635,7 +628,7 @@ private JStatement statement():
  */
 private ArrayList<JFormalParameter> formalParameters():
 {
-    ArrayList<JFormalParameter> parameters = new ArrayList<JFormalParameter>();
+    ArrayList<JFormalParameter> parameters = new ArrayList<>();
     JFormalParameter aParameter = null;
 }
 {
@@ -668,8 +661,8 @@ private ArrayList<JFormalParameter> formalParameters():
  */
 private JFormalParameter formalParameter():
 {
-    int line    = 0;
-    Type type   = null;
+    int line = 0;
+    Type type = null;
     String name = "";
 }
 {
@@ -748,7 +741,7 @@ private JVariableDeclaration localVariableDeclarationStatement():
 private ArrayList<JVariableDeclarator> variableDeclarators(Type type):
 {
     JVariableDeclarator aVariableDeclarator = null;
-    ArrayList<JVariableDeclarator> variableDeclarators = new ArrayList<JVariableDeclarator>();
+    ArrayList<JVariableDeclarator> variableDeclarators = new ArrayList<>();
 }
 {
     try {
@@ -826,7 +819,7 @@ private JExpression variableInitializer(Type type):
  * Parses an array initializer and returns an AST for it.
  *
  * <pre>
- *   arrayInitializer ::= LCURLY [variableInitializer {COMMA variableInitializer} [COMMA]] RCURLY
+ *   arrayInitializer ::= LCURLY [ variableInitializer { COMMA variableInitializer } [ COMMA ] ] RCURLY
  * </pre>
  *
  * @param type type of the array.
@@ -835,7 +828,7 @@ private JExpression variableInitializer(Type type):
 private JArrayInitializer arrayInitializer(Type type):
 {
     int line = 0;
-    ArrayList<JExpression> initials = new ArrayList<JExpression>();
+    ArrayList<JExpression> initials = new ArrayList<>();
     JExpression anInitializer = null;
 }
 {
@@ -869,7 +862,7 @@ private JArrayInitializer arrayInitializer(Type type):
  */
 private ArrayList<JExpression> arguments():
 {
-    ArrayList<JExpression> args = new ArrayList<JExpression>();
+    ArrayList<JExpression> args = new ArrayList<>();
     JExpression anExpression = null;
 }
 {
@@ -1048,8 +1041,7 @@ private JExpression expression():
  * Parses an assignment expression and returns an AST for it.
  *
  * <pre>
- *   assignmentExpression ::= conditionalAndExpression
- *                                [ ( ASSIGN | PLUS_ASSIGN ) assignmentExpression ]
+ *   assignmentExpression ::= conditionalAndExpression [ ( ASSIGN | PLUS_ASSIGN ) assignmentExpression ]
  * </pre>
  *
  * @return an AST for an assignment expression.
@@ -1367,8 +1359,7 @@ private JExpression selector(JExpression target):
         { expr = new JFieldSelection(line, ambiguousPart(id), target, id.simpleName()); }
         [
             args = arguments()
-            { expr = new JMessageExpression(line, target, ambiguousPart(id), id.simpleName(),
-                                            args); }
+            { expr = new JMessageExpression(line, target, ambiguousPart(id), id.simpleName(), args); }
         ] |
         <LBRACK>
         { line = token.beginLine; }
@@ -1460,10 +1451,10 @@ private JExpression primary():
  *
  * <pre>
  *   creator ::= ( basicType | qualifiedIdentifier )
- *                   ( arguments
- *                   | LBRACK RBRACK { LBRACK RBRACK } [ arrayInitializer ]
- *                   | newArrayDeclarator
- *                   )
+ *                 ( arguments
+ *                 | LBRACK RBRACK { LBRACK RBRACK } [ arrayInitializer ]
+ *                 | newArrayDeclarator
+ *                 )
  * </pre>
  *
  * @return an AST for a creator.
@@ -1525,7 +1516,7 @@ private JExpression creator():
 private JNewArrayOp newArrayDeclarator(Type type):
 {
     int line = 0;
-    ArrayList<JExpression> dimensions = new ArrayList<JExpression>();
+    ArrayList<JExpression> dimensions = new ArrayList<>();
     JExpression expr = null;
 }
 {
