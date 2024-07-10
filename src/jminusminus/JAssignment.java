@@ -97,14 +97,13 @@ class JPlusAssignOp extends JAssignment {
             lhs = ((JLhs) lhs).analyzeLhs(context);
         }
         rhs = rhs.analyze(context);
-        if (lhs.type().equals(Type.INT)) {
-            rhs.type().mustMatchExpected(line(), Type.INT);
-            type = Type.INT;
-        } else if (lhs.type().equals(Type.STRING)) {
+        if (lhs.type().equals(Type.STRING)) {
             rhs = (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
             type = Type.STRING;
         } else {
-            JAST.compilationUnit.reportSemanticError(line(), "invalid lhs type for +=: " + lhs.type());
+            lhs.type().mustMatchExpected(line(), Type.INT);
+            rhs.type().mustMatchExpected(line(), Type.INT);
+            type = Type.INT;
         }
         return this;
     }
