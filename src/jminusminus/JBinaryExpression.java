@@ -119,11 +119,10 @@ class JPlusOp extends JBinaryExpression {
         rhs = rhs.analyze(context);
         if (lhs.type() == Type.STRING || rhs.type() == Type.STRING) {
             return (new JStringConcatenationOp(line, lhs, rhs)).analyze(context);
-        } else if (lhs.type() == Type.INT && rhs.type() == Type.INT) {
-            type = Type.INT;
         } else {
-            type = Type.ANY;
-            JAST.compilationUnit.reportSemanticError(line(), "invalid operand types for +");
+            lhs.type().mustMatchExpected(line(), Type.INT);
+            rhs.type().mustMatchExpected(line(), Type.INT);
+            type = Type.INT;
         }
         return this;
     }
