@@ -5,9 +5,15 @@ package jminusminus;
 import java.util.Hashtable;
 
 import static jminusminus.CLConstants.CHECKCAST;
+import static jminusminus.CLConstants.D2I;
+import static jminusminus.CLConstants.D2L;
 import static jminusminus.CLConstants.I2C;
+import static jminusminus.CLConstants.I2D;
+import static jminusminus.CLConstants.I2L;
 import static jminusminus.CLConstants.INVOKESTATIC;
 import static jminusminus.CLConstants.INVOKEVIRTUAL;
+import static jminusminus.CLConstants.L2D;
+import static jminusminus.CLConstants.L2I;
 
 /**
  * The AST for a cast expression, which has both a cast (a type) and the expression to be cast.
@@ -97,16 +103,26 @@ class Conversions {
         // Primitive casts.
         put(Type.CHAR, Type.INT, Converter.Identity);
         put(Type.INT, Type.CHAR, new I2C());
+        put(Type.INT, Type.DOUBLE, new I2D());
+        put(Type.INT, Type.LONG, new I2L());
+        put(Type.DOUBLE, Type.INT, new D2I());
+        put(Type.DOUBLE, Type.LONG, new D2L());
+        put(Type.LONG, Type.DOUBLE, new L2D());
+        put(Type.LONG, Type.INT, new L2I());
 
         // Boxing.
-        put(Type.CHAR, Type.BOXED_CHAR, new Boxing(Type.CHAR, Type.BOXED_CHAR));
-        put(Type.INT, Type.BOXED_INT, new Boxing(Type.INT, Type.BOXED_INT));
         put(Type.BOOLEAN, Type.BOXED_BOOLEAN, new Boxing(Type.BOOLEAN, Type.BOXED_BOOLEAN));
+        put(Type.CHAR, Type.BOXED_CHAR, new Boxing(Type.CHAR, Type.BOXED_CHAR));
+        put(Type.DOUBLE, Type.BOXED_LONG, new Boxing(Type.DOUBLE, Type.BOXED_DOUBLE));
+        put(Type.INT, Type.BOXED_INT, new Boxing(Type.INT, Type.BOXED_INT));
+        put(Type.LONG, Type.BOXED_LONG, new Boxing(Type.LONG, Type.BOXED_LONG));
 
         // Un-boxing.
-        put(Type.BOXED_CHAR, Type.CHAR, new UnBoxing(Type.BOXED_CHAR, Type.CHAR, "charValue"));
-        put(Type.BOXED_INT, Type.INT, new UnBoxing(Type.BOXED_INT, Type.INT, "intValue"));
         put(Type.BOXED_BOOLEAN, Type.BOOLEAN, new UnBoxing(Type.BOXED_BOOLEAN, Type.BOOLEAN, "booleanValue"));
+        put(Type.BOXED_CHAR, Type.CHAR, new UnBoxing(Type.BOXED_CHAR, Type.CHAR, "charValue"));
+        put(Type.BOXED_DOUBLE, Type.DOUBLE, new UnBoxing(Type.BOXED_DOUBLE, Type.INT, "doubleValue"));
+        put(Type.BOXED_INT, Type.INT, new UnBoxing(Type.BOXED_INT, Type.INT, "intValue"));
+        put(Type.BOXED_LONG, Type.LONG, new UnBoxing(Type.BOXED_LONG, Type.LONG, "longValue"));
     }
 
     /**
@@ -271,5 +287,77 @@ class I2C implements Converter {
      */
     public void codegen(CLEmitter output) {
         output.addNoArgInstruction(I2C);
+    }
+}
+
+/**
+ * An int to long converter.
+ */
+class I2L implements Converter {
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        output.addNoArgInstruction(I2L);
+    }
+}
+
+/**
+ * An int to double converter.
+ */
+class I2D implements Converter {
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        output.addNoArgInstruction(I2D);
+    }
+}
+
+/**
+ * A long to int converter.
+ */
+class L2I implements Converter {
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        output.addNoArgInstruction(L2I);
+    }
+}
+
+/**
+ * A long to double converter.
+ */
+class L2D implements Converter {
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        output.addNoArgInstruction(L2D);
+    }
+}
+
+/**
+ * A double to int converter.
+ */
+class D2I implements Converter {
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        output.addNoArgInstruction(D2I);
+    }
+}
+
+/**
+ * A double to long converter.
+ */
+class D2L implements Converter {
+    /**
+     * {@inheritDoc}
+     */
+    public void codegen(CLEmitter output) {
+        output.addNoArgInstruction(D2L);
     }
 }
