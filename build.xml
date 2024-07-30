@@ -20,7 +20,6 @@ An Ant build configuration file for the jminusminus compiler.
         <echo message="compile: Compiles the jminusminus source files"/>
         <echo message="jar: Bundles jminusminus classes into a jar file"/>
         <echo message="javadoc: Generates javadoc for jminusminus classes"/>
-        <echo message="j2h: Generates browsable code using java2html"/>
         <echo message="package: Creates a distributable for j--"/>
         <echo message="clean: Removes generated files and folders"/>
     </target>
@@ -60,24 +59,10 @@ An Ant build configuration file for the jminusminus compiler.
         </javadoc>
     </target>
 
-    <!-- j2h: Generates browsable code using java2html. -->
-    <target name="j2h">
-        <echo message="Generating browsable code for j--..."/>
-        <mkdir dir="${J2H_DIR}" />
-        <java jar="${LIB_DIR}/j2h.jar" fork="true" failonerror="true" maxmemory="128m">
-              <arg value="-m"/>
-              <arg value="4"/>
-              <arg value="-d"/>
-              <arg value="${J2H_DIR}"/>
-              <arg value="-js"/>
-              <arg value="${SRC_DIR}"/>
-       </java>
-    </target>
-
     <!-- 
        package: Makes a distributable package for the compiler which includes the sources, binaries, and documentation.
     -->
-    <target name="package" depends="jar,javadoc,j2h">
+    <target name="package" depends="jar,javadoc">
         <echo message="Making a distributable j--.zip..."/>
         <zip destfile="j--.zip"
              basedir="../"
@@ -102,7 +87,6 @@ An Ant build configuration file for the jminusminus compiler.
         <delete file="${LIB_DIR}/j--.jar" />
         <delete dir="${CLASS_DIR}" />
         <delete dir="${JAVADOC_DIR}" />
-        <delete dir="${J2H_DIR}" />
     </target>
 
 </project>

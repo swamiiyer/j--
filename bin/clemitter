@@ -6,8 +6,6 @@
 # programmatically generate a Java class file B, and running the class A to produce class B.
 
 BASE_DIR=`dirname $0`
-j=${BASE_DIR}/../../
-export j
 JAVA=java
 JAVAC=javac
 CPATH=".:${BASE_DIR}/../lib/j--.jar"
