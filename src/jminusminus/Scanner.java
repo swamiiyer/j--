@@ -105,7 +105,6 @@ class Scanner {
                 moreWhiteSpace = false;
             }
         }
-        line = input.line();
         switch (ch) {
             case EOFCH:
                 return new TokenInfo(EOF, line);
