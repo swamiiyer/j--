@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts a (int) and b (int) as command-line arguments; and writes to standard output the greatest common divisor
 // (GCD) of a and b.
 

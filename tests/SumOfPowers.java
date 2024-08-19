@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts n (int) and k (int) as command-line arguments; and writes to standard output the sum 1^k + 2^k + ... + n^k.
 
 import java.lang.Integer;

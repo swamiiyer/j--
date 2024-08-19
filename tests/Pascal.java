@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts n (int) as command-line argument; and writes to standard output an order n Pascal's triangle.
 
 import java.lang.Integer;

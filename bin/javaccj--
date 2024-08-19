@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas.
-
 # Wrapper script for running jminusminus.JavaCCMain program.
 
 BASE_DIR=`dirname $0`

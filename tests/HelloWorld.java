@@ -1,6 +1,4 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
-// Writes to standard output the message "Hello, World".
+// Writes the message "Hello, World" to standard output.
 
 import java.lang.System;
 

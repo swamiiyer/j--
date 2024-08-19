@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
 package jminusminus;
 
 import java.util.ArrayList;

@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Tests the instanceof operator.
 
 import java.lang.System;

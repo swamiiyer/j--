@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
 /**
  * This is the input file to JavaCC for generating a scanner and a parser for j--. From the
  * specification in this file, JavaCC generates, among other files, a JavaCCParser.java program

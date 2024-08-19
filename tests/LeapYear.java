@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts a year (int) as command-line argument; and writes to standard output whether the year is a leap year or not.
 
 import java.lang.Integer;

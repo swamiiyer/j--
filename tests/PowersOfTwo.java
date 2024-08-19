@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts n (int) as command-line argument; and writes to standard output a table of powers of 2 that are less than
 // or equal to 2^n.
 

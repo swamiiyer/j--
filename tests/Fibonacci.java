@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts n (int) as command-line argument; and writes to standard output the first n Fibonacci numbers.
 
 import java.lang.Integer;

@@ -1,7 +1,5 @@
 @echo off
 
-REM Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-REM
 REM Wrapper script for running jminusminus.JavaCCMain program.
 
 set BASE_DIR=%~dp0

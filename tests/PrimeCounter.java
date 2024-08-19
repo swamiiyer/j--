@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts n (int) as command-line argument; and writes to standard output the number of primes that are less than or
 // equal to n.
 

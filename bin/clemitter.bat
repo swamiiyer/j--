@@ -1,7 +1,5 @@
 @echo off
 
-REM Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-
 REM This is a convenience script for compiling a Java source file A that uses the CLEmitter interface to
 programmatically generate a Java class file B, and running the class A to produce class B.
 

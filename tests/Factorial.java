@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas
-//
 // Accepts n (int) as command-line argument; and writes n! to standard output.
 
 import java.lang.Integer;

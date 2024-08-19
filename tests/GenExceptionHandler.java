@@ -1,5 +1,3 @@
-// Copyright 2012- Bill Campbell, Swami Iyer and Bahar Akbal-Delibas.
-
 import java.util.ArrayList;
 
 import jminusminus.CLEmitter;
