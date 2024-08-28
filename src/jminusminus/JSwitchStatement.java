@@ -15,8 +15,8 @@ class JSwitchStatement extends JStatement {
     /**
      * Constructs an AST node for a switch-statement.
      *
-     * @param line      line in which the switch-statement occurs in the source file.
-     * @param condition test expression.
+     * @param line             line in which the switch-statement occurs in the source file.
+     * @param condition        test expression.
      * @param switchStmtGroups list of statement groups.
      */
     public JSwitchStatement(int line, JExpression condition, ArrayList<SwitchStatementGroup> switchStmtGroups) {
@@ -56,10 +56,10 @@ class JSwitchStatement extends JStatement {
 }
 
 /**
- * A switch statement group consists of case labels and a block of statements.
+ * A switch-statement group consists of a list of switch labels and a block of statements.
  */
 class SwitchStatementGroup {
-    // Case labels.
+    // Switch labels.
     private ArrayList<JExpression> switchLabels;
 
     // Block of statements.
@@ -68,12 +68,30 @@ class SwitchStatementGroup {
     /**
      * Constructs a switch-statement group.
      *
-     * @param switchLabels case labels.
+     * @param switchLabels switch labels.
      * @param block        block of statements.
      */
     public SwitchStatementGroup(ArrayList<JExpression> switchLabels, ArrayList<JStatement> block) {
         this.switchLabels = switchLabels;
         this.block = block;
+    }
+
+    /**
+     * Returns the switch labels associated with this switch-statement group.
+     *
+     * @return the switch labels associated with this switch-statement group.
+     */
+    public ArrayList<JExpression> getSwitchLabels() {
+        return switchLabels;
+    }
+
+    /**
+     * Returns the block of statements associated with this switch-statement group.
+     *
+     * @return the block of statements associated with this switch-statement group.
+     */
+    public ArrayList<JStatement> block() {
+        return block;
     }
 
     /**
