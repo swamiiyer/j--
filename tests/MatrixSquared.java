@@ -9,7 +9,8 @@ public class MatrixSquared {
         int c = Integer.parseInt(args[2]);
         int d = Integer.parseInt(args[3]);
         int[][] A = {{a, b}, {c, d}};
-        int[][] B = {{a * a + b * c, a * b + b * d}, {a * c + c * c, b * c + d * d}};
+        int[][] B = {{A[0][0] * A[0][0] + A[0][1] * A[1][0], A[0][0] * A[0][1] + A[0][1] * A[1][1]}, 
+                     {A[1][0] * A[0][0] + A[1][1] * A[1][0], A[1][0] * A[0][1] + A[1][1] * A[1][1]}};
         write(B);
     }
 
