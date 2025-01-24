@@ -1,5 +1,3 @@
-// Tests various cast operations.
-
 import java.lang.Boolean;
 import java.lang.System;
 

@@ -1,6 +1,3 @@
-// Accepts a (int), b (int), c (int), and d (int) as command-line arguments representing the elements of a 2x2 matrix
-// A in row-major order; and writes to standard output the matrix A * A.
-
 import java.lang.Integer;
 import java.lang.System;
 

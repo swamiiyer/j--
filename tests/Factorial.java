@@ -1,5 +1,3 @@
-// Accepts n (int) as command-line argument; and writes n! to standard output.
-
 import java.lang.Integer;
 import java.lang.System;
 

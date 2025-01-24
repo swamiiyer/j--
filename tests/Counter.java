@@ -1,5 +1,3 @@
-// A data type to represent a counter.
-
 import java.lang.Integer;
 import java.lang.System;
 import java.util.Random;

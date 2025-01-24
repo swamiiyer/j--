@@ -1,6 +1,3 @@
-// Accepts n (int) as command-line argument; and writes to standard output the number of primes that are less than or
-// equal to n.
-
 import java.lang.Integer;
 import java.lang.System;
 

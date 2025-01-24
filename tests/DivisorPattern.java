@@ -1,6 +1,3 @@
-// Accepts n (int) as command-line argument; and writes to standard output a table where entry (i, j) is a "* " if j
-// divides i or i divides j and a "  " otherwise.
-
 import java.lang.Integer;
 import java.lang.System;
 

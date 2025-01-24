@@ -1,6 +1,3 @@
-// Accepts m (int), d (int), and y (int) as command-line arguments representing a date; and writes the corresponding
-// day of the week to standard output.
-
 import java.lang.Integer;
 import java.lang.System;
 

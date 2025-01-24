@@ -1,5 +1,3 @@
-// Writes the message "Hello, World" to standard output.
-
 import java.lang.System;
 
 public class HelloWorld {

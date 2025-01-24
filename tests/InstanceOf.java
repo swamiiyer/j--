@@ -1,5 +1,3 @@
-// Tests the instanceof operator.
-
 import java.lang.System;
 
 public class InstanceOf {

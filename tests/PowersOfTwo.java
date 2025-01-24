@@ -1,6 +1,3 @@
-// Accepts n (int) as command-line argument; and writes to standard output a table of powers of 2 that are less than
-// or equal to 2^n.
-
 import java.lang.Integer;
 import java.lang.System;
 

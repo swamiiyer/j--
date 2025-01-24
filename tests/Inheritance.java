@@ -1,5 +1,3 @@
-// Tests inheritance.
-
 import java.lang.System;
 
 abstract class Person {

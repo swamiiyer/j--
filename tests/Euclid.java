@@ -1,6 +1,3 @@
-// Accepts a (int) and b (int) as command-line arguments; and writes to standard output the greatest common divisor
-// (GCD) of a and b.
-
 import java.lang.Integer;
 import java.lang.System;
 
