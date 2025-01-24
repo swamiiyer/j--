@@ -9,7 +9,6 @@ An Ant build configuration file for the jminusminus compiler.
     <property name="CLASS_DIR" value="out" />
     <property name="LIB_DIR" value="lib" />
     <property name="JAVADOC_DIR" value="jmm-javadoc" />
-    <property name="J2H_DIR" value="jmm-code" />
 
     <!-- help: Lists main targets -->
     <target name="help">
