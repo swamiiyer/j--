@@ -1,0 +1,8 @@
+{
+    "editor.rulers": [120],
+    "java.inlayHints.parameterNames.enabled": "none",
+    "java.project.referencedLibraries": [
+        "lib/j--.jar",
+        "lib/javacc.jar"
+    ],
+}

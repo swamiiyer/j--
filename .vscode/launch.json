@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "j-- Compiler",
+            "request": "launch",
+            "mainClass": "jminusminus.Main",
+            "args": "${command:SpecifyProgramArgs}"
+        },
+        {
+            "type": "java",
+            "name": "j-- Compiler with JavaCC Frontend",
+            "request": "launch",
+            "mainClass": "jminusminus.JavaCCMain",
+            "args": "${command:SpecifyProgramArgs}"
+        },
+    ]
+}
