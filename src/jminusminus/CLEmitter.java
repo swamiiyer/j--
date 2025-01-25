@@ -620,7 +620,8 @@ public class CLEmitter {
         switch (CLInstruction.instructionInfo[opcode].category) {
             case FIELD:
                 if (!validTypeDescriptor(type)) {
-                    reportEmitterError("%s: '%s' is not a valid type descriptor for field", eCurrentMethod, type);
+                    reportEmitterError("%s: '%s' is not a valid type descriptor for field", eCurrentMethod, 
+                                       type);
                 }
                 index = constantPool.constantFieldRefInfo(target, name, type);
                 stackUnits = typeStackResidue(type);
@@ -632,7 +633,8 @@ public class CLEmitter {
                 break;
             case METHOD1:
                 if (!validMethodDescriptor(type)) {
-                    reportEmitterError("%s: '%s' is not a valid type descriptor for method", eCurrentMethod, type);
+                    reportEmitterError("%s: '%s' is not a valid type descriptor for method", eCurrentMethod, 
+                                       type);
                 }
                 if (opcode == INVOKEINTERFACE) {
                     index = constantPool.constantInterfaceMethodRefInfo(target, name, type);
@@ -675,7 +677,8 @@ public class CLEmitter {
      */
     public void addReferenceInstruction(int opcode, String type) {
         if (!validTypeDescriptor(type) && !validInternalForm(type)) {
-            reportEmitterError("%s: '%s' is neither a type descriptor nor in internal form", eCurrentMethod, type);
+            reportEmitterError("%s: '%s' is neither a type descriptor nor in internal form", eCurrentMethod, 
+                               type);
         }
         CLInstruction instr = null;
         switch (CLInstruction.instructionInfo[opcode].category) {
@@ -733,8 +736,8 @@ public class CLEmitter {
                     }
                 } else {
                     if (!validTypeDescriptor(type) && !validInternalForm(type)) {
-                        reportEmitterError("%s: '%s' is not a valid type descriptor for an array", eCurrentMethod,
-                                type);
+                        reportEmitterError("%s: '%s' is not a valid type descriptor for an array", 
+                                           eCurrentMethod, type);
                     }
                     index = constantPool.constantClassInfo(type);
                 }
@@ -1009,7 +1012,8 @@ public class CLEmitter {
         }
         String outFile = destDir + File.separator + name + ".class";
         try {
-            File file = new File(destDir + File.separator + name.substring(0, name.lastIndexOf("/") + 1));
+            File file = new File(destDir + File.separator + name.substring(0, 
+                                 name.lastIndexOf("/") + 1));
             file.mkdirs();
             CLOutputStream out = new CLOutputStream(new BufferedOutputStream(new FileOutputStream(outFile)));
             clFile.write(out);

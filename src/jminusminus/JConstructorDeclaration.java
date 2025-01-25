@@ -9,7 +9,7 @@ import static jminusminus.CLConstants.RETURN;
 /**
  * The AST node for a constructor declaration.
  */
-class JConstructorDeclaration extends JMethodDeclaration implements JMember {
+class JConstructorDeclaration extends JMethodDeclaration {
     // Does this constructor invoke this(...) or super(...)?
     private boolean invokesConstructor;
 

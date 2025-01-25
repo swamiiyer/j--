@@ -65,7 +65,8 @@ public class JavaCCMain {
 
         JavaCCParserTokenManager javaCCScanner = null;
         try {
-            javaCCScanner = new JavaCCParserTokenManager(new SimpleCharStream(new FileInputStream(sourceFile), 1, 1));
+            javaCCScanner = new JavaCCParserTokenManager(new SimpleCharStream(new FileInputStream(sourceFile), 
+                                                                              1, 1));
         } catch (FileNotFoundException e) {
             System.err.println("Error: file " + sourceFile + " not found.");
         }
