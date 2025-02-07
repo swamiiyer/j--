@@ -1,5 +1,6 @@
 {
     "editor.rulers": [120],
+    "files.autoSave": "afterDelay",
     "java.inlayHints.parameterNames.enabled": "none",
     "java.project.referencedLibraries": [
         "lib/j--.jar",
