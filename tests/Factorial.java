@@ -5,8 +5,8 @@ public class Factorial {
     // Entry point.
     public static void main(String[] args) {
         int n = Integer.parseInt(args[0]);
-        System.out.println(n + "! = " + Factorial.computeRec(n) + " (computed recursively)");
-        System.out.println(n + "! = " + Factorial.computeIter(n) + " (computed iteratively)");
+        System.out.println(computeRec(n));
+        System.out.println(computeIter(n));
     }
 
     // Returns n!, computed recursively.

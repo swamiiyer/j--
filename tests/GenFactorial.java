@@ -1,117 +1,90 @@
 import java.util.ArrayList;
-
 import jminusminus.CLEmitter;
-
 import static jminusminus.CLConstants.*;
 
-/**
- * This class programatically generates the class file for the following Java application using CLEmitter:
- *
- * <pre>
- * public class Factorial {
- *     public static void main(String[] args) {
- *         int n = Integer.parseInt(args[0]);
- *         int result = factorial(n);
- *         System.out.println(n + "! = " + result);
- *     }
- *
- *     private static int factorial(int n) {
- *         if (n <= 1) {
- *             return 1;
- *         }
- *         return n * factorial(n - 1);
- *     }
- * }
- * </pre>
- */
 public class GenFactorial {
     public static void main(String[] args) {
-        // Create a CLEmitter instance
         CLEmitter e = new CLEmitter(true);
-
-        // Create an ArrayList instance to store modifiers
         ArrayList<String> modifiers = new ArrayList<String>();
 
-        // public class Factorial {
+        // public class Factorial { ... }.
         modifiers.add("public");
         e.addClass(modifiers, "Factorial", "java/lang/Object", null, true);
 
         // public static void main(String[] args) {
+        //     int n = Integer.parseInt(args[0]);
+        //     System.out.println(computeRec(n));
+        //     System.out.println(computeIter(n));
+        // }
         modifiers.clear();
         modifiers.add("public");
         modifiers.add("static");
         e.addMethod(modifiers, "main", "([Ljava/lang/String;)V", null, true);
-
-        // int n = Integer.parseInt(args[0]);
         e.addNoArgInstruction(ALOAD_0);
         e.addNoArgInstruction(ICONST_0);
         e.addNoArgInstruction(AALOAD);
         e.addMemberAccessInstruction(INVOKESTATIC, "java/lang/Integer", "parseInt", "(Ljava/lang/String;)I");
         e.addNoArgInstruction(ISTORE_1);
-
-        // int result = factorial(n);
-        e.addNoArgInstruction(ILOAD_1);
-        e.addMemberAccessInstruction(INVOKESTATIC, "Factorial", "factorial", "(I)I");
-        e.addNoArgInstruction(ISTORE_2);
-
-        // System.out.println(n + "! = " + result);
-
-        // Get System.out on stack
         e.addMemberAccessInstruction(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-
-        // Create an intance (say sb) of StringBuffer on stack for string concatenations
-        //    sb = new StringBuffer();
-        e.addReferenceInstruction(NEW, "java/lang/StringBuffer");
-        e.addNoArgInstruction(DUP);
-        e.addMemberAccessInstruction(INVOKESPECIAL, "java/lang/StringBuffer", "<init>", "()V");
-
-        // sb.append(n);
         e.addNoArgInstruction(ILOAD_1);
-        e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/lang/StringBuffer", "append", "(I)Ljava/lang/StringBuffer;");
-
-        // sb.append("!=");
-        e.addLDCInstruction("! = ");
-        e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/lang/StringBuffer", "append",
-                "(Ljava/lang/String;)Ljava/lang/StringBuffer;");
-
-        // sb.append(result);
-        e.addNoArgInstruction(ILOAD_2);
-        e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/lang/StringBuffer", "append", "(I)Ljava/lang/StringBuffer;");
-
-        // System.out.println(sb.toString());
-        e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/lang/StringBuffer",
-                "toString", "()Ljava/lang/String;");
-        e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
-
-        // return;
+        e.addMemberAccessInstruction(INVOKESTATIC, "Factorial", "computeRec", "(I)I");
+        e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V");
+        e.addMemberAccessInstruction(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        e.addNoArgInstruction(ILOAD_1);
+        e.addMemberAccessInstruction(INVOKESTATIC, "Factorial", "computeIter", "(I)I");
+        e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V");
         e.addNoArgInstruction(RETURN);
 
-        // private static int factorial(int n) {
+        // private static int computeRec(int n) {
+        //     if (n == 0) {
+        //         return 1;
+        //     } else {
+        //         return n * computeRec(n - 1);
+        //     }
+        // }
         modifiers.clear();
         modifiers.add("private");
         modifiers.add("static");
-        e.addMethod(modifiers, "factorial", "(I)I", null, true);
-
-        // if (n > 1) branch to "Recurse"
+        e.addMethod(modifiers, "computeRec", "(I)I", null, true);
         e.addNoArgInstruction(ILOAD_0);
-        e.addNoArgInstruction(ICONST_1);
-        e.addBranchInstruction(IF_ICMPGT, "Recurse");
-
-        // Base case: return 1;
+        e.addBranchInstruction(IFNE, "recurse");
         e.addNoArgInstruction(ICONST_1);
         e.addNoArgInstruction(IRETURN);
-
-        // Recursive case: return n * factorial(n - 1);
-        e.addLabel("Recurse");
+        e.addLabel("recurse");
         e.addNoArgInstruction(ILOAD_0);
         e.addNoArgInstruction(ILOAD_0);
         e.addNoArgInstruction(ICONST_1);
         e.addNoArgInstruction(ISUB);
-        e.addMemberAccessInstruction(INVOKESTATIC, "Factorial", "factorial", "(I)I");
+        e.addMemberAccessInstruction(INVOKESTATIC, "Factorial", "computeRec", "(I)I");
         e.addNoArgInstruction(IMUL);
         e.addNoArgInstruction(IRETURN);
 
-        // Write Factorial.class to file system
+        // private static int computeIter(int n) {
+        //     int result = 1;
+        //     while (n > 0) {
+        //         result = result * n--;
+        //     }
+        //     return result;
+        // }
+        modifiers.clear();
+        modifiers.add("private");
+        modifiers.add("static");
+        e.addMethod(modifiers, "computeIter", "(I)I", null, true);
+        e.addNoArgInstruction(ICONST_1);
+        e.addNoArgInstruction(ISTORE_1);
+        e.addLabel("continue");
+        e.addNoArgInstruction(ILOAD_0);
+        e.addNoArgInstruction(ICONST_0);
+        e.addBranchInstruction(IF_ICMPLE, "done");
+        e.addNoArgInstruction(ILOAD_1);
+        e.addNoArgInstruction(ILOAD_0);
+        e.addNoArgInstruction(IMUL);
+        e.addNoArgInstruction(ISTORE_1);
+        e.addIINCInstruction(0, -1);
+        e.addBranchInstruction(GOTO, "continue");
+        e.addLabel("done");
+        e.addNoArgInstruction(ILOAD_1);
+        e.addNoArgInstruction(IRETURN);
         e.write();
     }
 }

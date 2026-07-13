@@ -1,218 +1,171 @@
 import java.util.ArrayList;
-
 import jminusminus.CLEmitter;
-
 import static jminusminus.CLConstants.*;
 
-/**
- * This class programatically generates the class file for the following Java application using CLEmitter:
- *
- * <pre>
- * public class TableSwitch {
- *     public static void main(String[] args) {
- *         int month = Integer.parseInt(args[0]);
- *         String monthString;
- *         switch (month) {
- *             case 1:
- *                 monthString = "January";
- *                 break;
- *             case 2:
- *                 monthString = "February";
- *                 break;
- *             case 3:
- *                 monthString = "March";
- *                 break;
- *             case 4:
- *                 monthString = "April";
- *                 break;
- *             case 5:
- *                 monthString = "May";
- *                 break;
- *             case 6:
- *                 monthString = "June";
- *                 break;
- *             case 7:
- *                 monthString = "July";
- *                 break;
- *             case 8:
- *                 monthString = "August";
- *                 break;
- *             case 9:
- *                 monthString = "September";
- *                 break;
- *             case 10:
- *                 monthString = "October";
- *                 break;
- *             case 11:
- *                 monthString = "November";
- *                 break;
- *             case 12:
- *                 monthString = "December";
- *                 break;
- *             default:
- *                 monthString = "Error!";
- *         }
- *         System.out.println(monthString);
- *     }
- * }
- * </pre>
- */
 public class GenTableSwitch {
     public static void main(String[] args) {
-        // Create a CLEmitter instance
         CLEmitter e = new CLEmitter(true);
-
-        // Create an ArrayList instance to store modifiers
         ArrayList<String> modifiers = new ArrayList<String>();
 
-        // public class TableSwitch {
+        // public class TableSwitch { ... }.
         modifiers.add("public");
         e.addClass(modifiers, "TableSwitch", "java/lang/Object", null, true);
 
         // public static void main(String[] args) {
+        //     int month = Integer.parseInt(args[0]);
+        //     String monthString;
+        //     switch (month) {
+        //         case 1:
+        //             monthString = "January";
+        //             break;
+        //         case 2:
+        //             monthString = "February";
+        //             break;
+        //         case 3:
+        //             monthString = "March";
+        //             break;
+        //         case 4:
+        //             monthString = "April";
+        //             break;
+        //         case 5:
+        //             monthString = "May";
+        //             break;
+        //         case 6:
+        //             monthString = "June";
+        //             break;
+        //         case 7:
+        //             monthString = "July";
+        //             break;
+        //         case 8:
+        //             monthString = "August";
+        //             break;
+        //         case 9:
+        //             monthString = "September";
+        //             break;
+        //         case 10:
+        //             monthString = "October";
+        //             break;
+        //         case 11:
+        //             monthString = "November";
+        //             break;
+        //         case 12:
+        //             monthString = "December";
+        //             break;
+        //         default:
+        //             monthString = "Error!";
+        //     }
+        //     System.out.println(monthString);
+        // }
         modifiers.clear();
         modifiers.add("public");
         modifiers.add("static");
         e.addMethod(modifiers, "main", "([Ljava/lang/String;)V", null, true);
-
-        // int month = Integer.parseInt(args[0]);
         e.addNoArgInstruction(ALOAD_0);
         e.addNoArgInstruction(ICONST_0);
         e.addNoArgInstruction(AALOAD);
         e.addMemberAccessInstruction(INVOKESTATIC, "java/lang/Integer", "parseInt", "(Ljava/lang/String;)I");
         e.addNoArgInstruction(ISTORE_1);
 
-        // switch(month) {
+        // switch(month) { ... }.
         e.addNoArgInstruction(ILOAD_1);
         ArrayList<String> labels = new ArrayList<String>();
-        labels.add("Case1");
-        labels.add("Case2");
-        labels.add("Case3");
-        labels.add("Case4");
-        labels.add("Case5");
-        labels.add("Case6");
-        labels.add("Case7");
-        labels.add("Case8");
-        labels.add("Case9");
-        labels.add("Case10");
-        labels.add("Case11");
-        labels.add("Case12");
-        e.addTABLESWITCHInstruction("Default", 1, 12, labels);
+        labels.add("case1");
+        labels.add("case2");
+        labels.add("case3");
+        labels.add("case4");
+        labels.add("case5");
+        labels.add("case6");
+        labels.add("case7");
+        labels.add("case8");
+        labels.add("case9");
+        labels.add("case10");
+        labels.add("case11");
+        labels.add("case12");
+        e.addTABLESWITCHInstruction("default", 1, 12, labels);
 
-        // case 1:
-        //     monthString = "January";
-        //     break;
-        e.addLabel("Case1");
+        // case 1: { ... }.
+        e.addLabel("case1");
         e.addLDCInstruction("January");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 2:
-        //     monthString = "February";
-        //     break;
-        e.addLabel("Case2");
+        // case 2: { ... }.
+        e.addLabel("case2");
         e.addLDCInstruction("February");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 3:
-        //     monthString = "March";
-        //     break;
-        e.addLabel("Case3");
+        // case 3: { ... }.
+        e.addLabel("case3");
         e.addLDCInstruction("March");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 4:
-        //     monthString = "April";
-        //     break;
-        e.addLabel("Case4");
+        // case 4: { ... }.
+        e.addLabel("case4");
         e.addLDCInstruction("April");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 5:
-        //     monthString = "May";
-        //     break;
-        e.addLabel("Case5");
+        // case 5: { ... }.
+        e.addLabel("case5");
         e.addLDCInstruction("May");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 6:
-        //     monthString = "June";
-        //     break;
-        e.addLabel("Case6");
+        // case 6: { ... }.
+        e.addLabel("case6");
         e.addLDCInstruction("June");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 7:
-        //     monthString = "July";
-        //     break;
-        e.addLabel("Case7");
+        // case 7: { ... }.
+        e.addLabel("case7");
         e.addLDCInstruction("July");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 8:
-        //     monthString = "August";
-        //     break;
-        e.addLabel("Case8");
+        // case 8: { ... }.
+        e.addLabel("case8");
         e.addLDCInstruction("August");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 9:
-        //     monthString = "September";
-        //     break;
-        e.addLabel("Case9");
+        // case 9: { ... }.
+        e.addLabel("case9");
         e.addLDCInstruction("September");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 10:
-        //     monthString = "October";
-        //     break;
-        e.addLabel("Case10");
+        // case 10: { ... }.
+        e.addLabel("case10");
         e.addLDCInstruction("October");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 11:
-        //     monthString = "November";
-        //     break;
-        e.addLabel("Case11");
+        // case 11: { ... }.
+        e.addLabel("case11");
         e.addLDCInstruction("November");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // case 12:
-        //     monthString = "December";
-        //     break;
-        e.addLabel("Case12");
+        // case 12: { ... }.
+        e.addLabel("case12");
         e.addLDCInstruction("December");
         e.addNoArgInstruction(ASTORE_2);
-        e.addBranchInstruction(GOTO, "EndSwitch");
+        e.addBranchInstruction(GOTO, "endSwitch");
 
-        // default:
-        //     monthString = "Error!";
-        e.addLabel("Default");
+        // default: { ... }.
+        e.addLabel("default");
         e.addLDCInstruction("Error!");
         e.addNoArgInstruction(ASTORE_2);
 
-        // End of switch(month)
-        e.addLabel("EndSwitch");
-
-        // System.out.println(monthString);
+        e.addLabel("endSwitch");
         e.addMemberAccessInstruction(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
         e.addNoArgInstruction(ALOAD_2);
         e.addMemberAccessInstruction(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V");
-
-        // return;
         e.addNoArgInstruction(RETURN);
 
-        // Write TableSwitch.class to file system
         e.write();
     }
 }
