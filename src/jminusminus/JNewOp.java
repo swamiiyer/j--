@@ -1,7 +1,6 @@
 package jminusminus;
 
 import java.util.ArrayList;
-
 import static jminusminus.CLConstants.DUP;
 import static jminusminus.CLConstants.INVOKESPECIAL;
 import static jminusminus.CLConstants.NEW;

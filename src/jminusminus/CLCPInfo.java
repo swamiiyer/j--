@@ -1,7 +1,6 @@
 package jminusminus;
 
 import java.io.IOException;
-
 import static jminusminus.CLConstants.*;
 
 /**

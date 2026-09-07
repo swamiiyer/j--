@@ -4,7 +4,7 @@ An Ant build configuration file for the jminusminus compiler.
 
 <project default="jar">
 
-    <property name="APP_FULL_NAME" value="j-- (A Non-trivial Subset of Java)" />
+    <property name="APP_FULL_NAME" value="j-- Compiler" />
     <property name="SRC_DIR" value="src" />
     <property name="CLASS_DIR" value="out" />
     <property name="LIB_DIR" value="lib" />

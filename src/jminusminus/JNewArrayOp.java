@@ -1,7 +1,6 @@
 package jminusminus;
 
 import java.util.ArrayList;
-
 import static jminusminus.CLConstants.ANEWARRAY;
 import static jminusminus.CLConstants.NEWARRAY;
 

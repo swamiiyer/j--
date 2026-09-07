@@ -2,7 +2,6 @@ package jminusminus;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import static jminusminus.CLConstants.*;
 
 /**

@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-
 import static jminusminus.CLConstants.*;
 import static jminusminus.CLConstants.Category.*;
 
